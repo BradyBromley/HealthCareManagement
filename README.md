@@ -1,1 +1,3 @@
 # HealthCareManagement
+
+To setup the app through Apache, clone the repository to /var/www. Then create a file named HealthCareManagement.conf in /etc/apache2/sites-available/. Set the ServerName to HealthCareManagement and the DocumentRoot to /var/www/HealthCareManagement. Then activate the file (sudo a2ensite HealthCareManagement.conf) and restart Apache (systemctl restart apache2). Finally, Add the line 'LOCAL_IP HealthCareManagement' to /etc/hosts (where LOCAL_IP is your local ipv4 address). You can now get to the app with the url 'http://healthcaremanagement'.
