@@ -10,6 +10,4 @@ if ($mysqli->connect_errno) {
     die("ERROR: Could not connect. " . $mysqli->connect_error);
 }
 
-$mysqli->close();
-
 ?>
