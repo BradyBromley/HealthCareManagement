@@ -7,5 +7,6 @@ CREATE TABLE Users (
     LastName varchar(255) NOT NULL,
     Address varchar(255) DEFAULT NULL,
     City varchar(255) DEFAULT NULL,
+    IsActive boolean DEFAULT 1
     PRIMARY KEY (ID)
 );
