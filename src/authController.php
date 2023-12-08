@@ -89,11 +89,10 @@ class AuthController {
         // Insert into database
         if (empty($this->emailError) && empty($this->passwordError) && empty($this->confirmPasswordError)) {
             
-            $sql = 'INSERT INTO Users (Email, PasswordHash, Salt, FirstName, LastName) VALUES (?, ?, ?, ?, ?)';
+            $sql = 'INSERT INTO Users (Email, PasswordHash, FirstName, LastName) VALUES (?, ?, ?, ?)';
             $stmt = $this->mysqli->prepare($sql);
             
-            $salt = 'Salt Test';
-            $stmt->bind_param('sssss', $this->email, $this->password, $salt, $this->firstName, $this->lastName);
+            $stmt->bind_param('ssss', $this->email, password_hash($this->password, PASSWORD_DEFAULT), $this->firstName, $this->lastName);
             if ($stmt->execute()) {
                 header('location: login.php');
             } else {
