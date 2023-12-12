@@ -27,17 +27,16 @@ class AuthController {
         } else if (!filter_var(trim($_POST['email']), FILTER_VALIDATE_EMAIL)) {
             $this->emailError = 'Invalid email format.';
         } else {
+            $this->email = trim($_POST['email']);
             
             // Check if the email has already been used
             $sql = 'SELECT ID FROM Users WHERE Email = ?';
             $stmt = $this->mysqli->prepare($sql);
-            $stmt->bind_param('s', trim($_POST['email']));
+            $stmt->bind_param('s', $this->email);
             if ($stmt->execute()) {
                 $stmt->store_result();
                 if ($stmt->num_rows == 1) {
                     $this->emailError = 'This email is already in use.';
-                } else {
-                    $this->email = trim($_POST['email']);
                 }
             }
             $stmt->close();
@@ -50,31 +49,65 @@ class AuthController {
         } else if (strlen(trim($_POST['password'])) < 8) {
             $this->passwordError = 'Password must have at least 8 characters.';
         } else {
-            $this->password = trim($_POST['password']);
+            $this->password = password_hash(trim($_POST['password']), PASSWORD_DEFAULT);
         }
     }
 
     private function validateConfirmPassword() {
         if (empty(trim($_POST['confirmPassword']))) {
             $this->confirmPasswordError = 'Please confirm password.';
-        } else if ($this->password != trim($_POST['confirmPassword'])) {
-            $this->confirmPasswordError = 'Password does not match';
+        } else if (!password_verify(trim($_POST['confirmPassword']), $this->password)) {
+            $this->confirmPasswordError = 'This password does not match.';
         }
     }
 
     private function validateName() {
         // Validate first name
         if (empty(trim($_POST['firstName']))) {
-            $this->firstNameError = 'Please enter a first name';
+            $this->firstNameError = 'Please enter a first name.';
         } else {
             $this->firstName = trim($_POST['firstName']);
         }
 
         // Validate last name
         if (empty(trim($_POST['lastName']))) {
-            $this->lastNameError = 'Please enter a last name';
+            $this->lastNameError = 'Please enter a last name.';
         } else {
             $this->lastName = trim($_POST['lastName']);
+        }
+    }
+
+    private function validateLogin() {
+
+        if (empty(trim($_POST['email']))) {
+            $this->emailError = 'Please enter an email.';
+        } else if (!filter_var(trim($_POST['email']), FILTER_VALIDATE_EMAIL)) {
+            $this->emailError = 'Invalid email format.';
+        } else if (empty(trim($_POST['password']))) {
+            $this->email = trim($_POST['email']);
+            $this->passwordError = 'Please enter a password.';
+        } else {
+            $this->email = trim($_POST['email']);
+
+            // Check if the email exists
+            $sql = 'SELECT PasswordHash FROM Users WHERE Email = ?';
+            $stmt = $this->mysqli->prepare($sql);
+            $stmt->bind_param('s', trim($_POST['email']));
+            if ($stmt->execute()) {
+                $result = $stmt->get_result();
+                if ($result) {
+                    $passwordHash = $result->fetch_row()[0];
+                    if (password_verify(trim($_POST['password']), $passwordHash)) {
+                        $this->password = $passwordHash;
+                    } else {
+                        $this->passwordError = 'This password does not match.';
+                    }
+
+                } else {
+                    $this->emailError = 'This email does not exist.';
+                }
+            }
+            $stmt->close();
         }
     }
 
@@ -87,12 +120,14 @@ class AuthController {
         $this->validateName();
 
         // Insert into database
-        if (empty($this->emailError) && empty($this->passwordError) && empty($this->confirmPasswordError)) {
+        if (empty($this->emailError) && empty($this->passwordError)
+        && empty($this->confirmPasswordError) && empty($this->firstNameError)
+        && empty($this->lastNameError)) {
             
             $sql = 'INSERT INTO Users (Email, PasswordHash, FirstName, LastName) VALUES (?, ?, ?, ?)';
             $stmt = $this->mysqli->prepare($sql);
             
-            $stmt->bind_param('ssss', $this->email, password_hash($this->password, PASSWORD_DEFAULT), $this->firstName, $this->lastName);
+            $stmt->bind_param('ssss', $this->email, $this->password, $this->firstName, $this->lastName);
             if ($stmt->execute()) {
                 header('location: login.php');
             } else {
@@ -103,10 +138,16 @@ class AuthController {
         }
     }
 
-    /*
+    
     public function login() {
-        
-    }*/
+        $this->validateLogin();
+
+        // Insert into database
+        if (empty($this->emailError) && empty($this->passwordError)) {
+            
+            header('location:  index.php');
+        }
+    }
 
 }
 ?>

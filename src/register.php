@@ -39,12 +39,12 @@ $mysqli->close();
 
             <div class='form-group'>
                 <label for='password'>Password</label>
-                <input id='password' name='password' type='password' class='form-control <?php echo (!empty($auth->passwordError)) ? 'is-invalid' : ''; ?>' value='<?php echo $auth->password; ?>' placeholder='Enter password' required>
+                <input id='password' name='password' type='password' class='form-control <?php echo (!empty($auth->passwordError)) ? 'is-invalid' : ''; ?>' placeholder='Enter password' required>
             </div>
 
             <div class='form-group'>
                 <label for='confirmPassword'>Confirm Password</label>
-                <input id='confirmPassword' name='confirmPassword' type='password' class='form-control <?php echo (!empty($auth->confirmPasswordError)) ? 'is-invalid' : ''; ?>' value='<?php echo $auth->confirmPassword; ?>' placeholder='Confirm password' required>
+                <input id='confirmPassword' name='confirmPassword' type='password' class='form-control <?php echo (!empty($auth->confirmPasswordError)) ? 'is-invalid' : ''; ?>' placeholder='Confirm password' required>
             </div>
 
             <button id='Submit' type='submit' class='btn btn-primary'>Submit</button>
