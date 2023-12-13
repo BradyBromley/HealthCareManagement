@@ -3,6 +3,7 @@ class AuthController {
     // Properties
     public $mysqli;
 
+    public $id;
     public $email;
     public $password;
     public $firstName;
@@ -78,7 +79,6 @@ class AuthController {
     }
 
     private function validateLogin() {
-
         if (empty(trim($_POST['email']))) {
             $this->emailError = 'Please enter an email.';
         } else if (!filter_var(trim($_POST['email']), FILTER_VALIDATE_EMAIL)) {
@@ -90,15 +90,17 @@ class AuthController {
             $this->email = trim($_POST['email']);
 
             // Check if the email exists
-            $sql = 'SELECT PasswordHash FROM Users WHERE Email = ?';
+            $sql = 'SELECT ID, PasswordHash FROM Users WHERE Email = ?';
             $stmt = $this->mysqli->prepare($sql);
             $stmt->bind_param('s', trim($_POST['email']));
             if ($stmt->execute()) {
                 $result = $stmt->get_result();
                 if ($result) {
-                    $passwordHash = $result->fetch_row()[0];
+                    // Check if the password matches
+                    $passwordHash = $result->fetch_row()[1];
                     if (password_verify(trim($_POST['password']), $passwordHash)) {
                         $this->password = $passwordHash;
+                        $this->id = $result->fetch_row()[0];
                     } else {
                         $this->passwordError = 'This password does not match.';
                     }
@@ -129,7 +131,7 @@ class AuthController {
             
             $stmt->bind_param('ssss', $this->email, $this->password, $this->firstName, $this->lastName);
             if ($stmt->execute()) {
-                header('location: login.php');
+                header('location: http://healthcaremanagement/src/login.php');
             } else {
                 echo 'Oops! Something went wrong. Please try again later.';
             }
@@ -145,8 +147,17 @@ class AuthController {
         // Insert into database
         if (empty($this->emailError) && empty($this->passwordError)) {
             
-            header('location:  index.php');
+            //session_start();
+            $_SESSION['loggedIn'] = true;
+            $_SESSION['id'] = $this->id;
+            header('location: http://healthcaremanagement/index.php');
         }
+    }
+
+    public function logout() {
+        $_SESSION = [];
+        session_destroy();
+        header('location: http://healthcaremanagement/src/login.php');
     }
 
 }
