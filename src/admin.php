@@ -8,14 +8,15 @@ if (!isset($_SESSION['loggedIn']) || !$_SESSION['loggedIn']) {
 }
 $auth = new authController($mysqli);
 
+if (!$auth->access('admin')) {
+    header('location: http://healthcaremanagement/index.php');
+}
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if ($_POST['logout']) {
         $auth->logout();
     }
 }
-$mysqli->close();
-
-
 ?>
 
 <!DOCTYPE html>
@@ -30,3 +31,7 @@ $mysqli->close();
         </form>
     </body>
 </html>
+
+<?php
+$mysqli->close();
+?>

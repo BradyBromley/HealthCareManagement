@@ -31,7 +31,7 @@ class AuthController {
             $this->email = trim($_POST['email']);
             
             // Check if the email has already been used
-            $sql = 'SELECT ID FROM Users WHERE Email = ?';
+            $sql = 'SELECT ID FROM Users WHERE email = ?';
             $stmt = $this->mysqli->prepare($sql);
             $stmt->bind_param('s', $this->email);
             if ($stmt->execute()) {
@@ -90,17 +90,18 @@ class AuthController {
             $this->email = trim($_POST['email']);
 
             // Check if the email exists
-            $sql = 'SELECT ID, PasswordHash FROM Users WHERE Email = ?';
+            $sql = 'SELECT ID, passwordHash FROM Users WHERE email = ?';
             $stmt = $this->mysqli->prepare($sql);
             $stmt->bind_param('s', trim($_POST['email']));
             if ($stmt->execute()) {
                 $result = $stmt->get_result();
                 if ($result) {
                     // Check if the password matches
-                    $passwordHash = $result->fetch_row()[1];
+                    $row = $result->fetch_row();
+                    $passwordHash = $row[1];
                     if (password_verify(trim($_POST['password']), $passwordHash)) {
                         $this->password = $passwordHash;
-                        $this->id = $result->fetch_row()[0];
+                        $this->id = $row[0];
                     } else {
                         $this->passwordError = 'This password does not match.';
                     }
@@ -126,7 +127,7 @@ class AuthController {
         && empty($this->confirmPasswordError) && empty($this->firstNameError)
         && empty($this->lastNameError)) {
             
-            $sql = 'INSERT INTO Users (Email, PasswordHash, FirstName, LastName) VALUES (?, ?, ?, ?)';
+            $sql = 'INSERT INTO Users (email, passwordHash, firstName, lastName) VALUES (?, ?, ?, ?)';
             $stmt = $this->mysqli->prepare($sql);
             
             $stmt->bind_param('ssss', $this->email, $this->password, $this->firstName, $this->lastName);
@@ -144,10 +145,7 @@ class AuthController {
     public function login() {
         $this->validateLogin();
 
-        // Insert into database
         if (empty($this->emailError) && empty($this->passwordError)) {
-            
-            //session_start();
             $_SESSION['loggedIn'] = true;
             $_SESSION['id'] = $this->id;
             header('location: http://healthcaremanagement/index.php');
@@ -158,6 +156,23 @@ class AuthController {
         $_SESSION = [];
         session_destroy();
         header('location: http://healthcaremanagement/src/login.php');
+    }
+
+    public function access($role) {
+        // Check if the current user has the required permissions
+        $sql = 'SELECT Roles.ID FROM Roles, UsersToRoles WHERE UsersToRoles.userID = ? AND Roles.ID = UsersToRoles.roleID AND roleName = ?';
+        $stmt = $this->mysqli->prepare($sql);
+        $stmt->bind_param('is', $_SESSION['id'], $role);
+
+        if ($stmt->execute()) {
+            $result = $stmt->get_result();
+            if ($result && $result->fetch_row()) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+        $stmt->close();
     }
 
 }

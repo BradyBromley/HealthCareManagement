@@ -13,9 +13,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $auth->logout();
     }
 }
-$mysqli->close();
-
-
 ?>
 
 <!DOCTYPE html>
@@ -27,6 +24,15 @@ $mysqli->close();
         <?php echo '<p>Hello World</p>'; ?>
         <form id='logoutForm' action='<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>' method='post'>
             <input id='logout' name='logout' type='submit' value='Logout'>
+
+            <?php if ($auth->access('admin')) { ?>
+                <a href='http://healthcaremanagement/src/admin.php'>Admin Page</a>
+            <?php } ?>
+
         </form>
     </body>
 </html>
+
+<?php
+$mysqli->close();
+?>
