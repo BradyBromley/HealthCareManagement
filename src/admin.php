@@ -1,6 +1,6 @@
 <?php
-require_once 'src/config.php';
-require_once 'src/authController.php';
+require_once 'config.php';
+require_once 'authController.php';
 
 session_start();
 if (!isset($_SESSION['loggedIn']) || !$_SESSION['loggedIn']) {
@@ -21,10 +21,10 @@ $mysqli->close();
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Test Page</title>
+        <title>Admin Page</title>
     </head>
     <body>
-        <?php echo '<p>Hello World</p>'; ?>
+        <?php echo '<p>Hello Admin</p>'; ?>
         <form id='logoutForm' action='<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>' method='post'>
             <input id='logout' name='logout' type='submit' value='Logout'>
         </form>
