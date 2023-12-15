@@ -132,7 +132,7 @@ class AuthController {
             
             $stmt->bind_param('ssss', $this->email, $this->password, $this->firstName, $this->lastName);
             if ($stmt->execute()) {
-                header('location: http://healthcaremanagement/src/login.php');
+                header('location: http://' . $_SERVER['HTTP_HOST'] . '/src/login.php');
             } else {
                 echo 'Oops! Something went wrong. Please try again later.';
             }
@@ -148,14 +148,14 @@ class AuthController {
         if (empty($this->emailError) && empty($this->passwordError)) {
             $_SESSION['loggedIn'] = true;
             $_SESSION['id'] = $this->id;
-            header('location: http://healthcaremanagement/index.php');
+            header('location: http://' . $_SERVER['HTTP_HOST'] . '/index.php');
         }
     }
 
     public function logout() {
         $_SESSION = [];
         session_destroy();
-        header('location: http://healthcaremanagement/src/login.php');
+        header('location: http://' . $_SERVER['HTTP_HOST'] . '/src/login.php');
     }
 
     public function access($role) {

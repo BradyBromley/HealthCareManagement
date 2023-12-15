@@ -1,0 +1,32 @@
+/* Navigation */
+#navigation {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+
+.navbar {
+    background-color: slategrey;
+    list-style-type: none;
+    margin: 0px;
+    padding: 0px;
+    display: flex;
+    justify-content: center;
+}
+
+.navbarLink {
+    display: inline-block;
+}
+
+.navbarLink a {
+    color: white;
+    display: block;
+    text-align: center;
+    text-decoration: none;
+    padding: 10px 20px 10px 20px;
+}
+
+.navbarLink a:hover {
+    background-color: darkslategrey;
+}
