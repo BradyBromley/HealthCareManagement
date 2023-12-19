@@ -32,9 +32,7 @@ class AuthController {
     }
 
     private function validatePassword() {
-        if (empty(trim($_POST['password']))) {
-            $this->passwordError = 'Please enter a password.';
-        } else if (strlen(trim($_POST['password'])) < 8) {
+        if (strlen(trim($_POST['password'])) < 8) {
             $this->passwordError = 'Password must have at least 8 characters.';
         } else {
             $this->password = password_hash(trim($_POST['password']), PASSWORD_DEFAULT);
@@ -57,11 +55,26 @@ class AuthController {
         }
     }
 
-    private function emailInUse() {
-        // Return ID and password if the email is in use
+    private function getUserFromEmail($email) {
+        // Return ID and password if the email exists
         $sql = 'SELECT ID, passwordHash FROM Users WHERE email = ?';
         $stmt = $this->mysqli->prepare($sql);
-        $stmt->bind_param('s', $this->email);
+        $stmt->bind_param('s', $email);
+        if ($stmt->execute()) {
+            $result = $stmt->get_result();
+            if ($result) {
+                return $result->fetch_row();
+            }
+        }
+        $stmt->close();
+        return null;
+    }
+
+    private function getRoleID($role) {
+        // Return ID if the role exists
+        $sql = "SELECT ID FROM Roles WHERE roleName = ?";
+        $stmt = $this->mysqli->prepare($sql);
+        $stmt->bind_param('s', $role);
         if ($stmt->execute()) {
             $result = $stmt->get_result();
             if ($result) {
@@ -78,7 +91,7 @@ class AuthController {
         // Validate all inputs in the form
         $this->validateEmail();
         $this->validatePassword();
-        if ($this->emailInUse()) {
+        if ($this->getUserFromEmail($this->email)) {
             $this->emailError = 'This email is already in use.';
         }
         if (!password_verify(trim($_POST['confirmPassword']), $this->password)) {
@@ -93,24 +106,34 @@ class AuthController {
             
             // Insert User
             $sql = 'INSERT INTO Users (email, passwordHash, firstName, lastName) VALUES (?, ?, ?, ?)';
-            $stmt = $this->mysqli->prepare($sql);
-            $stmt->bind_param('ssss', $this->email, $this->password, $this->firstName, $this->lastName);
-            if ($stmt->execute()) {
-                header('location: http://' . $_SERVER['HTTP_HOST'] . '/src/login.php');
-            } else {
-                echo 'Oops! Something went wrong. Please try again later.';
+            $usersStmt = $this->mysqli->prepare($sql);
+            $usersStmt->bind_param('ssss', $this->email, $this->password, $this->firstName, $this->lastName);
+            if ($usersStmt->execute()) {
+
+                // Set Role
+                if (($userRow = $this->getUserFromEmail($this->email)) && ($roleRow = $this->getRoleID('guest'))) {
+                    $sql = 'INSERT INTO UsersToRoles (userID, roleID) VALUES (?, ?)';
+                    $usersToRolesStmt = $this->mysqli->prepare($sql);
+                    $usersToRolesStmt->bind_param('ii', $userRow[0], $roleRow[0]);
+                    if ($usersToRolesStmt->execute()) {
+                        header('location: http://' . $_SERVER['HTTP_HOST'] . '/src/login.php');
+                    }
+                    $usersToRolesStmt->close();
+                }
             }
-            $stmt->close();
+
+            echo 'Oops! Something went wrong. Please try again later.';
+            $usersStmt->close();
         }
     }
-
     
     public function login() {
         // Validate all inputs in the form
         $this->validateEmail();
         $this->validatePassword();
-        if ($row = $this->emailInUse()) {
+        if ($row = $this->getUserFromEmail($this->email)) {
             if (password_verify(trim($_POST['password']), $row[1])) {
+
                 // If the user exists, then login and store the ID
                 $_SESSION['loggedIn'] = true;
                 $_SESSION['id'] = $row[0];
