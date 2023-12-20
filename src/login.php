@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <form id='loginForm' action='<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>' method='post'>
             <div class='form-group'>
                 <label for='email'>Email</label>
-                <input id='email' name='email' type='email' class='form-control <?php echo (!empty($auth->emailError)) ? 'is-invalid' : ''; ?>' value='<?php echo $auth->email; ?>' placeholder='Enter email' required>
+                <input id='email' name='email' type='email' class='form-control <?php echo (!empty($auth->emailError)) ? 'is-invalid' : ''; ?>' value='<?php echo $_POST['email']; ?>' placeholder='Enter email' required>
             </div>
 
             <div class='form-group'>

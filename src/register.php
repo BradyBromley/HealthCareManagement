@@ -26,17 +26,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <form id='signUpForm' action='<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>' method='post'>
             <div class='form-group'>
                 <label for='firstName'>First Name</label>
-                <input id='firstName' name='firstName' type='text' class='form-control <?php echo (!empty($auth->firstNameError)) ? 'is-invalid' : ''; ?>' value='<?php echo $auth->firstName; ?>' placeholder='Enter first name' required>
+                <input id='firstName' name='firstName' type='text' class='form-control <?php echo (!empty($auth->firstNameError)) ? 'is-invalid' : ''; ?>' value='<?php echo $_POST['firstName']; ?>' placeholder='Enter first name' required>
             </div>
             
             <div class='form-group'>
                 <label for='lastName'>Last Name</label>
-                <input id='lastName' name='lastName' type='text' class='form-control <?php echo (!empty($auth->lastNameError)) ? 'is-invalid' : ''; ?>' value='<?php echo $auth->lastName; ?>' placeholder='Enter last name' required>
+                <input id='lastName' name='lastName' type='text' class='form-control <?php echo (!empty($auth->lastNameError)) ? 'is-invalid' : ''; ?>' value='<?php echo $_POST['lastName']; ?>' placeholder='Enter last name' required>
             </div>
 
             <div class='form-group'>
                 <label for='email'>Email</label>
-                <input id='email' name='email' type='email' class='form-control <?php echo (!empty($auth->emailError)) ? 'is-invalid' : ''; ?>' value='<?php echo $auth->email; ?>' placeholder='Enter email' required>
+                <input id='email' name='email' type='email' class='form-control <?php echo (!empty($auth->emailError)) ? 'is-invalid' : ''; ?>' value='<?php echo $_POST['email']; ?>' placeholder='Enter email' required>
             </div>
 
             <div class='form-group'>

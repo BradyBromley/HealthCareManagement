@@ -3,8 +3,6 @@ class AuthController {
     // Properties
     public $mysqli;
 
-    public $email;
-    public $password;
     public $firstName;
     public $lastName;
 
@@ -21,37 +19,42 @@ class AuthController {
 
 
     // Private Methods
-    private function validateEmail() {
-        if (empty(trim($_POST['email']))) {
+    private function validateEmail($email) {
+        if (empty(trim($email))) {
             $this->emailError = 'Please enter an email.';
-        } else if (!filter_var(trim($_POST['email']), FILTER_VALIDATE_EMAIL)) {
+        } else if (!filter_var(trim($email), FILTER_VALIDATE_EMAIL)) {
             $this->emailError = 'Invalid email format.';
         } else {
-            $this->email = trim($_POST['email']);
+            return trim($email);
         }
     }
 
-    private function validatePassword() {
-        if (strlen(trim($_POST['password'])) < 8) {
+    private function validatePassword($password) {
+        if (strlen(trim($password)) < 8) {
             $this->passwordError = 'Password must have at least 8 characters.';
+            return null;
         } else {
-            $this->password = password_hash(trim($_POST['password']), PASSWORD_DEFAULT);
+            return password_hash(trim($password), PASSWORD_DEFAULT);
         }
     }
 
-    private function validateName() {
+    private function validateFirstName($firstName) {
         // Validate first name
         if (empty(trim($_POST['firstName']))) {
             $this->firstNameError = 'Please enter a first name.';
+            return null;
         } else {
-            $this->firstName = trim($_POST['firstName']);
+            return trim($firstName);
         }
+    }
 
+    private function validateLastName($lastName) {
         // Validate last name
-        if (empty(trim($_POST['lastName']))) {
+        if (empty(trim($lastName))) {
             $this->lastNameError = 'Please enter a last name.';
+            return null;
         } else {
-            $this->lastName = trim($_POST['lastName']);
+            return trim($lastName);
         }
     }
 
@@ -89,15 +92,16 @@ class AuthController {
     // Public Methods
     public function register() {
         // Validate all inputs in the form
-        $this->validateEmail();
-        $this->validatePassword();
-        if ($this->getUserFromEmail($this->email)) {
+        $email = $this->validateEmail($_POST['email']);
+        $passwordHash = $this->validatePassword($_POST['password']);
+        if ($this->getUserFromEmail($email)) {
             $this->emailError = 'This email is already in use.';
         }
-        if (!password_verify(trim($_POST['confirmPassword']), $this->password)) {
+        if (!password_verify(trim($_POST['confirmPassword']), $passwordHash)) {
             $this->confirmPasswordError = 'This password does not match.';
         }
-        $this->validateName();
+        $firstName = $this->validateFirstName($_POST['firstName']);
+        $lastName = $this->validateLastName($_POST['lastName']);
 
         // Insert into database
         if (empty($this->emailError) && empty($this->passwordError)
@@ -107,11 +111,11 @@ class AuthController {
             // Insert User
             $sql = 'INSERT INTO Users (email, passwordHash, firstName, lastName) VALUES (?, ?, ?, ?)';
             $usersStmt = $this->mysqli->prepare($sql);
-            $usersStmt->bind_param('ssss', $this->email, $this->password, $this->firstName, $this->lastName);
+            $usersStmt->bind_param('ssss', $email, $passwordHash, $firstName, $lastName);
             if ($usersStmt->execute()) {
 
                 // Set Role
-                if (($userRow = $this->getUserFromEmail($this->email)) && ($roleRow = $this->getRoleID('guest'))) {
+                if (($userRow = $this->getUserFromEmail($email)) && ($roleRow = $this->getRoleID('guest'))) {
                     $sql = 'INSERT INTO UsersToRoles (userID, roleID) VALUES (?, ?)';
                     $usersToRolesStmt = $this->mysqli->prepare($sql);
                     $usersToRolesStmt->bind_param('ii', $userRow[0], $roleRow[0]);
@@ -129,9 +133,9 @@ class AuthController {
     
     public function login() {
         // Validate all inputs in the form
-        $this->validateEmail();
-        $this->validatePassword();
-        if ($row = $this->getUserFromEmail($this->email)) {
+        $email = $this->validateEmail($_POST['email']);
+        $this->validatePassword($_POST['password']);
+        if ($row = $this->getUserFromEmail($email)) {
             if (password_verify(trim($_POST['password']), $row[1])) {
 
                 // If the user exists, then login and store the ID
