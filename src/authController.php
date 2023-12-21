@@ -3,9 +3,6 @@ class AuthController {
     // Properties
     public $mysqli;
 
-    public $firstName;
-    public $lastName;
-
     public $emailError;
     public $passwordError;
     public $confirmPasswordError;
@@ -20,9 +17,7 @@ class AuthController {
 
     // Private Methods
     private function validateEmail($email) {
-        if (empty(trim($email))) {
-            $this->emailError = 'Please enter an email.';
-        } else if (!filter_var(trim($email), FILTER_VALIDATE_EMAIL)) {
+        if (!filter_var(trim($email), FILTER_VALIDATE_EMAIL)) {
             $this->emailError = 'Invalid email format.';
         } else {
             return trim($email);

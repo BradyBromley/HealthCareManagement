@@ -30,3 +30,8 @@
 .navbarLink a:hover {
     background-color: darkslategrey;
 }
+
+/* Authentication */
+.formInput {
+    height: 90px;
+}
