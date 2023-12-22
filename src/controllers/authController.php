@@ -9,6 +9,7 @@ class AuthController {
     public $firstNameError;
     public $lastNameError;
 
+
     // Constructor
     function __construct($mysqli) {
         $this->mysqli = $mysqli;
@@ -70,7 +71,7 @@ class AuthController {
 
     private function getRoleID($role) {
         // Return ID if the role exists
-        $sql = "SELECT ID FROM Roles WHERE roleName = ?";
+        $sql = 'SELECT ID FROM Roles WHERE roleName = ?';
         $stmt = $this->mysqli->prepare($sql);
         $stmt->bind_param('s', $role);
         if ($stmt->execute()) {

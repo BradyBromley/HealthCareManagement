@@ -1,14 +1,15 @@
 <?php
 require_once 'config.php';
-require_once 'authController.php';
+require_once 'controllers/authController.php';
 
+// Redirect if user is logged in
 session_start();
 if (isset($_SESSION['loggedIn']) && $_SESSION['loggedIn']) {
     header('location: http://' . $_SERVER['HTTP_HOST'] . '/index.php');
 }
 
-$auth = new authController($mysqli);
-
+// Login
+$auth = new AuthController($mysqli);
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $auth->login();
 }
