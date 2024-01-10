@@ -30,7 +30,7 @@ $userController = new UserController($mysqli);
     <head>
         <!-- Import css -->
         <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css' integrity='sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN' crossorigin='anonymous'>
-        <link rel='stylesheet' href='<?php $_SERVER['DOCUMENT_ROOT'] ?>/css/style.css'>
+        <link rel='stylesheet' href='/css/style.css'>
 
         <title>Admin Page</title>
     </head>
@@ -50,13 +50,20 @@ $userController = new UserController($mysqli);
                         <th>Last Name</th>
                         <th>Email</th>
                         <th>Role</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
         <?php
+            $numCols = 5;
             while ($row = $result->fetch_row()) {
-                echo '<tr><td>' . $row[0] . '</td><td>' . $row[1] . '</td><td>'
-                . $row[2] . '</td><td>' . $row[3] . '</td><td>' . $row[4] . '</td></tr>';
+                echo '<tr>';
+                for ($i = 0; $i < $numCols; $i++) {
+                    echo '<td>' . $row[$i] . '</td>';
+                }
+                echo '<td><a href="/src/editUser.php?id=' . $row[0] . '">Edit</a></td>';
+                echo '</tr>';
+
             }
         ?>
                 </tbody>

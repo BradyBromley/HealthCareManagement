@@ -22,7 +22,17 @@ class UserController {
         $stmt = $this->mysqli->prepare($sql);
         if ($stmt->execute()) {
             return $stmt->get_result();
-            
+        }
+        $stmt->close();
+        return null;
+    }
+
+    public function getUser($id) {
+        $sql = 'SELECT * FROM Users WHERE ID = ?';
+        $stmt = $this->mysqli->prepare($sql);
+        $stmt->bind_param('i', $id);
+        if ($stmt->execute()) {
+            return $stmt->get_result();
         }
         $stmt->close();
         return null;
