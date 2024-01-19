@@ -10,16 +10,9 @@ if (!isset($_SESSION['loggedIn']) || !$_SESSION['loggedIn']) {
 }
 
 // Redirect if user is not an admin
-$auth = new AuthController($mysqli);
-if (!$auth->access('admin')) {
+$authController = new AuthController($mysqli);
+if (!$authController->access('admin')) {
     header('location: http://' . $_SERVER['HTTP_HOST'] . '/index.php');
-}
-
-// Logout
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    if ($_POST['logout']) {
-        $auth->logout();
-    }
 }
 
 $userController = new UserController($mysqli);
@@ -32,6 +25,7 @@ $userController = new UserController($mysqli);
         <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css' integrity='sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN' crossorigin='anonymous'>
         <link rel='stylesheet' href='/css/style.css'>
 
+        <meta charset='utf-8'>
         <title>Admin Page</title>
     </head>
     <body>
@@ -70,13 +64,11 @@ $userController = new UserController($mysqli);
             </table>
         <?php
         } else {
-            echo 'Oops! Something went wrong. Please try again later.';
+        ?>
+            <div class="alert alert-danger">Oops! Something went wrong. Please try again later.</div>
+        <?php
         }
         ?>
-
-        <form id='logoutForm' action='<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>' method='post'>
-            <input id='logout' name='logout' type='submit' value='Logout'>
-        </form>
     </body>
 </html>
 

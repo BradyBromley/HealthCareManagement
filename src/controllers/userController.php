@@ -1,17 +1,11 @@
 <?php
-class UserController {
+require_once 'validationController.php';
+
+class UserController extends ValidationController {
     // Properties
     public $mysqli;
 
-
-    // Constructor
-    function __construct($mysqli) {
-        $this->mysqli = $mysqli;
-    }
-
-
     // Private Methods
-
 
     // Public Methods
     public function listUsers() {
@@ -36,5 +30,23 @@ class UserController {
         }
         $stmt->close();
         return null;
+    }
+
+    public function editUser($id) {
+        // Validate all inputs in the form
+        $firstName = $this->validateFirstName($_POST['firstName']);
+        $lastName = $this->validateLastName($_POST['lastName']);
+
+        if (empty($this->firstNameError) && empty($this->lastNameError)) {
+            // Update User
+            $sql = 'UPDATE Users SET firstName = ?, lastName = ? WHERE id = ?';
+            $stmt = $this->mysqli->prepare($sql);
+            $stmt->bind_param('sss', $firstName, $lastName, $id);
+            if ($stmt->execute()) {
+                $stmt->close();
+                return true;
+            }
+            return false;
+        }
     }
 }

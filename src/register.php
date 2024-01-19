@@ -9,9 +9,12 @@ if (isset($_SESSION['loggedIn']) && $_SESSION['loggedIn']) {
 }
 
 // Register
-$auth = new AuthController($mysqli);
+$authController = new AuthController($mysqli);
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $auth->register();
+    $register = $authController->register();
+    if ($register) {
+        header('location: http://' . $_SERVER['HTTP_HOST'] . '/src/login.php');
+    }
 }
 ?>
 
@@ -27,42 +30,49 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </head>
     <body>
         <h1>Sign Up</h1>
-        <form id='signUpForm' class='needs-validation' action='<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>' method='post'>
+        <form id='signUpForm' class='needs-validation' action='<?php echo htmlspecialchars($_SERVER['REQUEST_URI']); ?>' method='post'>
             <div class='form-group formInput'>
                 <label for='firstName'>First Name</label>
-                <input id='firstName' name='firstName' type='text' class='form-control <?php echo (!empty($auth->firstNameError)) ? 'is-invalid' : ''; ?>' value='<?php echo $_POST['firstName']; ?>' placeholder='Enter first name'>
-                <div class="invalid-feedback"><?php echo $auth->firstNameError; ?></div>
+                <input id='firstName' name='firstName' type='text' class='form-control <?php echo (!empty($authController->firstNameError)) ? 'is-invalid' : ''; ?>' value='<?php echo $_POST['firstName']; ?>' placeholder='Enter first name'>
+                <div class="invalid-feedback"><?php echo $authController->firstNameError; ?></div>
             </div>
             
             <div class='form-group formInput'>
                 <label for='lastName'>Last Name</label>
-                <input id='lastName' name='lastName' type='text' class='form-control <?php echo (!empty($auth->lastNameError)) ? 'is-invalid' : ''; ?>' value='<?php echo $_POST['lastName']; ?>' placeholder='Enter last name'>
-                <div class="invalid-feedback"><?php echo $auth->lastNameError; ?></div>
+                <input id='lastName' name='lastName' type='text' class='form-control <?php echo (!empty($authController->lastNameError)) ? 'is-invalid' : ''; ?>' value='<?php echo $_POST['lastName']; ?>' placeholder='Enter last name'>
+                <div class="invalid-feedback"><?php echo $authController->lastNameError; ?></div>
             </div>
 
             <div class='form-group formInput'>
                 <label for='email'>Email</label>
-                <input id='email' name='email' type='email' class='form-control <?php echo (!empty($auth->emailError)) ? 'is-invalid' : ''; ?>' value='<?php echo $_POST['email']; ?>' placeholder='Enter email'>
-                <div class="invalid-feedback"><?php echo $auth->emailError; ?></div>
+                <input id='email' name='email' type='email' class='form-control <?php echo (!empty($authController->emailError)) ? 'is-invalid' : ''; ?>' value='<?php echo $_POST['email']; ?>' placeholder='Enter email'>
+                <div class="invalid-feedback"><?php echo $authController->emailError; ?></div>
             </div>
 
             <div class='form-group formInput'>
                 <label for='password'>Password</label>
-                <input id='password' name='password' type='password' class='form-control <?php echo (!empty($auth->passwordError)) ? 'is-invalid' : ''; ?>' value='<?php echo $_POST['password']; ?>' placeholder='Enter password'>
-                <div class="invalid-feedback"><?php echo $auth->passwordError; ?></div>
+                <input id='password' name='password' type='password' class='form-control <?php echo (!empty($authController->passwordError)) ? 'is-invalid' : ''; ?>' value='<?php echo $_POST['password']; ?>' placeholder='Enter password'>
+                <div class="invalid-feedback"><?php echo $authController->passwordError; ?></div>
             </div>
 
             <div class='form-group formInput'>
                 <label for='confirmPassword'>Confirm Password</label>
-                <input id='confirmPassword' name='confirmPassword' type='password' class='form-control <?php echo (!empty($auth->confirmPasswordError)) ? 'is-invalid' : ''; ?>' value='<?php echo $_POST['confirmPassword']; ?>' placeholder='Confirm password'>
-                <div class="invalid-feedback"><?php echo $auth->confirmPasswordError; ?></div>
+                <input id='confirmPassword' name='confirmPassword' type='password' class='form-control <?php echo (!empty($authController->confirmPasswordError)) ? 'is-invalid' : ''; ?>' value='<?php echo $_POST['confirmPassword']; ?>' placeholder='Confirm password'>
+                <div class="invalid-feedback"><?php echo $authController->confirmPasswordError; ?></div>
             </div>
 
             <button id='submit' type='submit' class='btn btn-primary'>Submit</button>
 
             <p>Already have an account? <a href='/src/login.php'>Sign in here.</a></p>
         </form>
-        <script src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js' integrity='sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL' crossorigin='anonymous'></script>
+
+        <?php
+        if ($register === false) {
+        ?>
+            <div class="alert alert-danger">Oops! Something went wrong. Please try again later.</div>
+        <?php
+        }
+        ?>
     </body>
 </html>
 

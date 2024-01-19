@@ -10,19 +10,16 @@ if (!isset($_SESSION['loggedIn']) || !$_SESSION['loggedIn']) {
 }
 
 // Redirect if user is not an admin
-$auth = new AuthController($mysqli);
-if (!$auth->access('admin')) {
+$authController = new AuthController($mysqli);
+if (!$authController->access('admin') && $_SESSION['id'] != $_REQUEST['id']) {
     header('location: http://' . $_SERVER['HTTP_HOST'] . '/index.php');
 }
 
-// Logout
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    if ($_POST['logout']) {
-        $auth->logout();
-    }
-}
-
+// Edit User
 $userController = new UserController($mysqli);
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $result = $userController->editUser($_REQUEST['id']);
+}
 ?>
 
 <!DOCTYPE html>
@@ -32,25 +29,48 @@ $userController = new UserController($mysqli);
         <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css' integrity='sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN' crossorigin='anonymous'>
         <link rel='stylesheet' href='/css/style.css'>
 
+        <meta charset='utf-8'>
         <title>Admin Page</title>
     </head>
     <body>
         <?php include_once($_SERVER['DOCUMENT_ROOT'] . '/src/header.php') ?>
 
-        <!-- User Table -->
+        <!-- Edit User -->
         <?php
-        $result = $userController->getUser($_REQUEST['id']);
-        if ($result) {
-            $row = $result->fetch_row();
+        $user = $userController->getUser($_REQUEST['id']);
+        if ($user) {
+            $row = $user->fetch_row();
             echo $row[0] . ' ' . $row[1] . ' ' . $row[3] . ' ' . $row[4];
+            ?>
+
+            <form id='editUserForm' class='needs-validation' action='<?php echo htmlspecialchars($_SERVER['REQUEST_URI']); ?>' method='post'>
+                <div class='form-group formInput'>
+                    <label for='firstName'>First Name</label>
+                    <input id='firstName' name='firstName' type='text' class='form-control <?php echo (!empty($userController->firstNameError)) ? 'is-invalid' : ''; ?>' value='<?php echo $_SERVER['REQUEST_METHOD'] == 'POST' ? $_POST['firstName'] : $row[3]; ?>' placeholder='Enter first name'>
+                    <div class="invalid-feedback"><?php echo $userController->firstNameError; ?></div>
+                </div>
+                
+                <div class='form-group formInput'>
+                    <label for='lastName'>Last Name</label>
+                    <input id='lastName' name='lastName' type='text' class='form-control <?php echo (!empty($userController->lastNameError)) ? 'is-invalid' : ''; ?>' value='<?php echo $_SERVER['REQUEST_METHOD'] == 'POST' ? $_POST['lastName'] : $row[4]; ?>' placeholder='Enter last name'>
+                    <div class="invalid-feedback"><?php echo $userController->lastNameError; ?></div>
+                </div>
+
+                <button id='submit' type='submit' class='btn btn-primary'>Submit</button>
+            </form>
+
+            <?php
+            if ($result) {
+            ?>
+                <div class="alert alert-success">Updated Successfully!</div>
+            <?php
+            }
         } else {
-            echo 'Oops! Something went wrong. Please try again later.';
+        ?>
+            <div class="alert alert-danger">Oops! Something went wrong. Please try again later.</div>
+        <?php
         }
         ?>
-
-        <form id='logoutForm' action='<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>' method='post'>
-            <input id='logout' name='logout' type='submit' value='Logout'>
-        </form>
     </body>
 </html>
 

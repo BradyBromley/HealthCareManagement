@@ -9,16 +9,16 @@ if (isset($_SESSION['loggedIn']) && $_SESSION['loggedIn']) {
 }
 
 // Login
-$auth = new AuthController($mysqli);
+$authController = new AuthController($mysqli);
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $auth->login();
+    $authController->login();
 }
 ?>
 
 <!DOCTYPE html>
 <html>
     <head>
-        <!-- Import css-->
+        <!-- Import css -->
         <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css' integrity='sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN' crossorigin='anonymous'>
         <link rel='stylesheet' href='/css/style.css'>
 
@@ -27,17 +27,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </head>
     <body>
         <h1>Login</h1>
-        <form id='loginForm' class='needs-validation' action='<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>' method='post'>
+        <form id='loginForm' class='needs-validation' action='<?php echo htmlspecialchars($_SERVER['REQUEST_URI']); ?>' method='post'>
             <div class='form-group formInput'>
                 <label for='email'>Email</label>
-                <input id='email' name='email' type='email' class='form-control <?php echo (!empty($auth->emailError)) ? 'is-invalid' : ''; ?>' value='<?php echo $_POST['email']; ?>' placeholder='Enter email'>
-                <div class="invalid-feedback"><?php echo $auth->emailError; ?></div>
+                <input id='email' name='email' type='email' class='form-control <?php echo (!empty($authController->emailError)) ? 'is-invalid' : ''; ?>' value='<?php echo $_POST['email']; ?>' placeholder='Enter email'>
+                <div class='invalid-feedback'><?php echo $authController->emailError; ?></div>
             </div>
 
             <div class='form-group formInput'>
                 <label for='password'>Password</label>
-                <input id='password' name='password' type='password' class='form-control <?php echo (!empty($auth->passwordError)) ? 'is-invalid' : ''; ?>' value='<?php echo $_POST['password']; ?>' placeholder='Enter password'>
-                <div class="invalid-feedback"><?php echo $auth->passwordError; ?></div>
+                <input id='password' name='password' type='password' class='form-control <?php echo (!empty($authController->passwordError)) ? 'is-invalid' : ''; ?>' value='<?php echo $_POST['password']; ?>' placeholder='Enter password'>
+                <div class='invalid-feedback'><?php echo $authController->passwordError; ?></div>
             </div>
 
             <button id='submit' type='submit' class='btn btn-primary'>Submit</button>
