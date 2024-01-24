@@ -1,6 +1,5 @@
 <?php
 require_once 'config.php';
-require_once 'controllers/authController.php';
 require_once 'controllers/userController.php';
 
 // Redirect if user is not logged in
@@ -10,12 +9,11 @@ if (!isset($_SESSION['loggedIn']) || !$_SESSION['loggedIn']) {
 }
 
 // Redirect if user is not an admin
-$authController = new AuthController($mysqli);
-if (!$authController->access('admin')) {
+$userController = new UserController($mysqli);
+if (!$userController->access('admin')) {
     header('location: http://' . $_SERVER['HTTP_HOST'] . '/index.php');
 }
 
-$userController = new UserController($mysqli);
 ?>
 
 <!DOCTYPE html>

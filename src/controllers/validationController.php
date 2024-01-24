@@ -7,13 +7,6 @@ class ValidationController {
     public $firstNameError;
     public $lastNameError;
 
-
-    // Constructor
-    function __construct($mysqli) {
-        $this->mysqli = $mysqli;
-    }
-
-
     // Public Methods
     public function validateEmail($email) {
         if (!filter_var(trim($email), FILTER_VALIDATE_EMAIL)) {

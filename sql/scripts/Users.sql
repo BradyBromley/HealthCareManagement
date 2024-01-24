@@ -4,8 +4,10 @@ CREATE TABLE Users (
     passwordHash varchar(255) NOT NULL,
     firstName varchar(255) NOT NULL,
     lastName varchar(255) NOT NULL,
-    address varchar(255) DEFAULT NULL,
-    city varchar(255) DEFAULT NULL,
+    address varchar(255) DEFAULT '',
+    city varchar(255) DEFAULT '',
+    roleID int NOT NULL,
     isActive boolean DEFAULT 1,
-    PRIMARY KEY (ID)
+    PRIMARY KEY (ID),
+    FOREIGN KEY (roleID) REFERENCES Roles(ID)
 );

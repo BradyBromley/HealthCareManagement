@@ -1,8 +1,0 @@
-CREATE TABLE UsersToRoles (
-    ID int NOT NULL AUTO_INCREMENT,
-    userID int NOT NULL,
-    roleID int NOT NULL,
-    PRIMARY KEY (ID),
-    FOREIGN KEY (userID) REFERENCES Users(ID),
-    FOREIGN KEY (roleID) REFERENCES Roles(ID)
-);

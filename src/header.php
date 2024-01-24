@@ -4,7 +4,7 @@
         <h1>Health Care Management</h1>
         <ul class='navbar'>
             <li class='navbarLink'><a href='/index.php'>Home</a></li>
-            <?php if ($authController->access('admin')) { ?>
+            <?php if ($userController->access('admin')) { ?>
                 <li class='navbarLink'><a href='/src/admin.php'>Admin</a></li>
                 <li class='navbarLink'><a href='/src/users.php'>Users</a></li>
             <?php } ?>

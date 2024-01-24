@@ -1,6 +1,5 @@
 <?php
 require_once 'config.php';
-require_once 'controllers/authController.php';
 require_once 'controllers/userController.php';
 
 // Redirect if user is not logged in
@@ -10,13 +9,12 @@ if (!isset($_SESSION['loggedIn']) || !$_SESSION['loggedIn']) {
 }
 
 // Redirect if user is not an admin
-$authController = new AuthController($mysqli);
-if (!$authController->access('admin') && $_SESSION['id'] != $_REQUEST['id']) {
+$userController = new UserController($mysqli);
+if (!$userController->access('admin') && $_SESSION['id'] != $_REQUEST['id']) {
     header('location: http://' . $_SERVER['HTTP_HOST'] . '/index.php');
 }
 
 // Edit User
-$userController = new UserController($mysqli);
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $result = $userController->editUser($_REQUEST['id']);
 }
@@ -54,6 +52,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <label for='lastName'>Last Name</label>
                     <input id='lastName' name='lastName' type='text' class='form-control <?php echo (!empty($userController->lastNameError)) ? 'is-invalid' : ''; ?>' value='<?php echo $_SERVER['REQUEST_METHOD'] == 'POST' ? $_POST['lastName'] : $row[4]; ?>' placeholder='Enter last name'>
                     <div class="invalid-feedback"><?php echo $userController->lastNameError; ?></div>
+                </div>
+
+                <div class='form-group formInput'>
+                    <label for='address'>Address</label>
+                    <input id='address' name='address' type='text' class='form-control <?php echo (!empty($userController->lastNameError)) ? 'is-invalid' : ''; ?>' value='<?php echo $_SERVER['REQUEST_METHOD'] == 'POST' ? $_POST['address'] : $row[5]; ?>' placeholder='Enter address'>
+                </div>
+
+                <div class='form-group formInput'>
+                    <label for='city'>City</label>
+                    <input id='city' name='city' type='text' class='form-control <?php echo (!empty($userController->lastNameError)) ? 'is-invalid' : ''; ?>' value='<?php echo $_SERVER['REQUEST_METHOD'] == 'POST' ? $_POST['city'] : $row[6]; ?>' placeholder='Enter city'>
                 </div>
 
                 <button id='submit' type='submit' class='btn btn-primary'>Submit</button>

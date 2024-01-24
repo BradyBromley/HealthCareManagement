@@ -5,6 +5,13 @@ class AuthController extends ValidationController {
     // Properties
     public $mysqli;
 
+
+    // Constructor
+    function __construct($mysqli) {
+        $this->mysqli = $mysqli;
+    }
+    
+
     // Private Methods
     private function getUserFromEmail($email) {
         // Return ID and password if the email exists
@@ -30,7 +37,7 @@ class AuthController extends ValidationController {
             $result = $stmt->get_result();
             $stmt->close();
             if ($result) {
-                return $result->fetch_row();
+                return $result->fetch_row()[0];
             }
         }
         return null;
@@ -57,26 +64,17 @@ class AuthController extends ValidationController {
         && empty($this->lastNameError)) {
             
             // Insert User
-            $sql = 'INSERT INTO Users (email, passwordHash, firstName, lastName) VALUES (?, ?, ?, ?)';
+            $sql = 'INSERT INTO Users (email, passwordHash, firstName, lastName, roleID) VALUES (?, ?, ?, ?, ?)';
             $usersStmt = $this->mysqli->prepare($sql);
-            $usersStmt->bind_param('ssss', $email, $passwordHash, $firstName, $lastName);
+            $usersStmt->bind_param('sssss', $email, $passwordHash, $firstName, $lastName, $this->getRoleID('guest'));
             if ($usersStmt->execute()) {
                 $usersStmt->close();
-                // Set Role
-                if (($userRow = $this->getUserFromEmail($email)) && ($roleRow = $this->getRoleID('guest'))) {
-                    $sql = 'INSERT INTO UsersToRoles (userID, roleID) VALUES (?, ?)';
-                    $usersToRolesStmt = $this->mysqli->prepare($sql);
-                    $usersToRolesStmt->bind_param('ii', $userRow[0], $roleRow[0]);
-                    if ($usersToRolesStmt->execute()) {
-                        $usersToRolesStmt->close();
-                        return true;
-                    }
-                    $usersToRolesStmt->close();
-                }
+                return true;
             } else {
                 $usersStmt->close();
+                return false;
             }
-            return false;
+            
         }
     }
     
@@ -104,26 +102,5 @@ class AuthController extends ValidationController {
         session_destroy();
         header('location: http://' . $_SERVER['HTTP_HOST'] . '/src/login.php');
     }
-
-    // SHOULD THIS GO IN A ROLE CONTROLLER???????????????????
-    public function access($role) {
-        // Check if the current user has the required permissions
-        $sql = 'SELECT Roles.ID FROM Roles, UsersToRoles WHERE UsersToRoles.userID = ? AND Roles.ID = UsersToRoles.roleID AND roleName = ?';
-        $stmt = $this->mysqli->prepare($sql);
-        $stmt->bind_param('is', $_SESSION['id'], $role);
-
-        if ($stmt->execute()) {
-            $result = $stmt->get_result();
-            $stmt->close();
-            if ($result && $result->fetch_row()) {
-                return true;
-            } else {
-                return false;
-            }
-        } else {
-            $stmt->close();
-        }
-    }
-
 }
 ?>

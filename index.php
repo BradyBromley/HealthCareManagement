@@ -1,6 +1,6 @@
 <?php
 require_once 'src/config.php';
-require_once 'src/controllers/authController.php';
+require_once 'src/controllers/userController.php';
 
 // Redirect if user is not logged in
 session_start();
@@ -8,7 +8,7 @@ if (!isset($_SESSION['loggedIn']) || !$_SESSION['loggedIn']) {
     header('location: http://' . $_SERVER['HTTP_HOST'] . '/src/login.php');
 }
 
-$authController = new AuthController($mysqli);
+$userController = new UserController($mysqli);
 ?>
 
 <!DOCTYPE html>
