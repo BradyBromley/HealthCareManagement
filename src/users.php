@@ -63,7 +63,7 @@ if (!$userController->access('admin')) {
         <?php
         } else {
         ?>
-            <div class="alert alert-danger">Oops! Something went wrong. Please try again later.</div>
+            <div class='alert alert-danger'>Oops! Something went wrong. Please try again later.</div>
         <?php
         }
         ?>

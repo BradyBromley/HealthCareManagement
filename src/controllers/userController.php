@@ -45,12 +45,13 @@ class UserController extends ValidationController {
         $lastName = $this->validateLastName($_POST['lastName']);
         $address = trim($_POST['address']);
         $city = trim($_POST['city']);
+        $role = trim($_POST['role']);
 
         if (empty($this->firstNameError) && empty($this->lastNameError)) {
             // Update User
-            $sql = 'UPDATE Users SET firstName = ?, lastName = ?, address = ?, city = ? WHERE id = ?';
+            $sql = 'UPDATE Users SET firstName = ?, lastName = ?, address = ?, city = ?, roleID = ? WHERE id = ?';
             $stmt = $this->mysqli->prepare($sql);
-            $stmt->bind_param('sssss', $firstName, $lastName, $address, $city, $id);
+            $stmt->bind_param('ssssss', $firstName, $lastName, $address, $city, $role, $id);
             if ($stmt->execute()) {
                 $stmt->close();
                 return true;
