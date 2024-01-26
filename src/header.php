@@ -8,6 +8,7 @@
                 <li class='navbarLink'><a href='/src/admin.php'>Admin</a></li>
                 <li class='navbarLink'><a href='/src/users.php'>Users</a></li>
             <?php } ?>
+            <li class='navbarLink'><a href='/src/account.php'>Account</a></li>
             <li class='navbarLink'><a href='/src/logout.php'>Logout</a></li>
             </form>
         </ul>

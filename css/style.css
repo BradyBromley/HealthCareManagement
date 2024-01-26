@@ -31,7 +31,16 @@
     background-color: darkslategrey;
 }
 
-/* Authentication */
+/* Edit User */
 .formInput {
     height: 90px;
+}
+
+/* Account */
+.accountFieldLabel {
+    display: inline-block;
+    width: 150px;
+}
+
+.accountFieldValue {
 }
