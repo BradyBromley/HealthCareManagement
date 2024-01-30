@@ -23,7 +23,12 @@ $userController = new UserController($mysqli);
     </head>
     <body>
         <?php include_once($_SERVER['DOCUMENT_ROOT'] . '/src/header.php') ?>
-        <?php echo '<p>Hello World</p>'; ?>
+
+        <!-- Home -->
+        <div class='content'>
+            <h2>Home</h2>
+            <?php echo '<p>Hello World</p>'; ?>
+        </div>
     </body>
 </html>
 

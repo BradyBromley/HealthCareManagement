@@ -33,45 +33,57 @@ $roleController = new RoleController($mysqli);
     <body>
         <?php include_once($_SERVER['DOCUMENT_ROOT'] . '/src/header.php') ?>
 
-        <!-- Edit User -->
+        <!-- Account -->
+        <div class='content'>
+        <h2>Account</h2>
         <?php
         $user = $userController->getUser($_SESSION['id']);
         if ($user) {
             $userRow = $user->fetch_row();
+            $role = $roleController->getRole($userRow[7]);
+            if ($role) {
+                $roleRow = $role->fetch_row();
+                ?>
+                    <div class='accountField'>
+                        <span class='accountFieldLabel'>First Name</span>
+                        <span class='accountFieldValue'><?php echo $userRow[3]; ?></span>
+                    </div>
+                    
+                    <div class='accountField'>
+                        <span class='accountFieldLabel'>Last Name</span>
+                        <span class='accountFieldValue'><?php echo $userRow[4]; ?></span>
+                    </div>
+
+                    <div class='accountField'>
+                        <span class='accountFieldLabel'>Address</span>
+                        <span class='accountFieldValue'><?php echo $userRow[5]; ?></span>
+                    </div>
+
+                    <div class='accountField'>
+                        <span class='accountFieldLabel'>City</span>
+                        <span class='accountFieldValue'><?php echo $userRow[6]; ?></span>
+                    </div>
+
+                    <div class='accountField'>
+                        <span class='accountFieldLabel'>Role</span>
+                        <span class='accountFieldValue'><?php echo $roleRow[1]; ?></span>
+                    </div>
+
+                    <a class='btn btn-secondary' href='/src/editUser.php?id=<?php echo $_SESSION['id'] ?>'>Edit</a>
+
+                <?php
+            } else {
             ?>
-
-            <div class='accountField'>
-                <span class='accountFieldLabel'>First Name</span>
-                <span class='accountFieldValue'><?php echo $userRow[3]; ?></span>
-            </div>
-            
-            <div class='accountField'>
-                <span class='accountFieldLabel'>Last Name</span>
-                <span class='accountFieldValue'><?php echo $userRow[4]; ?></span>
-            </div>
-
-            <div class='accountField'>
-                <span class='accountFieldLabel'>Address</span>
-                <span class='accountFieldValue'><?php echo $userRow[5]; ?></span>
-            </div>
-
-            <div class='accountField'>
-                <span class='accountFieldLabel'>City</span>
-                <span class='accountFieldValue'><?php echo $userRow[6]; ?></span>
-            </div>
-
-            <div class='accountField'>
-                <span class='accountFieldLabel'>Role</span>
-                <span class='accountFieldValue'><?php echo $userRow[7]; ?></span>
-            </div>
-
+                <div class="banner alert alert-danger">Oops! Something went wrong. Please try again later.</div>
             <?php
+            }
         } else {
         ?>
-            <div class="alert alert-danger">Oops! Something went wrong. Please try again later.</div>
+            <div class="banner alert alert-danger">Oops! Something went wrong. Please try again later.</div>
         <?php
         }
         ?>
+        </div>
     </body>
 </html>
 

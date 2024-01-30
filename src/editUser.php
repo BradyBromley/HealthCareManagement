@@ -37,6 +37,8 @@ $roleController = new RoleController($mysqli);
         <?php include_once($_SERVER['DOCUMENT_ROOT'] . '/src/header.php') ?>
 
         <!-- Edit User -->
+        <div class='content'>
+        <h2>Edit User</h2>
         <?php
         $user = $userController->getUser($_REQUEST['id']);
         if ($user) {
@@ -90,35 +92,44 @@ $roleController = new RoleController($mysqli);
                     <?php
                     } else {
                     ?>
-                        <div class='alert alert-danger'>Oops! Something went wrong. Please try again later.</div>
+                        <div class='banner alert alert-danger'>Oops! Something went wrong. Please try again later.</div>
                     <?php
                     }
                 } else {
-                // Display the role if the logged in user isn't an admin
+                    // Don't let the role be editable if the logged in user isn't an admin
+                    $role = $roleController->getRole($userRow[7]);
+                    if ($role) {
+                        $roleRow = $role->fetch_row();
                 ?>
                     <div class='form-group formInput'>
                         <label for='role'>Role</label>
-                        <input id='role' name='role' type='text' class='form-control' value='<?php echo $userRow[7]; ?>' disabled>
+                        <input id='role' name='role' type='text' class='form-control' value='<?php echo $roleRow[1]; ?>' disabled>
                     </div>
                 <?php
+                    } else {
+                    ?>
+                        <div class='banner alert alert-danger'>Oops! Something went wrong. Please try again later.</div>
+                    <?php
+                    }
                 }
                 ?>
 
-                <button id='submit' type='submit' class='btn btn-primary'>Submit</button>
+                <button id='submit' type='submit' class='btn btn-success'>Submit</button>
             </form>
 
             <?php
             if ($result) {
             ?>
-                <div class="alert alert-success">Updated Successfully!</div>
+                <div class="banner alert alert-success">Updated Successfully!</div>
             <?php
             }
         } else {
         ?>
-            <div class="alert alert-danger">Oops! Something went wrong. Please try again later.</div>
+            <div class="banner alert alert-danger">Oops! Something went wrong. Please try again later.</div>
         <?php
         }
         ?>
+        </div>
     </body>
 </html>
 

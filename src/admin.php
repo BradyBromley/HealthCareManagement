@@ -27,7 +27,12 @@ if (!$userController->access('admin')) {
     </head>
     <body>
         <?php include_once($_SERVER['DOCUMENT_ROOT'] . '/src/header.php') ?>
-        <?php echo '<p>Hello Admin</p>'; ?>
+
+        <!-- Admin -->
+        <div class='content'>
+            <h2>Admin</h2>
+            <?php echo '<p>Hello Admin</p>'; ?>
+        </div>
     </body>
 </html>
 

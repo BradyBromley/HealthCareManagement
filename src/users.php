@@ -29,44 +29,47 @@ if (!$userController->access('admin')) {
     <body>
         <?php include_once($_SERVER['DOCUMENT_ROOT'] . '/src/header.php') ?>
 
-        <!-- User Table -->
-        <?php
-        $result = $userController->listUsers();
-        if ($result) {
-        ?>
-            <table class='table table-striped table-bordered'>
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>First Name</th>
-                        <th>Last Name</th>
-                        <th>Email</th>
-                        <th>Role</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-        <?php
-            $numCols = 5;
-            while ($row = $result->fetch_row()) {
-                echo '<tr>';
-                for ($i = 0; $i < $numCols; $i++) {
-                    echo '<td>' . $row[$i] . '</td>';
-                }
-                echo '<td><a href="/src/editUser.php?id=' . $row[0] . '">Edit</a></td>';
-                echo '</tr>';
+        <!-- Users -->
+        <div class='content'>
+            <h2>Users</h2>
+            <?php
+            $result = $userController->listUsers();
+            if ($result) {
+            ?>
+                <table class='table table-striped table-bordered'>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>Email</th>
+                            <th>Role</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            <?php
+                $numCols = 5;
+                while ($row = $result->fetch_row()) {
+                    echo '<tr>';
+                    for ($i = 0; $i < $numCols; $i++) {
+                        echo '<td>' . $row[$i] . '</td>';
+                    }
+                    echo '<td><a href="/src/editUser.php?id=' . $row[0] . '">Edit</a></td>';
+                    echo '</tr>';
 
+                }
+            ?>
+                    </tbody>
+                </table>
+            <?php
+            } else {
+            ?>
+                <div class='banner alert alert-danger'>Oops! Something went wrong. Please try again later.</div>
+            <?php
             }
-        ?>
-                </tbody>
-            </table>
-        <?php
-        } else {
-        ?>
-            <div class='alert alert-danger'>Oops! Something went wrong. Please try again later.</div>
-        <?php
-        }
-        ?>
+            ?>
+        </div>
     </body>
 </html>
 

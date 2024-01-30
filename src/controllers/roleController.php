@@ -25,4 +25,15 @@ class RoleController extends ValidationController {
         $stmt->close();
         return null;
     }
+
+    public function getRole($id) {
+        $sql = 'SELECT * FROM Roles WHERE ID = ?';
+        $stmt = $this->mysqli->prepare($sql);
+        $stmt->bind_param('i', $id);
+        if ($stmt->execute()) {
+            return $stmt->get_result();
+        }
+        $stmt->close();
+        return null;
+    }
 }

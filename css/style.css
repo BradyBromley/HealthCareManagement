@@ -31,16 +31,34 @@
     background-color: darkslategrey;
 }
 
+/* Page Formatting */
+.content {
+    margin: auto;
+    width: 90%;
+}
+
+.banner {
+    margin-top: 10px;
+}
+
 /* Edit User */
 .formInput {
     height: 90px;
 }
 
 /* Account */
+.accountField {
+    border-top: 1px solid lightgray;
+    padding: 10px;
+}
+
 .accountFieldLabel {
     display: inline-block;
     width: 150px;
+    font-size: 14px;
+    color: dimgray;
 }
 
 .accountFieldValue {
+    font-size: 16px;
 }
