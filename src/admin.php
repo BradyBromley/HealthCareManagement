@@ -23,7 +23,7 @@ if (!$userController->access('admin')) {
         <link rel='stylesheet' href='/css/style.css'>
 
         <meta charset='utf-8'>
-        <title>Admin Page</title>
+        <title>Admin</title>
     </head>
     <body>
         <?php include_once($_SERVER['DOCUMENT_ROOT'] . '/src/header.php') ?>

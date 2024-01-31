@@ -19,7 +19,7 @@ $userController = new UserController($mysqli);
         <link rel='stylesheet' href='/css/style.css'>
 
         <meta charset='utf-8'>
-        <title>Test Page</title>
+        <title>Home</title>
     </head>
     <body>
         <?php include_once($_SERVER['DOCUMENT_ROOT'] . '/src/header.php') ?>

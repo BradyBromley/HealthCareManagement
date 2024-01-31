@@ -28,7 +28,7 @@ $roleController = new RoleController($mysqli);
         <link rel='stylesheet' href='/css/style.css'>
 
         <meta charset='utf-8'>
-        <title>Admin Page</title>
+        <title>Account</title>
     </head>
     <body>
         <?php include_once($_SERVER['DOCUMENT_ROOT'] . '/src/header.php') ?>

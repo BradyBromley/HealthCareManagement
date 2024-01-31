@@ -41,6 +41,15 @@
     margin-top: 10px;
 }
 
+/* Users */
+.userTable thead tr th {
+    text-align: center;
+}
+
+.userTable tbody tr td {
+    text-align: center;
+}
+
 /* Edit User */
 .formInput {
     height: 90px;
