@@ -74,26 +74,28 @@ $roleController = new RoleController($mysqli);
                     // Role List
                     $roles = $roleController->listRoles();
                     if ($roles) {
-                    ?>
+                ?>
                         <div class='form-group formInput'>
                             <label for='role'>Role</label>
                             <select class='form-select' id='role' name='role'>
-                                <?php
-                                    while ($roleRow = $roles->fetch_row()) {
-                                        if ($userRow[7] == $roleRow[0]) {
-                                            echo '<option value="'. $roleRow[0] .'" selected>' . $roleRow[1] . '</option>';
-                                        } else {
-                                            echo '<option value="'. $roleRow[0] .'">' . $roleRow[1] . '</option>';
-                                        }
-                                    }
-                                ?>
+                            <?php
+                            while ($roleRow = $roles->fetch_row()) {
+                                if ($userRow[7] == $roleRow[0]) {
+                            ?>
+                                    <option value='<?php echo $roleRow[0]; ?>' selected><?php echo $roleRow[1]; ?></option>
+                                <?php } else { ?>
+                                    <option value='<?php echo $roleRow[0]; ?>'><?php echo $roleRow[1]; ?></option>
+                            <?php
+                                }
+                            }
+                            ?>
                             </select>
                         </div>
                     <?php
                     } else {
                     ?>
                         <div class='banner alert alert-danger'>Oops! Something went wrong. Please try again later.</div>
-                    <?php
+                <?php
                     }
                 } else {
                     // Don't let the role be editable if the logged in user isn't an admin
@@ -107,9 +109,9 @@ $roleController = new RoleController($mysqli);
                     </div>
                 <?php
                     } else {
-                    ?>
+                ?>
                         <div class='banner alert alert-danger'>Oops! Something went wrong. Please try again later.</div>
-                    <?php
+                <?php
                     }
                 }
                 ?>
@@ -117,18 +119,14 @@ $roleController = new RoleController($mysqli);
                 <button id='submit' type='submit' class='btn btn-success'>Submit</button>
             </form>
 
-            <?php
-            if ($result) {
-            ?>
+            <?php if ($result) { ?>
                 <div class="banner alert alert-success">Updated Successfully!</div>
-            <?php
+        <?php
             }
         } else {
         ?>
             <div class="banner alert alert-danger">Oops! Something went wrong. Please try again later.</div>
-        <?php
-        }
-        ?>
+        <?php } ?>
         </div>
     </body>
 </html>

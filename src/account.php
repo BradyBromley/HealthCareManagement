@@ -43,7 +43,7 @@ $roleController = new RoleController($mysqli);
             $role = $roleController->getRole($userRow[7]);
             if ($role) {
                 $roleRow = $role->fetch_row();
-                ?>
+        ?>
                     <div class='accountField'>
                         <span class='accountFieldLabel'>First Name</span>
                         <span class='accountFieldValue'><?php echo $userRow[3]; ?></span>
@@ -71,18 +71,14 @@ $roleController = new RoleController($mysqli);
 
                     <a class='btn btn-secondary' href='/src/editUser.php?id=<?php echo $_SESSION['id'] ?>'>Edit</a>
 
-                <?php
-            } else {
-            ?>
+            <?php } else { ?>
                 <div class="banner alert alert-danger">Oops! Something went wrong. Please try again later.</div>
-            <?php
+        <?php
             }
         } else {
         ?>
             <div class="banner alert alert-danger">Oops! Something went wrong. Please try again later.</div>
-        <?php
-        }
-        ?>
+        <?php } ?>
         </div>
     </body>
 </html>

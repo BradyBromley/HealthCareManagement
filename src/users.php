@@ -51,46 +51,43 @@ if (!$userController->access('admin')) {
                         </tr>
                     </thead>
                     <tbody>
-            <?php
-                $numCols = 5;
-                while ($row = $result->fetch_row()) {
-                    echo '<tr>';
-                    for ($i = 0; $i < $numCols; $i++) {
-                        echo '<td>' . $row[$i] . '</td>';
-                    }
-                    echo '<td><a type="button" class="btn btn-secondary" href="/src/editUser.php?id=' . $row[0] . '"><i class="fa-solid fa-pen-to-square"></i></a></td>';
-                    echo '<td><button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteUserModal"><i class="fa-solid fa-trash"></i></button></td>';
-                    echo '</tr>';
-
-                }
-            ?>
+                    <?php
+                    $numCols = 5;
+                    while ($row = $result->fetch_row()) {
+                    ?>
+                        <tr>
+                        <?php for ($i = 0; $i < $numCols; $i++) { ?>
+                            <td><?php echo $row[$i]?></td>
+                        <?php } ?>
+                            <td><a type='button' class='btn btn-secondary' href='/src/editUser.php?id=<?php echo $row[0]; ?>'><i class='fa-solid fa-pen-to-square'></i></a></td>
+                            <td><a type='button' class='btn btn-danger' data-bs-toggle='modal' href='#deleteUserModal' data-bs-id='<?php echo $row[0]; ?>'><i class='fa-solid fa-trash'></i></a></td>
+                        </tr>
+                    <?php } ?>
                     </tbody>
                 </table>
-            <?php
-            } else {
-            ?>
+            <?php } else { ?>
                 <div class='banner alert alert-danger'>Oops! Something went wrong. Please try again later.</div>
-            <?php
-            }
-            ?>
+            <?php } ?>
 
-            <!-- Modal -->
-            <div class="modal fade" id="deleteUserModal" tabindex="-1" aria-labelledby="deleteUserModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="deleteUserModalLabel">Modal title</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    ...
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                </div>
+            <!-- Delete User Modal -->
+            <div class='modal fade' id='deleteUserModal' tabindex='-1' aria-labelledby='deleteUserModalLabel' aria-hidden='true'>
+                <div class='modal-dialog'>
+                    <div class='modal-content'>
+                        <div class='modal-header'>
+                            <h1 class='modal-title fs-5' id='deleteUserModalLabel'>Delete User</h1>
+                            <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
+                        </div>
+                        <div class='modal-body'>
+                            Are you sure you want to delete this user?
+                        </div>
+                        <div class='modal-footer'>
+                            <a type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Cancel</a>
+                            <a type='button' class='deleteUserButton btn btn-danger'>Delete</a>
+                        </div>
+                    </div>
                 </div>
             </div>
-            </div>
+            <script src="/js/users.js"></script>
 
         </div>
     </body>

@@ -68,13 +68,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <p>Already have an account? <a href='/src/login.php'>Sign in here.</a></p>
             </form>
 
-            <?php
-            if ($register === false) {
-            ?>
+            <?php if ($register === false) { ?>
                 <div class="banner alert alert-danger">Oops! Something went wrong. Please try again later.</div>
-            <?php
-            }
-            ?>
+            <?php } ?>
         </div>
     </body>
 </html>
