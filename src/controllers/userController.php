@@ -19,7 +19,7 @@ class UserController extends ValidationController {
         $sql = '
         SELECT Users.ID, firstName, lastName, email, roleName
         FROM Users, Roles
-        WHERE Users.roleID = Roles.ID';
+        WHERE Users.roleID = Roles.ID AND isActive = 1';
         $stmt = $this->mysqli->prepare($sql);
         if ($stmt->execute()) {
             return $stmt->get_result();
@@ -56,8 +56,21 @@ class UserController extends ValidationController {
                 $stmt->close();
                 return true;
             }
+            $stmt->close();
             return false;
         }
+    }
+
+    public function deactivateUser($id) {
+        $sql = 'UPDATE Users SET passwordHash = "", isActive = 0 WHERE id = ?';
+        $stmt = $this->mysqli->prepare($sql);
+        $stmt->bind_param('s', $id);
+            if ($stmt->execute()) {
+            $stmt->close();
+            return true;
+        }
+        $stmt->close();
+        return false;
     }
 
     public function access($role) {
@@ -74,8 +87,8 @@ class UserController extends ValidationController {
             } else {
                 return false;
             }
-        } else {
-            $stmt->close();
         }
+        $stmt->close();
+        return false;
     }
 }

@@ -47,7 +47,7 @@ if (!$userController->access('admin')) {
                             <th>Email</th>
                             <th>Role</th>
                             <th>Edit</th>
-                            <th>Delete</th>
+                            <th>Deactivate</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -60,7 +60,7 @@ if (!$userController->access('admin')) {
                             <td><?php echo $row[$i]?></td>
                         <?php } ?>
                             <td><a type='button' class='btn btn-secondary' href='/src/editUser.php?id=<?php echo $row[0]; ?>'><i class='fa-solid fa-pen-to-square'></i></a></td>
-                            <td><a type='button' class='btn btn-danger' data-bs-toggle='modal' href='#deleteUserModal' data-bs-id='<?php echo $row[0]; ?>'><i class='fa-solid fa-trash'></i></a></td>
+                            <td><a type='button' class='btn btn-danger' data-bs-toggle='modal' href='#deactivateUserModal' data-bs-id='<?php echo $row[0]; ?>'><i class='fa-solid fa-ban'></i></a></td>
                         </tr>
                     <?php } ?>
                     </tbody>
@@ -69,20 +69,20 @@ if (!$userController->access('admin')) {
                 <div class='banner alert alert-danger'>Oops! Something went wrong. Please try again later.</div>
             <?php } ?>
 
-            <!-- Delete User Modal -->
-            <div class='modal fade' id='deleteUserModal' tabindex='-1' aria-labelledby='deleteUserModalLabel' aria-hidden='true'>
+            <!-- Deactivate User Modal -->
+            <div class='modal fade' id='deactivateUserModal' tabindex='-1' aria-labelledby='deactivateUserModalLabel' aria-hidden='true'>
                 <div class='modal-dialog'>
                     <div class='modal-content'>
                         <div class='modal-header'>
-                            <h1 class='modal-title fs-5' id='deleteUserModalLabel'>Delete User</h1>
+                            <h1 class='modal-title fs-5' id='deactivateUserModalLabel'>Deactivate User</h1>
                             <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
                         </div>
                         <div class='modal-body'>
-                            Are you sure you want to delete this user?
+                            Are you sure you want to deactivate this user?
                         </div>
                         <div class='modal-footer'>
                             <a type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Cancel</a>
-                            <a type='button' class='deleteUserButton btn btn-danger'>Delete</a>
+                            <a type='button' class='deactivateUserButton btn btn-danger'>Deactivate</a>
                         </div>
                     </div>
                 </div>

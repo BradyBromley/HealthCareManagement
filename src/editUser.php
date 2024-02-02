@@ -11,7 +11,7 @@ if (!isset($_SESSION['loggedIn']) || !$_SESSION['loggedIn']) {
 
 // Redirect if user is not an admin and if it isn't the user's own page
 $userController = new UserController($mysqli);
-if (!$userController->access('admin') && $_SESSION['id'] != $_REQUEST['id']) {
+if ((!$userController->access('admin')) && ($_SESSION['id'] != $_REQUEST['id'])) {
     header('location: http://' . $_SERVER['HTTP_HOST'] . '/index.php');
 }
 
@@ -91,9 +91,9 @@ $roleController = new RoleController($mysqli);
                             ?>
                             </select>
                         </div>
-                    <?php
+                <?php
                     } else {
-                    ?>
+                ?>
                         <div class='banner alert alert-danger'>Oops! Something went wrong. Please try again later.</div>
                 <?php
                     }
@@ -105,7 +105,9 @@ $roleController = new RoleController($mysqli);
                 ?>
                     <div class='form-group formInput'>
                         <label for='role'>Role</label>
-                        <input id='role' name='role' type='text' class='form-control' value='<?php echo $roleRow[1]; ?>' disabled>
+                        <select class='form-select' id='role' name='role'>
+                            <option value='<?php echo $roleRow[0]; ?>' selected><?php echo $roleRow[1]; ?></option>
+                        </select>
                     </div>
                 <?php
                     } else {
