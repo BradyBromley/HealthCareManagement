@@ -7,7 +7,10 @@ session_start();
 $userController = new UserController($mysqli);
 $userController->deactivateUser($_REQUEST['id']);
 
-header('location: http://' . $_SERVER['HTTP_HOST'] . '/src/users.php');
-
+if ($_REQUEST['id'] == $_SESSION['id']) {
+    header('location: http://' . $_SERVER['HTTP_HOST'] . '/src/logout.php');
+} else {
+    header('location: http://' . $_SERVER['HTTP_HOST'] . '/src/users.php');
+}
 
 ?>
