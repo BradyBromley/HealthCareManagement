@@ -9,15 +9,38 @@ if (!isset($_SESSION['loggedIn']) || !$_SESSION['loggedIn']) {
     header('location: http://' . $_SERVER['HTTP_HOST'] . '/src/login.php');
 }
 
-// Redirect if user is not an admin and if it isn't the user's own page
+// Redirect if user does not have access to this page
 $userController = new UserController($mysqli);
+$roleController = new RoleController($mysqli);
+if (($_REQUEST['id']) && ($_SESSION['id'] != $_REQUEST['id'])) {
+    // Redirect if the user only has access to their own profile and they are trying to view someone elses
+    if (!$userController->access('profile')) {
+        header('location: http://' . $_SERVER['HTTP_HOST'] . '/index.php');
+    }
+
+    // Redirect non-admins who try to look at non patient profiles
+    $user = $userController->getUser($_REQUEST['id']);
+    if ($user) {
+        $userRow = $user->fetch_row();
+        $role = $roleController->getRole($userRow[7]);
+        if ($role) {
+            $roleRow = $role->fetch_row();
+            if (($roleRow[1] != 'patient') && (!$userController->access('admin'))) {
+                header('location: http://' . $_SERVER['HTTP_HOST'] . '/index.php');
+            }
+        }
+    }
+}
 
 // Edit User
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $result = $userController->editUser($_SESSION['id']);
+    if ($_REQUEST['id']) {
+        $result = $userController->editUser($_REQUEST['id']);
+    } else {
+        $result = $userController->editUser($_SESSION['id']);
+    }
 }
 
-$roleController = new RoleController($mysqli);
 ?>
 
 <!DOCTYPE html>
@@ -28,16 +51,20 @@ $roleController = new RoleController($mysqli);
         <link rel='stylesheet' href='/css/style.css'>
 
         <meta charset='utf-8'>
-        <title>Account</title>
+        <title>Profile</title>
     </head>
     <body>
         <?php include_once($_SERVER['DOCUMENT_ROOT'] . '/src/header.php') ?>
 
-        <!-- Account -->
+        <!-- Profile -->
         <div class='content'>
-        <h2>Account</h2>
+        <h2>Profile</h2>
         <?php
-        $user = $userController->getUser($_SESSION['id']);
+        if ($_REQUEST['id']) {
+            $user = $userController->getUser($_REQUEST['id']);
+        } else {
+            $user = $userController->getUser($_SESSION['id']);
+        }
         if ($user) {
             $userRow = $user->fetch_row();
             $role = $roleController->getRole($userRow[7]);
@@ -69,7 +96,11 @@ $roleController = new RoleController($mysqli);
                         <span class='accountFieldValue'><?php echo $roleRow[1]; ?></span>
                     </div>
 
-                    <a class='btn btn-secondary' href='/src/editUser.php?id=<?php echo $_SESSION['id'] ?>'>Edit</a>
+                    <?php if ($_REQUEST['id']) { ?>
+                        <a class='btn btn-secondary' href='/src/editProfile.php?id=<?php echo $_REQUEST['id'] ?>'>Edit</a>
+                    <?php } else { ?>
+                        <a class='btn btn-secondary' href='/src/editProfile.php?id=<?php echo $_SESSION['id'] ?>'>Edit</a>
+                    <?php }?>
 
             <?php } else { ?>
                 <div class="banner alert alert-danger">Oops! Something went wrong. Please try again later.</div>

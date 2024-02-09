@@ -10,7 +10,7 @@ if (!isset($_SESSION['loggedIn']) || !$_SESSION['loggedIn']) {
 
 // Redirect if user is not an admin
 $userController = new UserController($mysqli);
-if (!$userController->access('admin')) {
+if (!$userController->access('patients')) {
     header('location: http://' . $_SERVER['HTTP_HOST'] . '/index.php');
 }
 
@@ -26,16 +26,16 @@ if (!$userController->access('admin')) {
         <link rel='stylesheet' href='/css/style.css'>
 
         <meta charset='utf-8'>
-        <title>Users</title>
+        <title>Patients</title>
     </head>
     <body>
         <?php include_once($_SERVER['DOCUMENT_ROOT'] . '/src/header.php') ?>
 
-        <!-- Users -->
+        <!-- Patients -->
         <div class='content'>
-            <h2>Users</h2>
+            <h2>Patients</h2>
             <?php
-            $result = $userController->listUsers();
+            $result = $userController->listPatients();
             if ($result) {
             ?>
                 <table class='table table-striped table-bordered userTable'>
@@ -45,14 +45,12 @@ if (!$userController->access('admin')) {
                             <th>First Name</th>
                             <th>Last Name</th>
                             <th>Email</th>
-                            <th>Role</th>
                             <th>View</th>
-                            <th>Deactivate</th>
                         </tr>
                     </thead>
                     <tbody>
                     <?php
-                    $numCols = 5;
+                    $numCols = 4;
                     while ($row = $result->fetch_row()) {
                     ?>
                         <tr>
@@ -60,7 +58,6 @@ if (!$userController->access('admin')) {
                             <td><?php echo $row[$i]?></td>
                         <?php } ?>
                             <td><a type='button' class='btn btn-secondary' href='/src/profile.php?id=<?php echo $row[0]; ?>'><i class='fa-solid fa-newspaper'></i></a></td>
-                            <td><a type='button' class='btn btn-danger' data-bs-toggle='modal' href='#deactivateUserModal' data-bs-id='<?php echo $row[0]; ?>'><i class='fa-solid fa-ban'></i></a></td>
                         </tr>
                     <?php } ?>
                     </tbody>
@@ -68,27 +65,6 @@ if (!$userController->access('admin')) {
             <?php } else { ?>
                 <div class='banner alert alert-danger'>Oops! Something went wrong. Please try again later.</div>
             <?php } ?>
-
-            <!-- Deactivate User Modal -->
-            <div class='modal fade' id='deactivateUserModal' tabindex='-1' aria-labelledby='deactivateUserModalLabel' aria-hidden='true'>
-                <div class='modal-dialog'>
-                    <div class='modal-content'>
-                        <div class='modal-header'>
-                            <h1 class='modal-title fs-5' id='deactivateUserModalLabel'>Deactivate User</h1>
-                            <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
-                        </div>
-                        <div class='modal-body'>
-                            Are you sure you want to deactivate this user?
-                        </div>
-                        <div class='modal-footer'>
-                            <a type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Cancel</a>
-                            <a type='button' class='deactivateUserButton btn btn-danger'>Deactivate</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <script src="/js/users.js"></script>
-
         </div>
     </body>
 </html>

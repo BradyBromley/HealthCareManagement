@@ -28,6 +28,19 @@ class UserController extends ValidationController {
         return null;
     }
 
+    public function listPatients() {
+        $sql = '
+        SELECT Users.ID, firstName, lastName, email, roleName
+        FROM Users, Roles
+        WHERE Users.roleID = Roles.ID AND Roles.roleName = "patient" AND isActive = 1';
+        $stmt = $this->mysqli->prepare($sql);
+        if ($stmt->execute()) {
+            return $stmt->get_result();
+        }
+        $stmt->close();
+        return null;
+    }
+
     public function getUser($id) {
         $sql = 'SELECT * FROM Users WHERE ID = ?';
         $stmt = $this->mysqli->prepare($sql);
@@ -73,11 +86,16 @@ class UserController extends ValidationController {
         return false;
     }
 
-    public function access($role) {
-        // Check if the current user has the required permissions
-        $sql = 'SELECT Roles.ID FROM Roles, Users WHERE Users.ID = ? AND Users.RoleID = Roles.ID AND Roles.roleName = ?';
+    public function access($permission) {
+        // Check if the current user has the required permission
+        $sql = 'SELECT Users.ID
+            FROM Users, RolesToPermissions, Permissions
+            WHERE
+                Users.ID = ? AND Users.RoleID = RolesToPermissions.roleID AND
+                RolesToPermissions.permissionID = Permissions.ID AND 
+                Permissions.permissionName = ?';
         $stmt = $this->mysqli->prepare($sql);
-        $stmt->bind_param('is', $_SESSION['id'], $role);
+        $stmt->bind_param('is', $_SESSION['id'], $permission);
 
         if ($stmt->execute()) {
             $result = $stmt->get_result();

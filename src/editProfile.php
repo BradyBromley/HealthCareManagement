@@ -9,10 +9,27 @@ if (!isset($_SESSION['loggedIn']) || !$_SESSION['loggedIn']) {
     header('location: http://' . $_SERVER['HTTP_HOST'] . '/src/login.php');
 }
 
-// Redirect if user is not an admin and if it isn't the user's own page
+// Redirect if user does not have access to this page
 $userController = new UserController($mysqli);
-if ((!$userController->access('admin')) && ($_SESSION['id'] != $_REQUEST['id'])) {
-    header('location: http://' . $_SERVER['HTTP_HOST'] . '/index.php');
+$roleController = new RoleController($mysqli);
+if (($_REQUEST['id']) && ($_SESSION['id'] != $_REQUEST['id'])) {
+    // Redirect if the user only has access to their own profile and they are trying to edit someone elses
+    if (!$userController->access('profile')) {
+        header('location: http://' . $_SERVER['HTTP_HOST'] . '/index.php');
+    }
+
+    // Redirect non-admins who try to look at non patient profiles
+    $user = $userController->getUser($_REQUEST['id']);
+    if ($user) {
+        $userRow = $user->fetch_row();
+        $role = $roleController->getRole($userRow[7]);
+        if ($role) {
+            $roleRow = $role->fetch_row();
+            if (($roleRow[1] != 'patient') && (!$userController->access('admin'))) {
+                header('location: http://' . $_SERVER['HTTP_HOST'] . '/index.php');
+            }
+        }
+    }
 }
 
 // Edit User
@@ -31,21 +48,21 @@ $roleController = new RoleController($mysqli);
         <link rel='stylesheet' href='/css/style.css'>
 
         <meta charset='utf-8'>
-        <title>Edit User</title>
+        <title>Edit Profile</title>
     </head>
     <body>
         <?php include_once($_SERVER['DOCUMENT_ROOT'] . '/src/header.php') ?>
 
-        <!-- Edit User -->
+        <!-- Edit Profile -->
         <div class='content'>
-        <h2>Edit User</h2>
+        <h2>Edit Profile</h2>
         <?php
         $user = $userController->getUser($_REQUEST['id']);
         if ($user) {
             $userRow = $user->fetch_row();
             ?>
 
-            <form id='editUserForm' class='needs-validation' action='<?php echo htmlspecialchars($_SERVER['REQUEST_URI']); ?>' method='post'>
+            <form id='editProfileForm' class='needs-validation' action='<?php echo htmlspecialchars($_SERVER['REQUEST_URI']); ?>' method='post'>
                 <div class='form-group formInput'>
                     <label for='firstName'>First Name</label>
                     <input id='firstName' name='firstName' type='text' class='form-control <?php echo (!empty($userController->firstNameError)) ? 'is-invalid' : ''; ?>' value='<?php echo $_SERVER['REQUEST_METHOD'] == 'POST' ? $_POST['firstName'] : $userRow[3]; ?>' placeholder='Enter first name'>
