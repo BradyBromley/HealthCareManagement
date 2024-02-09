@@ -10,4 +10,4 @@ CREATE TABLE Users (
     isActive boolean DEFAULT 1,
     PRIMARY KEY (ID),
     FOREIGN KEY (roleID) REFERENCES Roles(ID)
-);
+) ENGINE=InnoDB CHARACTER SET utf8;

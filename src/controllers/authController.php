@@ -101,7 +101,7 @@ class AuthController extends ValidationController {
                 $this->passwordError = 'This password does not match.';
             }
         } else {
-            $this->emailError = 'This email does not exist.';
+            $this->emailError = 'This email does not exist in the system.';
         }
     }
 
