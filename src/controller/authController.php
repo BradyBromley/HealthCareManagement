@@ -108,7 +108,7 @@ class AuthController extends ValidationController {
     public function logout() {
         $_SESSION = [];
         session_destroy();
-        header('location: http://' . $_SERVER['HTTP_HOST'] . '/src/login.php');
+        header('location: http://' . $_SERVER['HTTP_HOST'] . '/src/view/auth/login.php');
     }
 }
 ?>

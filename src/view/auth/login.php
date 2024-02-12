@@ -1,6 +1,6 @@
 <?php
-require_once 'config.php';
-require_once 'controllers/authController.php';
+require_once '../../config.php';
+require_once '../../controller/authController.php';
 
 // Redirect if user is logged in
 session_start();
@@ -44,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                 <button id='submit' type='submit' class='btn btn-success'>Submit</button>
 
-                <p>Don't have an account? <a href='/src/register.php'>Sign up now.</a></p>
+                <p>Don't have an account? <a href='/src/view/auth/register.php'>Sign up now.</a></p>
             </form>
         </div>
     </body>

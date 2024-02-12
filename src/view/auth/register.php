@@ -1,6 +1,6 @@
 <?php
-require_once 'config.php';
-require_once 'controllers/authController.php';
+require_once '../../config.php';
+require_once '../../controller/authController.php';
 
 // Redirect if user is logged in
 session_start();
@@ -13,7 +13,7 @@ $authController = new AuthController($mysqli);
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $register = $authController->register();
     if ($register) {
-        header('location: http://' . $_SERVER['HTTP_HOST'] . '/src/login.php');
+        header('location: http://' . $_SERVER['HTTP_HOST'] . '/src/view/auth/login.php');
     }
 }
 ?>
@@ -65,7 +65,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                 <button id='submit' type='submit' class='btn btn-success'>Submit</button>
 
-                <p>Already have an account? <a href='/src/login.php'>Sign in here.</a></p>
+                <p>Already have an account? <a href='/src/view/auth/login.php'>Sign in here.</a></p>
             </form>
 
             <?php if ($register === false) { ?>

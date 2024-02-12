@@ -1,12 +1,12 @@
 <?php
-require_once 'config.php';
-require_once 'controllers/userController.php';
-require_once 'controllers/roleController.php';
+require_once '../config.php';
+require_once '../controller/userController.php';
+require_once '../controller/roleController.php';
 
 // Redirect if user is not logged in
 session_start();
 if (!isset($_SESSION['loggedIn']) || !$_SESSION['loggedIn']) {
-    header('location: http://' . $_SERVER['HTTP_HOST'] . '/src/login.php');
+    header('location: http://' . $_SERVER['HTTP_HOST'] . '/src/view/auth/login.php');
 }
 
 // Redirect if user does not have access to this page
@@ -51,7 +51,7 @@ $roleController = new RoleController($mysqli);
         <title>Edit Profile</title>
     </head>
     <body>
-        <?php include_once($_SERVER['DOCUMENT_ROOT'] . '/src/header.php') ?>
+        <?php include_once($_SERVER['DOCUMENT_ROOT'] . '/src/view/header.php') ?>
 
         <!-- Edit Profile -->
         <div class='content'>

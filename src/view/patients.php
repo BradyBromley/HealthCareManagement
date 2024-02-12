@@ -1,11 +1,11 @@
 <?php
-require_once 'config.php';
-require_once 'controllers/userController.php';
+require_once '../config.php';
+require_once '../controller/userController.php';
 
 // Redirect if user is not logged in
 session_start();
 if (!isset($_SESSION['loggedIn']) || !$_SESSION['loggedIn']) {
-    header('location: http://' . $_SERVER['HTTP_HOST'] . '/src/login.php');
+    header('location: http://' . $_SERVER['HTTP_HOST'] . '/src/view/auth/login.php');
 }
 
 // Redirect if user is not an admin
@@ -29,7 +29,7 @@ if (!$userController->access('patients')) {
         <title>Patients</title>
     </head>
     <body>
-        <?php include_once($_SERVER['DOCUMENT_ROOT'] . '/src/header.php') ?>
+        <?php include_once($_SERVER['DOCUMENT_ROOT'] . '/src/view/header.php') ?>
 
         <!-- Patients -->
         <div class='content'>
@@ -57,7 +57,7 @@ if (!$userController->access('patients')) {
                         <?php for ($i = 0; $i < $numCols; $i++) { ?>
                             <td><?php echo $row[$i]?></td>
                         <?php } ?>
-                            <td><a type='button' class='btn btn-secondary' href='/src/profile.php?id=<?php echo $row[0]; ?>'><i class='fa-solid fa-newspaper'></i></a></td>
+                            <td><a type='button' class='btn btn-secondary' href='/src/view/profile.php?id=<?php echo $row[0]; ?>'><i class='fa-solid fa-newspaper'></i></a></td>
                         </tr>
                     <?php } ?>
                     </tbody>

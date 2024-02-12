@@ -1,12 +1,12 @@
 <?php
-require_once 'config.php';
-require_once 'controllers/userController.php';
-require_once 'controllers/roleController.php';
+require_once '../config.php';
+require_once '../controller/userController.php';
+require_once '../controller/roleController.php';
 
 // Redirect if user is not logged in
 session_start();
 if (!isset($_SESSION['loggedIn']) || !$_SESSION['loggedIn']) {
-    header('location: http://' . $_SERVER['HTTP_HOST'] . '/src/login.php');
+    header('location: http://' . $_SERVER['HTTP_HOST'] . '/src/view/auth/login.php');
 }
 
 // Redirect if user does not have access to this page
@@ -54,7 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <title>Profile</title>
     </head>
     <body>
-        <?php include_once($_SERVER['DOCUMENT_ROOT'] . '/src/header.php') ?>
+        <?php include_once($_SERVER['DOCUMENT_ROOT'] . '/src/view/header.php') ?>
 
         <!-- Profile -->
         <div class='content'>
@@ -97,9 +97,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     </div>
 
                     <?php if ($_REQUEST['id']) { ?>
-                        <a class='btn btn-secondary' href='/src/editProfile.php?id=<?php echo $_REQUEST['id'] ?>'>Edit</a>
+                        <a class='btn btn-secondary' href='/src/view/editProfile.php?id=<?php echo $_REQUEST['id'] ?>'>Edit</a>
                     <?php } else { ?>
-                        <a class='btn btn-secondary' href='/src/editProfile.php?id=<?php echo $_SESSION['id'] ?>'>Edit</a>
+                        <a class='btn btn-secondary' href='/src/view/editProfile.php?id=<?php echo $_SESSION['id'] ?>'>Edit</a>
                     <?php }?>
 
             <?php } else { ?>

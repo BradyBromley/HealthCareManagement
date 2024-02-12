@@ -1,6 +1,6 @@
 <?php
-require_once 'config.php';
-require_once 'controllers/authController.php';
+require_once '../../config.php';
+require_once '../../controller/authController.php';
 
 // Logout
 session_start();

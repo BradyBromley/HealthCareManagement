@@ -1,11 +1,11 @@
 <?php
-require_once 'config.php';
-require_once 'controllers/userController.php';
+require_once '../../config.php';
+require_once '../../controller/userController.php';
 
 // Redirect if user is not logged in
 session_start();
 if (!isset($_SESSION['loggedIn']) || !$_SESSION['loggedIn']) {
-    header('location: http://' . $_SERVER['HTTP_HOST'] . '/src/login.php');
+    header('location: http://' . $_SERVER['HTTP_HOST'] . '/src/view/auth/login.php');
 }
 
 // Redirect if user is not an admin
@@ -26,7 +26,7 @@ if (!$userController->access('admin')) {
         <title>Admin</title>
     </head>
     <body>
-        <?php include_once($_SERVER['DOCUMENT_ROOT'] . '/src/header.php') ?>
+        <?php include_once($_SERVER['DOCUMENT_ROOT'] . '/src/view/header.php') ?>
 
         <!-- Admin -->
         <div class='content'>

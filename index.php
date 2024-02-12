@@ -1,11 +1,11 @@
 <?php
 require_once 'src/config.php';
-require_once 'src/controllers/userController.php';
+require_once 'src/controller/userController.php';
 
 // Redirect if user is not logged in
 session_start();
 if (!isset($_SESSION['loggedIn']) || !$_SESSION['loggedIn']) {
-    header('location: http://' . $_SERVER['HTTP_HOST'] . '/src/login.php');
+    header('location: http://' . $_SERVER['HTTP_HOST'] . '/src/view/auth/login.php');
 }
 
 $userController = new UserController($mysqli);
@@ -22,7 +22,7 @@ $userController = new UserController($mysqli);
         <title>Home</title>
     </head>
     <body>
-        <?php include_once($_SERVER['DOCUMENT_ROOT'] . '/src/header.php') ?>
+        <?php include_once($_SERVER['DOCUMENT_ROOT'] . '/src/view/header.php') ?>
 
         <!-- Home -->
         <div class='content'>
