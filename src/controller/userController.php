@@ -30,7 +30,7 @@ class UserController extends ValidationController {
 
     public function listPatients() {
         $sql = '
-        SELECT Users.ID, firstName, lastName, email, roleName
+        SELECT Users.ID, firstName, lastName, email
         FROM Users, Roles
         WHERE Users.roleID = Roles.ID AND Roles.roleName = "patient" AND isActive = 1';
         $stmt = $this->mysqli->prepare($sql);
