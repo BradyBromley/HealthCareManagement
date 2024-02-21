@@ -67,12 +67,12 @@ class AuthController extends ValidationController {
                 // Reactivate User
                 $sql = 'UPDATE Users SET passwordHash = ?, firstName = ?, lastName = ?, address = "", city = "", roleID = ?, isActive = 1 WHERE id = ?';
                 $usersStmt = $this->mysqli->prepare($sql);
-                $usersStmt->bind_param('sssss', $passwordHash, $firstName, $lastName, $this->getRoleID('guest'), $row[0]);
+                $usersStmt->bind_param('sssii', $passwordHash, $firstName, $lastName, $this->getRoleID('guest'), $row[0]);
             } else {
                 // Insert User
                 $sql = 'INSERT INTO Users (email, passwordHash, firstName, lastName, roleID) VALUES (?, ?, ?, ?, ?)';
                 $usersStmt = $this->mysqli->prepare($sql);
-                $usersStmt->bind_param('sssss', $email, $passwordHash, $firstName, $lastName, $this->getRoleID('guest'));
+                $usersStmt->bind_param('ssssi', $email, $passwordHash, $firstName, $lastName, $this->getRoleID('guest'));
             }
             
             if ($usersStmt->execute()) {
@@ -81,8 +81,6 @@ class AuthController extends ValidationController {
             }
             $usersStmt->close();
             return false;
-
-            
         }
     }
     

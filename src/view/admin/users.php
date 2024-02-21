@@ -35,7 +35,7 @@ if (!$userController->access('admin')) {
         <div class='content'>
             <h2>Users</h2>
             <?php
-            $result = $userController->listUsers();
+            $result = $userController->listUsers('all');
             if ($result) {
             ?>
                 <table class='table table-striped table-bordered userTable'>

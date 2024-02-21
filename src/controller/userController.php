@@ -15,24 +15,15 @@ class UserController extends ValidationController {
     // Private Methods
 
     // Public Methods
-    public function listUsers() {
+    public function listUsers($role) {
         $sql = '
         SELECT Users.ID, firstName, lastName, email, roleName
         FROM Users, Roles
         WHERE Users.roleID = Roles.ID AND isActive = 1';
-        $stmt = $this->mysqli->prepare($sql);
-        if ($stmt->execute()) {
-            return $stmt->get_result();
+        if ($role != 'all') {
+            $sql .= ' AND Roles.roleName = "' . $role . '"';
         }
-        $stmt->close();
-        return null;
-    }
 
-    public function listPatients() {
-        $sql = '
-        SELECT Users.ID, firstName, lastName, email
-        FROM Users, Roles
-        WHERE Users.roleID = Roles.ID AND Roles.roleName = "patient" AND isActive = 1';
         $stmt = $this->mysqli->prepare($sql);
         if ($stmt->execute()) {
             return $stmt->get_result();
@@ -64,7 +55,7 @@ class UserController extends ValidationController {
             // Update User
             $sql = 'UPDATE Users SET firstName = ?, lastName = ?, address = ?, city = ?, roleID = ? WHERE id = ?';
             $stmt = $this->mysqli->prepare($sql);
-            $stmt->bind_param('ssssss', $firstName, $lastName, $address, $city, $role, $id);
+            $stmt->bind_param('ssssii', $firstName, $lastName, $address, $city, $role, $id);
             if ($stmt->execute()) {
                 $stmt->close();
                 return true;
@@ -77,7 +68,7 @@ class UserController extends ValidationController {
     public function deactivateUser($id) {
         $sql = 'UPDATE Users SET passwordHash = "", isActive = 0 WHERE id = ?';
         $stmt = $this->mysqli->prepare($sql);
-        $stmt->bind_param('s', $id);
+        $stmt->bind_param('i', $id);
             if ($stmt->execute()) {
             $stmt->close();
             return true;

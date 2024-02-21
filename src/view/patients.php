@@ -35,7 +35,7 @@ if (!$userController->access('patients')) {
         <div class='content'>
             <h2>Patients</h2>
             <?php
-            $result = $userController->listPatients();
+            $result = $userController->listUsers('patient');
             if ($result) {
             ?>
                 <table class='table table-striped table-bordered userTable'>

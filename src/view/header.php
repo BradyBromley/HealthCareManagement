@@ -4,7 +4,9 @@
         <h1>Health Care Management</h1>
         <ul class='navbar'>
             <li class='navbarLink'><a href='/index.php'>Home</a></li>
-            <?php if ($userController->access('patients')) { ?>
+            <?php if ($userController->access('bookAppointment')) {?>
+                <li class='navbarLink'><a href='/src/view/bookAppointment.php'>Book Appointment</a></li>
+            <?php } if ($userController->access('patients')) { ?>
                 <li class='navbarLink'><a href='/src/view/patients.php'>Patients</a></li>
             <?php } if ($userController->access('admin')) {?>
                 <li class='navbarLink'><a href='/src/view/admin/users.php'>Users</a></li>

@@ -36,8 +36,6 @@ if (($_REQUEST['id']) && ($_SESSION['id'] != $_REQUEST['id'])) {
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $result = $userController->editUser($_REQUEST['id']);
 }
-
-$roleController = new RoleController($mysqli);
 ?>
 
 <!DOCTYPE html>
@@ -77,12 +75,12 @@ $roleController = new RoleController($mysqli);
 
                 <div class='form-group formInput'>
                     <label for='address'>Address</label>
-                    <input id='address' name='address' type='text' class='form-control <?php echo (!empty($userController->lastNameError)) ? 'is-invalid' : ''; ?>' value='<?php echo $_SERVER['REQUEST_METHOD'] == 'POST' ? $_POST['address'] : $userRow[5]; ?>' placeholder='Enter address'>
+                    <input id='address' name='address' type='text' class='form-control' value='<?php echo $_SERVER['REQUEST_METHOD'] == 'POST' ? $_POST['address'] : $userRow[5]; ?>' placeholder='Enter address'>
                 </div>
 
                 <div class='form-group formInput'>
                     <label for='city'>City</label>
-                    <input id='city' name='city' type='text' class='form-control <?php echo (!empty($userController->lastNameError)) ? 'is-invalid' : ''; ?>' value='<?php echo $_SERVER['REQUEST_METHOD'] == 'POST' ? $_POST['city'] : $userRow[6]; ?>' placeholder='Enter city'>
+                    <input id='city' name='city' type='text' class='form-control' value='<?php echo $_SERVER['REQUEST_METHOD'] == 'POST' ? $_POST['city'] : $userRow[6]; ?>' placeholder='Enter city'>
                 </div>
 
                 <?php
