@@ -2,7 +2,6 @@
 require_once '../config.php';
 require_once '../controller/userController.php';
 require_once '../controller/appointmentController.php';
-require_once '../helper/dateTime.php';
 
 // Redirect if user is not logged in
 session_start();
@@ -66,7 +65,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <div class='form-group formInput'>
                 <label for='appointmentTime'>Appointment time</label>
                 <select class='form-select' id='appointmentTime' name='appointmentTime'>
-                    <?php echo getTimes(); ?>
+                    <?php echo $appointmentController->getTimes(); ?>
                 </select>
             </div>
 
