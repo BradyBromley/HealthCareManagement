@@ -38,15 +38,18 @@ class AppointmentController extends ValidationController {
         return false;
     }
 
-    public function getTimes($default = '00:00') {
+    public function getAvailableTimes($date) {
         $output = '';
 
-        //$current = strtotime(date('H:00'));
-        $current = strtotime('00:00');
-        $end = strtotime('23:59');
+        $current = strtotime($date . '00:00');
+        $end = strtotime($date . '23:59');
         
+        // Find all appointments booked on the currently selected day
         $sql = '
-        SELECT * FROM Appointments';
+        SELECT * FROM Appointments
+        WHERE startTime BETWEEN
+        "' . $date . ' 00:00:00" AND "' . $date . ' 23:59:59"';
+
         $stmt = $this->mysqli->prepare($sql);
         $unavailableTimes = [];
         
@@ -58,15 +61,15 @@ class AppointmentController extends ValidationController {
         }
         $stmt->close();
 
-        // I need to 'call' getTimes every time the calendar date is changed
-        // CURRENT TIMESTAMPS ARE FOR TODAY, NEED TO GET THE DATE FROM THE SELECT LIST TO MAKE IT MORE ACCURATE
+        // A time is available if no appointments have been booked for that time
         while ($current <= $end) {
             if (!in_array($current, $unavailableTimes)) {
                 $time = date('H:i', $current);
-                $selected = ($time == $default) ? ' selected' : '';
+                $selected = ($time == '00:00') ? ' selected' : '';
         
                 $output .= '<option value='. $time . $selected . '>' . date('h:i A', $current) .'</option>';
             }
+            // Appointments can be booked in 30 minute increments
             $current = strtotime('+30 minutes', $current);
             
         }

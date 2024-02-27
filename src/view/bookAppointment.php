@@ -29,6 +29,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css' integrity='sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN' crossorigin='anonymous'>
         <link rel='stylesheet' href='/css/style.css'>
 
+        <!-- Import jquery -->
+        <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+        
         <meta charset='utf-8'>
         <title>Book Appointment</title>
     </head>
@@ -41,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <form id='bookAppointmentForm' class='needs-validation' action='<?php echo htmlspecialchars($_SERVER['REQUEST_URI']); ?>' method='post'>
 
         <?php
-            // Role List
+            // Physician List
             $physicians = $userController->listUsers('physician');
             if ($physicians) {
         ?>
@@ -57,15 +60,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <div class='banner alert alert-danger'>Oops! Something went wrong. Please try again later.</div>
         <?php } ?>
 
+            <!-- Calendar input for selecting appointment date -->
             <div class='form-group formInput'>
                 <label for="appointmentDate">Appointment date</label>
-                <input id="appointmentDate" name="appointmentDate" type="date" class='form-control' required/>
+                <input id="appointmentDate" name="appointmentDate" type="date" class='form-control appointmentDate' required/>
             </div>
 
-            <div class='form-group formInput'>
+            <!-- Dropdown input for selecting appointment time -->
+            <div class='form-group formInput appointmentTime'>
                 <label for='appointmentTime'>Appointment time</label>
                 <select class='form-select' id='appointmentTime' name='appointmentTime'>
-                    <?php echo $appointmentController->getTimes(); ?>
+                    <?php echo $appointmentController->getAvailableTimes(date('Y-m-d')); ?>
                 </select>
             </div>
 

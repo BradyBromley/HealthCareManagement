@@ -16,3 +16,16 @@ var nextYear = htmlDate(new Date(new Date().setFullYear(new Date().getFullYear()
 appointmentDate.valueAsDate = new Date();
 appointmentDate.setAttribute('min', today);
 appointmentDate.setAttribute('max', nextYear);
+
+$('.appointmentDate').on('change', function(){
+    var date = $(this).val();
+    $.ajax({
+        type: 'POST',
+        url: 'bookAppointmentHelper.php',
+        data: {date: date},
+        cache: false,
+        success: function(data) {
+            $('.appointmentTime').html(data);
+        }
+    });
+});
