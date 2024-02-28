@@ -38,17 +38,17 @@ class AppointmentController extends ValidationController {
         return false;
     }
 
-    public function getAvailableTimes($date) {
+    public function getAvailableTimes($date, $physicianID) {
         $output = '';
 
         $current = strtotime($date . '00:00');
         $end = strtotime($date . '23:59');
         
-        // Find all appointments booked on the currently selected day
+        // Find all appointments booked for the selected day and physician
         $sql = '
         SELECT * FROM Appointments
-        WHERE startTime BETWEEN
-        "' . $date . ' 00:00:00" AND "' . $date . ' 23:59:59"';
+        WHERE physicianID = ' . $physicianID . ' AND
+        startTime BETWEEN "' . $date . ' 00:00:00" AND "' . $date . ' 23:59:59"';
 
         $stmt = $this->mysqli->prepare($sql);
         $unavailableTimes = [];

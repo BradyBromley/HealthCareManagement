@@ -47,39 +47,42 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             // Physician List
             $physicians = $userController->listUsers('physician');
             if ($physicians) {
+                $defaultPhysician = $physicians->fetch_row();
         ?>
                 <div class='form-group formInput'>
                     <label for='physician'>Physician</label>
                     <select class='form-select' id='physician' name='physician'>
+                        <option value='<?php echo $defaultPhysician[0]; ?>'><?php echo $defaultPhysician[1] . ' ' . $defaultPhysician[2]; ?></option>
                     <?php while ($physicianRow = $physicians->fetch_row()) { ?>
                         <option value='<?php echo $physicianRow[0]; ?>'><?php echo $physicianRow[1] . ' ' . $physicianRow[2]; ?></option>
                     <?php } ?>
                     </select>
                 </div>
+
+                <!-- Calendar input for selecting appointment date -->
+                <div class='form-group formInput'>
+                    <label for="appointmentDate">Appointment date</label>
+                    <input id="appointmentDate" name="appointmentDate" type="date" class='form-control' required/>
+                </div>
+
+                <!-- Dropdown input for selecting appointment time -->
+                <div id='appointmentTimeHTML' class='form-group formInput '>
+                    <label for='appointmentTime'>Appointment time</label>
+                    <select class='form-select' id='appointmentTime' name='appointmentTime'>
+                        <?php echo $appointmentController->getAvailableTimes(date('Y-m-d'), $defaultPhysician[0]); ?>
+                    </select>
+                </div>
+
+                <div class='form-group formTextArea'>
+                    <label for='reason'>Reason for appointment</label>
+                    <textarea id='reason' name='reason' rows='3' class='form-control' placeholder='Enter reason'></textarea>
+                </div>
+
+                <button id='submit' type='submit' class='btn btn-success'>Submit</button>
         <?php } else { ?>
                 <div class='banner alert alert-danger'>Oops! Something went wrong. Please try again later.</div>
         <?php } ?>
 
-            <!-- Calendar input for selecting appointment date -->
-            <div class='form-group formInput'>
-                <label for="appointmentDate">Appointment date</label>
-                <input id="appointmentDate" name="appointmentDate" type="date" class='form-control appointmentDate' required/>
-            </div>
-
-            <!-- Dropdown input for selecting appointment time -->
-            <div class='form-group formInput appointmentTime'>
-                <label for='appointmentTime'>Appointment time</label>
-                <select class='form-select' id='appointmentTime' name='appointmentTime'>
-                    <?php echo $appointmentController->getAvailableTimes(date('Y-m-d')); ?>
-                </select>
-            </div>
-
-            <div class='form-group formTextArea'>
-                <label for='reason'>Reason for appointment</label>
-                <textarea id='reason' name='reason' rows='3' class='form-control' placeholder='Enter reason'></textarea>
-            </div>
-            
-            <button id='submit' type='submit' class='btn btn-success'>Submit</button>
         </form>
 
         <?php if ($result) { ?>

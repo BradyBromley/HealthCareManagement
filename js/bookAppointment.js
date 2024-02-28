@@ -17,15 +17,20 @@ appointmentDate.valueAsDate = new Date();
 appointmentDate.setAttribute('min', today);
 appointmentDate.setAttribute('max', nextYear);
 
-$('.appointmentDate').on('change', function(){
-    var date = $(this).val();
+$('#appointmentDate, #physician').on('change', function(){
+    var date = $('#appointmentDate').val();
+    var physicianID = $('#physician').val();
+
     $.ajax({
         type: 'POST',
         url: 'bookAppointmentHelper.php',
-        data: {date: date},
+        data: {
+            date: date,
+            physicianID: physicianID
+        },
         cache: false,
         success: function(data) {
-            $('.appointmentTime').html(data);
+            $('#appointmentTimeHTML').html(data);
         }
     });
 });
