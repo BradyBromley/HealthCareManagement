@@ -10,11 +10,13 @@ function htmlDate(date) {
 }
 
 var appointmentDate = document.getElementById('appointmentDate');
-var today = htmlDate(new Date());
+var today = new Date();
+var tomorrow = new Date(today.setDate(today.getDate() + 1));
+var tomorrowYMD = htmlDate(tomorrow);
 var nextYear = htmlDate(new Date(new Date().setFullYear(new Date().getFullYear() + 1)));
 
-appointmentDate.valueAsDate = new Date();
-appointmentDate.setAttribute('min', today);
+appointmentDate.valueAsDate = tomorrow;
+appointmentDate.setAttribute('min', tomorrowYMD);
 appointmentDate.setAttribute('max', nextYear);
 
 $('#appointmentDate, #physician').on('change', function(){

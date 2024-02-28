@@ -69,7 +69,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <div id='appointmentTimeHTML' class='form-group formInput '>
                     <label for='appointmentTime'>Appointment time</label>
                     <select class='form-select' id='appointmentTime' name='appointmentTime'>
-                        <?php echo $appointmentController->getAvailableTimes(date('Y-m-d'), $defaultPhysician[0]); ?>
+                        <?php echo $appointmentController->getAvailableTimes(date('Y-m-d', strtotime('tomorrow')), $defaultPhysician[0]); ?>
                     </select>
                 </div>
 
