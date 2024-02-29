@@ -13,6 +13,27 @@ class AppointmentController extends ValidationController {
 
     
     // Private Methods
+    private function physicianHours($physicianID) {
+        $startTime = '00:00:00';
+        $endTime = '23:59:59';
+
+        // Physicians are only available at certain times of the day
+        $sql = '
+        SELECT * FROM Availability
+        WHERE physicianID = ' . $physicianID;
+
+        $availabilityStmt = $this->mysqli->prepare($sql);
+        
+        if ($availabilityStmt->execute()) {
+            $availability = $availabilityStmt->get_result();
+            $availabilityRow = $availability->fetch_row();
+            $startTime = $availabilityRow[2];
+            $endTime = $availabilityRow[3];
+        }
+        $availabilityStmt->close();
+        
+        return [$startTime, $endTime];
+    }
 
     // Public Methods
     public function bookAppointment() {
@@ -41,31 +62,34 @@ class AppointmentController extends ValidationController {
     public function getAvailableTimes($date, $physicianID) {
         $output = '';
 
-        $current = strtotime($date . '00:00');
-        $end = strtotime($date . '23:59');
-        
+        // Set the default start and end time for each physician
+        $physicianHours = $this->physicianHours($physicianID);
+        $current = strtotime($date . $physicianHours[0]);
+        $end = strtotime($date . $physicianHours[1]);
+
+
         // Find all appointments booked for the selected day and physician
         $sql = '
         SELECT * FROM Appointments
         WHERE physicianID = ' . $physicianID . ' AND
-        startTime BETWEEN "' . $date . ' 00:00:00" AND "' . $date . ' 23:59:59"';
+        startTime BETWEEN "' . $date . ' ' . $physicianHours[0] . '" AND "' . $date . ' ' . $physicianHours[1] . '"';
 
-        $stmt = $this->mysqli->prepare($sql);
+        $appointmentStmt = $this->mysqli->prepare($sql);
         $unavailableTimes = [];
         
-        if ($stmt->execute()) {
-            $appointments = $stmt->get_result();
+        if ($appointmentStmt->execute()) {
+            $appointments = $appointmentStmt->get_result();
             while ($appointmentRow = $appointments->fetch_row()) {
                 array_push($unavailableTimes, strtotime($appointmentRow[3]));
             }
         }
-        $stmt->close();
+        $appointmentStmt->close();
 
         // A time is available if no appointments have been booked for that time
         while ($current <= $end) {
             if (!in_array($current, $unavailableTimes)) {
                 $time = date('H:i', $current);
-                $selected = ($time == '00:00') ? ' selected' : '';
+                $selected = ($time == $physicianHours[0]) ? ' selected' : '';
         
                 $output .= '<option value='. $time . $selected . '>' . date('h:i A', $current) .'</option>';
             }
