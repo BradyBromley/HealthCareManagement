@@ -2,6 +2,8 @@
 require_once '../config.php';
 require_once '../controller/userController.php';
 require_once '../controller/roleController.php';
+require_once '../controller/appointmentController.php';
+
 
 // Redirect if user is not logged in
 session_start();
@@ -33,8 +35,16 @@ if (($_REQUEST['id']) && ($_SESSION['id'] != $_REQUEST['id'])) {
 }
 
 // Edit User
+$appointmentController = new AppointmentController($mysqli);
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $result = $userController->editUser($_REQUEST['id']);
+    $role = $roleController->getRole($_POST['role']);
+    if ($role) {
+        $roleRow = $role->fetch_row();
+        if ($roleRow[1] == 'physician') {
+            $appointmentController->setAvailability($_REQUEST['id']);
+        }
+    }
 }
 ?>
 
@@ -45,6 +55,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css' integrity='sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN' crossorigin='anonymous'>
         <link rel='stylesheet' href='/css/style.css'>
 
+        <!-- Import jquery -->
+        <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+        
         <meta charset='utf-8'>
         <title>Edit Profile</title>
     </head>
@@ -133,6 +146,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 }
                 ?>
 
+                <!-- CREATE A FUNCTION THAT INSERTS/UPDATES (And disables for non physicians) THE Availability TABLE -->
+                <div id='availableTimes'>
+                    <div id='startTimeHTML' class='form-group formInput'>
+                        <label for='startTime'>Start Time</label>
+                        <select class='form-select' id='startTime' name='startTime'>
+                            <?php echo $appointmentController->getTimeList('00:00:00', '23:30:00'); ?>
+                        </select>
+                    </div>
+
+                    <div id='endTimeHTML' class='form-group formInput'>
+                        <label for='endTime'>End Time</label>
+                        <select class='form-select' id='endTime' name='endTime'>
+                            <?php echo $appointmentController->getTimeList('00:30:00'); ?>
+                        </select>
+                    </div>
+                </div>
+
                 <button id='submit' type='submit' class='btn btn-success'>Submit</button>
             </form>
 
@@ -144,6 +174,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         ?>
             <div class="banner alert alert-danger">Oops! Something went wrong. Please try again later.</div>
         <?php } ?>
+
+        <script src="/js/editProfile.js"></script>
         </div>
     </body>
 </html>

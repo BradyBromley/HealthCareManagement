@@ -11,9 +11,10 @@ class AppointmentController extends ValidationController {
         $this->mysqli = $mysqli;
     }
 
-    
     // Private Methods
-    private function physicianHours($physicianID) {
+
+    // Public Methods
+    public function getAvailability($physicianID) {
         $startTime = '00:00:00';
         $endTime = '23:59:59';
 
@@ -35,35 +36,29 @@ class AppointmentController extends ValidationController {
         return [$startTime, $endTime];
     }
 
-    // Public Methods
-    public function bookAppointment() {
-        $physicianID = trim($_POST['physician']);
-        $date = trim($_POST['appointmentDate']);
-        $time = trim($_POST['appointmentTime']);
-        $reason = trim($_POST['reason']);
-        
-        $startTime = $date . ' ' . $time;
-        $endTime = strtotime('+25 minutes', strtotime($startTime));
-        $endTime = date('Y-m-d H:i', $endTime);
+    public function setAvailability($physicianID) {
+        // Set the availability for a particular physician
+        $startTime = trim($_POST['startTime']);
+        $endTime = trim($_POST['endTime']);
             
-        // Insert Appointment
-        $sql = 'INSERT INTO Appointments (patientID, physicianID, startTime, endTime, reason) VALUES (?, ?, ?, ?, ?)';
-        $appointmentStmt = $this->mysqli->prepare($sql);
-        $appointmentStmt->bind_param('iisss', $_SESSION['id'], $physicianID, $startTime, $endTime, $reason);
+        // Insert Availability
+        $sql = 'INSERT INTO Availability (physicianID, startTime, endTime) VALUES (?, ?, ?)';
+        $availabilityStmt = $this->mysqli->prepare($sql);
+        $availabilityStmt->bind_param('iss', $physicianID, $startTime, $endTime);
 
-        if ($appointmentStmt->execute()) {
-            $appointmentStmt->close();
+        if ($availabilityStmt->execute()) {
+            $availabilityStmt->close();
             return true;
         }
-        $appointmentStmt->close();
+        $availabilityStmt->close();
         return false;
     }
 
     public function getAvailableTimes($date, $physicianID) {
         $output = '';
 
-        // Set the default start and end time for each physician
-        $physicianHours = $this->physicianHours($physicianID);
+        // Get the default start and end time for a particular physician
+        $physicianHours = $this->getAvailability($physicianID);
         $current = strtotime($date . $physicianHours[0]);
         $end = strtotime($date . $physicianHours[1]);
 
@@ -86,7 +81,7 @@ class AppointmentController extends ValidationController {
         $appointmentStmt->close();
 
         // A time is available if no appointments have been booked for that time
-        while ($current <= $end) {
+        while ($current < $end) {
             if (!in_array($current, $unavailableTimes)) {
                 $time = date('H:i', $current);
                 $selected = ($time == $physicianHours[0]) ? ' selected' : '';
@@ -99,5 +94,47 @@ class AppointmentController extends ValidationController {
         }
     
         return $output;
+    }
+
+    public function getTimeList($earliestTime = '00:00:00', $latestTime = '24:00:00') {
+        // Return a select list of times in 30 minute increments
+        $output = '';
+
+        $current = strtotime($earliestTime);
+        $end = strtotime($latestTime);
+
+        while ($current < $end) {
+            $time = date('H:i', $current);
+            $selected = ($time == $earliestTime) ? ' selected' : '';
+    
+            $output .= '<option value='. $time . $selected . '>' . date('h:i A', $current) .'</option>';
+            $current = strtotime('+30 minutes', $current);
+            
+        }
+    
+        return $output;
+    }
+
+    public function bookAppointment() {
+        $physicianID = trim($_POST['physician']);
+        $date = trim($_POST['appointmentDate']);
+        $time = trim($_POST['appointmentTime']);
+        $reason = trim($_POST['reason']);
+        
+        $startTime = $date . ' ' . $time;
+        $endTime = strtotime('+25 minutes', strtotime($startTime));
+        $endTime = date('Y-m-d H:i', $endTime);
+            
+        // Insert Appointment
+        $sql = 'INSERT INTO Appointments (patientID, physicianID, startTime, endTime, reason) VALUES (?, ?, ?, ?, ?)';
+        $appointmentStmt = $this->mysqli->prepare($sql);
+        $appointmentStmt->bind_param('iisss', $_SESSION['id'], $physicianID, $startTime, $endTime, $reason);
+
+        if ($appointmentStmt->execute()) {
+            $appointmentStmt->close();
+            return true;
+        }
+        $appointmentStmt->close();
+        return false;
     }
 }

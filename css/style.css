@@ -6,6 +6,11 @@
     z-index: 1;
 }
 
+.websiteHeader {
+    background-color: white;
+    margin: 0px;
+}
+
 .navbar {
     background-color: slategrey;
     list-style-type: none;
@@ -32,6 +37,8 @@
 }
 
 /* Page Formatting */
+
+
 .content {
     margin: auto;
     width: 90%;
@@ -74,4 +81,8 @@
 
 .accountFieldValue {
     font-size: 16px;
+}
+
+#availableTimes {
+    display: none;
 }

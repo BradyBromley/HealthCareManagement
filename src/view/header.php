@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <div id='navigation'>    
-        <h1>Health Care Management</h1>
+        <h1 class='websiteHeader'>Health Care Management</h1>
         <ul class='navbar'>
             <li class='navbarLink'><a href='/index.php'>Home</a></li>
             <?php if ($userController->access('bookAppointment')) {?>
