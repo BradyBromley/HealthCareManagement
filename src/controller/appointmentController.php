@@ -48,13 +48,6 @@ class AppointmentController extends ValidationController {
 
         $physicianHours = $this->getAvailability($physicianID);
 
-        /*
-        ///////////////////////////////////////////
-        Add a isActive field to Availability that gets disabled if the user isn't a physician
-        ///////////////////////////////////////////
-        */
-
-
         if ($physicianHours) {
             // Update Availability
             $sql = 'UPDATE Availability SET startTime = ?, endTime = ? WHERE physicianID = ?';

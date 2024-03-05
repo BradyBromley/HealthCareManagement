@@ -9,6 +9,7 @@ function htmlDate(date) {
     return yyyy + '-' + mm + '-' + dd;
 }
 
+// Appointments can be booked anytime from the following day, to a year from now
 var appointmentDate = document.getElementById('appointmentDate');
 var today = new Date();
 var tomorrow = new Date(today.setDate(today.getDate() + 1));
@@ -19,6 +20,7 @@ appointmentDate.valueAsDate = tomorrow;
 appointmentDate.setAttribute('min', tomorrowYMD);
 appointmentDate.setAttribute('max', nextYear);
 
+// The available appointment times depend on the physician and date chosen
 $('#appointmentDate, #physician').on('change', function(){
     var date = $('#appointmentDate').val();
     var physicianID = $('#physician').val();

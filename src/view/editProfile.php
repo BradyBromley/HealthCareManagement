@@ -148,7 +148,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 }
                 ?>
 
-                <!-- CREATE A FUNCTION THAT INSERTS/UPDATES (And disables for non physicians) THE Availability TABLE -->
+                <!-- Only display start and end times if the user is a physician -->
                 <div id='availableTimes'>
                     <div id='startTimeHTML' class='form-group formInput'>
                         <label for='startTime'>Start Time</label>

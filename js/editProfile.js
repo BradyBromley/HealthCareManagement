@@ -3,7 +3,8 @@ $(document).ready(function(){
     $("#role").change();
 });
 
-$('#role').on('load change', function(){
+// The start and end time dropdowns should only show if the physician role is selected
+$('#role').on('change', function(){
     var role = $('#role').find('option:selected').text();
 
     if (role == 'physician') {
@@ -13,6 +14,7 @@ $('#role').on('load change', function(){
     }
 });
 
+// The end time dropdown should only show times after the start time
 $('#startTime').on('change', function(){
     var startTime = $('#startTime').val();
 

@@ -2,6 +2,7 @@
 require_once '../config.php';
 require_once '../controller/appointmentController.php';
 
+// Update the appointment time based on the date and physician chosen
 $appointmentController = new AppointmentController($mysqli);
 ?>
 
