@@ -43,6 +43,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $roleRow = $role->fetch_row();
         if ($roleRow[1] == 'physician') {
             $appointmentController->setAvailability($_REQUEST['id']);
+        } else {
+            $appointmentController->deleteAvailability($_REQUEST['id']);
         }
     }
 }
