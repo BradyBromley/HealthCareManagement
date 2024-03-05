@@ -15,8 +15,8 @@ class AppointmentController extends ValidationController {
 
     // Public Methods
     public function getAvailability($physicianID) {
-        $startTime = '00:00:00';
-        $endTime = '23:59:59';
+        $startTime = '';
+        $endTime = '';
 
         // Physicians are only available at certain times of the day
         $sql = '
@@ -33,18 +33,32 @@ class AppointmentController extends ValidationController {
         }
         $availabilityStmt->close();
         
-        return [$startTime, $endTime];
+        // Return the start and end times if they exist
+        if ($startTime && $endTime) {
+            return [$startTime, $endTime];
+        } else {
+            return null;
+        }
     }
 
     public function setAvailability($physicianID) {
         // Set the availability for a particular physician
         $startTime = trim($_POST['startTime']);
         $endTime = trim($_POST['endTime']);
-            
-        // Insert Availability
-        $sql = 'INSERT INTO Availability (physicianID, startTime, endTime) VALUES (?, ?, ?)';
-        $availabilityStmt = $this->mysqli->prepare($sql);
-        $availabilityStmt->bind_param('iss', $physicianID, $startTime, $endTime);
+
+        $physicianHours = $this->getAvailability($physicianID);
+
+        if ($physicianHours) {
+            // Update Availability
+            $sql = 'UPDATE Availability SET startTime = ?, endTime = ? WHERE physicianID = ?';
+            $availabilityStmt = $this->mysqli->prepare($sql);
+            $availabilityStmt->bind_param('ssi', $startTime, $endTime, $physicianID);
+        } else {
+            // Insert Availability
+            $sql = 'INSERT INTO Availability (physicianID, startTime, endTime) VALUES (?, ?, ?)';
+            $availabilityStmt = $this->mysqli->prepare($sql);
+            $availabilityStmt->bind_param('iss', $physicianID, $startTime, $endTime);
+        }
 
         if ($availabilityStmt->execute()) {
             $availabilityStmt->close();
