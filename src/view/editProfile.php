@@ -58,7 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <link rel='stylesheet' href='/css/style.css'>
 
         <!-- Import jquery -->
-        <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+        <script src='https://code.jquery.com/jquery-3.7.1.min.js' integrity='sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=' crossorigin='anonymous'></script>
         
         <meta charset='utf-8'>
         <title>Edit Profile</title>
@@ -79,13 +79,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <div class='form-group formInput'>
                     <label for='firstName'>First Name</label>
                     <input id='firstName' name='firstName' type='text' class='form-control <?php echo (!empty($userController->firstNameError)) ? 'is-invalid' : ''; ?>' value='<?php echo $_SERVER['REQUEST_METHOD'] == 'POST' ? $_POST['firstName'] : $userRow[3]; ?>' placeholder='Enter first name'>
-                    <div class="invalid-feedback"><?php echo $userController->firstNameError; ?></div>
+                    <div class='invalid-feedback'><?php echo $userController->firstNameError; ?></div>
                 </div>
                 
                 <div class='form-group formInput'>
                     <label for='lastName'>Last Name</label>
                     <input id='lastName' name='lastName' type='text' class='form-control <?php echo (!empty($userController->lastNameError)) ? 'is-invalid' : ''; ?>' value='<?php echo $_SERVER['REQUEST_METHOD'] == 'POST' ? $_POST['lastName'] : $userRow[4]; ?>' placeholder='Enter last name'>
-                    <div class="invalid-feedback"><?php echo $userController->lastNameError; ?></div>
+                    <div class='invalid-feedback'><?php echo $userController->lastNameError; ?></div>
                 </div>
 
                 <div class='form-group formInput'>
@@ -169,15 +169,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             </form>
 
             <?php if ($result) { ?>
-                <div class="banner alert alert-success">Updated Successfully!</div>
+                <div class='banner alert alert-success'>Updated Successfully!</div>
         <?php
             }
         } else {
         ?>
-            <div class="banner alert alert-danger">Oops! Something went wrong. Please try again later.</div>
+            <div class='banner alert alert-danger'>Oops! Something went wrong. Please try again later.</div>
         <?php } ?>
 
-        <script src="/js/editProfile.js"></script>
+        <script src='/js/editProfile.js'></script>
         </div>
     </body>
 </html>

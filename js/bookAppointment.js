@@ -1,3 +1,8 @@
+$(document).ready(function(){
+    // Invoke a change on page load so the availability gets correctly shown
+    $('#appointmentDate').change();
+});
+
 function htmlDate(date) {
     var dd = date.getDate();
     var mm = date.getMonth() + 1;
@@ -35,6 +40,14 @@ $('#appointmentDate, #physician').on('change', function(){
         cache: false,
         success: function(data) {
             $('#appointmentTimeHTML').html(data);
+            if (data) {
+                console.log('success');
+                $('#submitHTML').html('<button id="submit" type="submit" class="btn btn-success">Submit</button>');
+            } else {
+                console.log('fail');
+                $('#submitHTML').html('<div class="banner alert alert-warning">There are no appointments available for this day.</div>');
+                
+            }
         }
     });
 });

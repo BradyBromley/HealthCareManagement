@@ -1,6 +1,6 @@
 $(document).ready(function(){
     // Invoke a change on page load so the start/end times get correctly shown/hidden
-    $("#role").change();
+    $('#role').change();
 });
 
 // The start and end time dropdowns should only show if the physician role is selected

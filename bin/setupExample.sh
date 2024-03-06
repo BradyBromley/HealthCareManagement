@@ -1,5 +1,5 @@
 #!/bin/bash
-echo "Executing SQL commands"
+echo 'Executing SQL commands'
 
 mysql -u USER -p PASSWORD HealthCareManagement < sql/scripts/Roles.sql
 mysql -u USER -p PASSWORD HealthCareManagement < sql/scripts/Users.sql

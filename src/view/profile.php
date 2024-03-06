@@ -103,12 +103,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <?php }?>
 
             <?php } else { ?>
-                <div class="banner alert alert-danger">Oops! Something went wrong. Please try again later.</div>
+                <div class='banner alert alert-danger'>Oops! Something went wrong. Please try again later.</div>
         <?php
             }
         } else {
         ?>
-            <div class="banner alert alert-danger">Oops! Something went wrong. Please try again later.</div>
+            <div class='banner alert alert-danger'>Oops! Something went wrong. Please try again later.</div>
         <?php } ?>
         </div>
     </body>

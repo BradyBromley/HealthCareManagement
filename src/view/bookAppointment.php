@@ -30,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <link rel='stylesheet' href='/css/style.css'>
 
         <!-- Import jquery -->
-        <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+        <script src='https://code.jquery.com/jquery-3.7.1.min.js' integrity='sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=' crossorigin='anonymous'></script>
         
         <meta charset='utf-8'>
         <title>Book Appointment</title>
@@ -61,16 +61,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                 <!-- Calendar input for selecting appointment date -->
                 <div class='form-group formInput'>
-                    <label for="appointmentDate">Appointment date</label>
-                    <input id="appointmentDate" name="appointmentDate" type="date" class='form-control' required/>
+                    <label for='appointmentDate'>Appointment date</label>
+                    <input id='appointmentDate' name='appointmentDate' type='date' class='form-control' required/>
                 </div>
 
                 <!-- Dropdown input for selecting appointment time -->
-                <div id='appointmentTimeHTML' class='form-group formInput '>
-                    <label for='appointmentTime'>Appointment time</label>
-                    <select class='form-select' id='appointmentTime' name='appointmentTime'>
-                        <?php echo $appointmentController->getAvailableTimes(date('Y-m-d', strtotime('tomorrow')), $defaultPhysician[0]); ?>
-                    </select>
+                <div id='appointmentTimeHTML'>
+                    <div class='form-group formInput'>
+                        <label for='appointmentTime'>Appointment time</label>
+                        <select class='form-select' id='appointmentTime' name='appointmentTime'>
+                            <?php echo $appointmentController->getAvailableTimes(date('Y-m-d', strtotime('tomorrow')), $defaultPhysician[0]); ?>
+                        </select>
+                    </div>
                 </div>
 
                 <div class='form-group formTextArea'>
@@ -78,7 +80,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <textarea id='reason' name='reason' rows='3' class='form-control' placeholder='Enter reason'></textarea>
                 </div>
 
-                <button id='submit' type='submit' class='btn btn-success'>Submit</button>
+                <div id='submitHTML'>
+                    <button id='submit' type='submit' class='btn btn-success'>Submit</button>
+                </div>
         <?php } else { ?>
                 <div class='banner alert alert-danger'>Oops! Something went wrong. Please try again later.</div>
         <?php } ?>
@@ -86,10 +90,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </form>
 
         <?php if ($result) { ?>
-            <div class="banner alert alert-success">Updated Successfully!</div>
+            <div class='banner alert alert-success'>Updated Successfully!</div>
         <?php } ?>
 
-        <script src="/js/bookAppointment.js"></script>
+        <script src='/js/bookAppointment.js'></script>
         </div>
     </body>
 </html>
