@@ -10,4 +10,4 @@ Then exit out of mysql, create a new file called setup.sh based on setupExample.
 Create a new file called config.php based on configExample.php.
 
 This is an ER Diagram for the database.
-![alt text](images/healthCareManagementDatabaseDiagram.png)
+![alt text](images/healthCareManagementERDiagram.png)
