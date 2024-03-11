@@ -17,12 +17,14 @@ $('#role').on('change', function(){
 // The end time dropdown should only show times after the start time
 $('#startTime').on('change', function(){
     var startTime = $('#startTime').val();
+    var endTime =  $('#endTime').val();
 
     $.ajax({
         type: 'POST',
         url: 'editProfileHelper.php',
         data: {
-            startTime
+            startTime,
+            endTime
         },
         cache: false,
         success: function(data) {

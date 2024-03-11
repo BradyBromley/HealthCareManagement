@@ -146,6 +146,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <?php
                     }
                 }
+
+                // If the physician already has a set availability, then use that as the default
+                $physicianHours = $appointmentController->getAvailability($userRow[0]);
+                $startTime = $physicianHours ? $physicianHours[0] : '00:00:00';
+                $endTime = $physicianHours ? $physicianHours[1] : '00:30:00';
                 ?>
 
                 <!-- Only display start and end times if the user is a physician -->
@@ -153,14 +158,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <div id='startTimeHTML' class='form-group formInput'>
                         <label for='startTime'>Start Time</label>
                         <select class='form-select' id='startTime' name='startTime'>
-                            <?php echo $appointmentController->getTimeList('00:00:00', '23:30:00'); ?>
+                            <?php echo $appointmentController->getTimeList('00:00:00', '23:30:00', $startTime); ?>
                         </select>
                     </div>
 
                     <div id='endTimeHTML' class='form-group formInput'>
                         <label for='endTime'>End Time</label>
                         <select class='form-select' id='endTime' name='endTime'>
-                            <?php echo $appointmentController->getTimeList('00:30:00'); ?>
+                            <?php echo $appointmentController->getTimeList('00:30:00', '24:00:00', $endTime); ?>
                         </select>
                     </div>
                 </div>

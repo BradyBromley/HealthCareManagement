@@ -123,7 +123,7 @@ class AppointmentController extends ValidationController {
         return $output;
     }
 
-    public function getTimeList($earliestTime = '00:00:00', $latestTime = '24:00:00') {
+    public function getTimeList($earliestTime = '00:00:00', $latestTime = '24:00:00', $selectedTime = '00:00:00') {
         // Return a select list of times in 30 minute increments
         $output = '';
 
@@ -131,12 +131,12 @@ class AppointmentController extends ValidationController {
         $end = strtotime($latestTime);
 
         while ($current < $end) {
-            $time = date('H:i', $current);
-            $selected = ($time == $earliestTime) ? ' selected' : '';
+            $time = date('H:i:s', $current);
+            // Set the default time displayed based on the provided value
+            $selected = ($time == $selectedTime) ? ' selected' : '';
     
-            $output .= '<option value='. $time . $selected . '>' . date('h:i A', $current) .'</option>';
+            $output .= '<option value="'. $time . '" ' . $selected . '>' . date('h:i A', $current) .'</option>';
             $current = strtotime('+30 minutes', $current);
-            
         }
     
         return $output;
