@@ -41,10 +41,8 @@ $('#appointmentDate, #physician').on('change', function(){
         success: function(data) {
             $('#appointmentTimeHTML').html(data);
             if (data) {
-                console.log('success');
                 $('#submitHTML').html('<button id="submit" type="submit" class="btn btn-success">Submit</button>');
             } else {
-                console.log('fail');
                 $('#submitHTML').html('<div class="banner alert alert-warning">There are no appointments available for this day.</div>');
                 
             }

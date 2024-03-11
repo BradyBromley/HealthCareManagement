@@ -6,12 +6,23 @@ $(document).ready(function(){
 // The start and end time dropdowns should only show if the physician role is selected
 $('#role').on('change', function(){
     var role = $('#role').find('option:selected').text();
+    var physicianID = $('#userID').attr('value');
 
-    if (role == 'physician') {
-        $('#availableTimes').show();
-    } else {
-        $('#availableTimes').hide();
-    }
+    $.ajax({
+        type: 'POST',
+        url: 'editProfilePhysicianHelper.php',
+        data: {
+            physicianID: physicianID
+        },
+        cache: false,
+        success: function(data) {
+            if (role == 'physician') {
+                $('#availableTimes').html(data);
+            } else {
+                $('#availableTimes').html('');
+            }
+        }
+    });
 });
 
 // The end time dropdown should only show times after the start time
@@ -21,7 +32,7 @@ $('#startTime').on('change', function(){
 
     $.ajax({
         type: 'POST',
-        url: 'editProfileHelper.php',
+        url: 'editProfileAvailableTimesHelper.php',
         data: {
             startTime,
             endTime
