@@ -7,9 +7,17 @@ $appointmentController = new AppointmentController($mysqli);
 $earliestTime = strtotime($_POST['startTime']);
 $earliestTime = strtotime('+30 minutes', $earliestTime);
 $output = $appointmentController->getTimeList(date('H:i:s', $earliestTime), '24:00:00', $_POST['endTime']);
-?>
 
+$result = [];
+
+$endTimeHTML = "
 <label for='endTime'>End Time</label>
 <select class='form-select' id='endTime' name='endTime'>
-    <?php echo $output; ?>
+    " . $output . "
 </select>
+";
+
+$result['endTimeHTML'] = $endTimeHTML;
+
+echo json_encode($result);
+?>

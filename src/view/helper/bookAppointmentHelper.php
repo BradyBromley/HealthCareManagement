@@ -6,13 +6,21 @@ require_once '../../controller/appointmentController.php';
 $appointmentController = new AppointmentController($mysqli);
 $output = $appointmentController->getAvailableTimes($_POST['date'], $_POST['physicianID']);
 
-if ($output) {
-?>
-    <div class='form-group formInput'>
-        <label for='appointmentTime'>Appointment time</label>
-        <select class='form-select' id='appointmentTime' name='appointmentTime'>
-            <?php echo $output; ?>
-        </select>
-    </div>
+$result = [];
 
-<?php } ?>
+if ($output) {
+    $appointmentTimeHTML = "
+        <div class='form-group formInput'>
+            <label for='appointmentTime'>Appointment time</label>
+            <select class='form-select' id='appointmentTime' name='appointmentTime'>
+                " . $output . "
+            </select>
+        </div>
+    ";
+
+    $result['appointmentTimeHTML'] = $appointmentTimeHTML;
+} else {
+    $result['appointmentTimeHTML'] = '';
+}
+echo json_encode($result);
+?>

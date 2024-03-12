@@ -24,12 +24,8 @@ $endTimeHTML = "
     " . $appointmentController->getTimeList('00:30:00', '24:00:00', $endTime) . "
 </select>
 ";
-
 $result['endTimeHTML'] = $endTimeHTML;
 
 echo json_encode($result);
 
 ?>
-
-
-

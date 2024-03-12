@@ -45,6 +45,7 @@ $(document).on('change', '#startTime', function(){
 
     $.ajax({
         type: 'POST',
+        datatype: 'json',
         url: 'helper/editProfileAvailableTimesHelper.php',
         data: {
             startTime,
@@ -52,7 +53,9 @@ $(document).on('change', '#startTime', function(){
         },
         cache: false,
         success: function(data) {
-            $('#endTimeHTML').html(data);
+            var json = $.parseJSON(data);
+            var endTimeHTML = json.endTimeHTML;
+            $('#endTimeHTML').html(endTimeHTML);
         }
     });
 });

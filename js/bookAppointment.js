@@ -32,6 +32,7 @@ $('#appointmentDate, #physician').on('change', function(){
 
     $.ajax({
         type: 'POST',
+        datatype: 'json',
         url: 'helper/bookAppointmentHelper.php',
         data: {
             date: date,
@@ -39,8 +40,10 @@ $('#appointmentDate, #physician').on('change', function(){
         },
         cache: false,
         success: function(data) {
-            $('#appointmentTimeHTML').html(data);
-            if (data) {
+            var json = $.parseJSON(data);
+            var appointmentTimeHTML = json.appointmentTimeHTML;
+            $('#appointmentTimeHTML').html(appointmentTimeHTML);
+            if (appointmentTimeHTML) {
                 $('#submitHTML').html('<button id="submit" type="submit" class="btn btn-success">Submit</button>');
             } else {
                 $('#submitHTML').html('<div class="banner alert alert-warning">There are no appointments available for this day.</div>');
