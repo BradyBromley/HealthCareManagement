@@ -82,3 +82,11 @@
 .accountFieldValue {
     font-size: 16px;
 }
+
+#startTimeHTML {
+    display: none;
+}
+
+#endTimeHTML {
+    display: none;
+}
