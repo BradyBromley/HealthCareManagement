@@ -11,7 +11,7 @@ $(document).on('change', '#role', function(){
     $.ajax({
         type: 'POST',
         datatype: 'json',
-        url: 'editProfilePhysicianHelper.php',
+        url: 'helper/editProfilePhysicianHelper.php',
         data: {
             physicianID: physicianID
         },
@@ -45,7 +45,7 @@ $(document).on('change', '#startTime', function(){
 
     $.ajax({
         type: 'POST',
-        url: 'editProfileAvailableTimesHelper.php',
+        url: 'helper/editProfileAvailableTimesHelper.php',
         data: {
             startTime,
             endTime

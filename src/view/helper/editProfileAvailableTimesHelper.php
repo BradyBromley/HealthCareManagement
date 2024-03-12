@@ -1,6 +1,6 @@
 <?php
-require_once '../config.php';
-require_once '../controller/appointmentController.php';
+require_once '../../config.php';
+require_once '../../controller/appointmentController.php';
 
 // The end time dropdown should only show times after the start time
 $appointmentController = new AppointmentController($mysqli);

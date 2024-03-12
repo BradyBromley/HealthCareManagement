@@ -1,6 +1,6 @@
 <?php
-require_once '../config.php';
-require_once '../controller/appointmentController.php';
+require_once '../../config.php';
+require_once '../../controller/appointmentController.php';
 
 // If the physician already has a set availability, then use that as the default
 $appointmentController = new AppointmentController($mysqli);

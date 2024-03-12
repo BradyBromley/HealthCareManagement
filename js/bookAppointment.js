@@ -32,7 +32,7 @@ $('#appointmentDate, #physician').on('change', function(){
 
     $.ajax({
         type: 'POST',
-        url: 'bookAppointmentHelper.php',
+        url: 'helper/bookAppointmentHelper.php',
         data: {
             date: date,
             physicianID: physicianID
