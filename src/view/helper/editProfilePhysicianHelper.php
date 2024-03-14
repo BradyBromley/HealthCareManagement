@@ -10,6 +10,7 @@ $endTime = $physicianHours ? $physicianHours[1] : '00:30:00';
 
 $result = [];
 
+// Create the startTime select list
 $startTimeHTML = "
 <label for='startTime'>Start Time</label>
 <select class='form-select' id='startTime' name='startTime'>
@@ -18,10 +19,14 @@ $startTimeHTML = "
 ";
 $result['startTimeHTML'] = $startTimeHTML;
 
+// Create the endTime select list
+$earliestTime = strtotime($startTime);
+$earliestTime = strtotime('+30 minutes', $earliestTime);
+
 $endTimeHTML = "
 <label for='endTime'>End Time</label>
 <select class='form-select' id='endTime' name='endTime'>
-    " . $appointmentController->getTimeList('00:30:00', '24:00:00', $endTime) . "
+    " . $appointmentController->getTimeList(date('H:i:s', $earliestTime), '24:00:00', $endTime) . "
 </select>
 ";
 $result['endTimeHTML'] = $endTimeHTML;

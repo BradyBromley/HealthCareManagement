@@ -149,11 +149,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 }
                 ?>
 
-                <div id='availableTimes'>
-                    <div id='startTimeHTML' class='form-group formInput'></div>
+                <div id='startTimeHTML' class='form-group formInput'></div>
 
-                    <div id='endTimeHTML' class='form-group formInput'></div>
-                </div>
+                <div id='endTimeHTML' class='form-group formInput'></div>
 
                 <button id='submit' type='submit' class='btn btn-success'>Submit</button>
             </form>
