@@ -164,4 +164,21 @@ class AppointmentController extends ValidationController {
         $appointmentStmt->close();
         return false;
     }
+
+    public function listAppointments($physicianID) {
+        $sql = '
+        SELECT patientID, firstName, lastName, startTime, endTime, reason
+        FROM Appointments, Users
+        WHERE Appointments.patientID = Users.ID AND isActive = 1';
+        if ($role != 'all') {
+            $sql .= ' AND physicianID = "' . $physicianID . '"';
+        }
+
+        $stmt = $this->mysqli->prepare($sql);
+        if ($stmt->execute()) {
+            return $stmt->get_result();
+        }
+        $stmt->close();
+        return null;
+    }
 }

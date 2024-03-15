@@ -6,6 +6,8 @@
             <li class='navbarLink'><a href='/index.php'>Home</a></li>
             <?php if ($userController->access('bookAppointment')) {?>
                 <li class='navbarLink'><a href='/src/view/bookAppointment.php'>Book Appointment</a></li>
+            <?php } if ($userController->access('upcomingAppointments')) { ?>
+                <li class='navbarLink'><a href='/src/view/upcomingAppointments.php'>Upcoming Appointments</a></li>
             <?php } if ($userController->access('patients')) { ?>
                 <li class='navbarLink'><a href='/src/view/patients.php'>Patients</a></li>
             <?php } if ($userController->access('admin')) {?>
