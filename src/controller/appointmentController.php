@@ -170,7 +170,7 @@ class AppointmentController extends ValidationController {
         SELECT patientID, firstName, lastName, startTime, endTime, reason
         FROM Appointments, Users
         WHERE Appointments.patientID = Users.ID AND isActive = 1';
-        if ($role != 'all') {
+        if ($physicianID != 'all') {
             $sql .= ' AND physicianID = "' . $physicianID . '"';
         }
 
