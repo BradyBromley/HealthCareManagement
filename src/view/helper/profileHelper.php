@@ -14,11 +14,11 @@ $result = [];
 $availabilityHTML = "
 <div class='accountField'>
     <span class='accountFieldLabel'>Start Time</span>
-    <span class='accountFieldValue'>" . $startTime . "</span>
+    <span class='accountFieldValue'>" . date('h:i A', strtotime($startTime)) . "</span>
 </div>
 <div class='accountField'>
     <span class='accountFieldLabel'>End Time</span>
-    <span class='accountFieldValue'>" . $endTime . "</span>
+    <span class='accountFieldValue'>" . date('h:i A', strtotime($endTime)) . "</span>
 </div>
 ";
 $result['availabilityHTML'] = $availabilityHTML;
