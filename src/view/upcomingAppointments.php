@@ -28,6 +28,9 @@ $appointmentController = new AppointmentController($mysqli);
         <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css'>
         <link rel='stylesheet' href='/css/style.css'>
 
+        <!-- Import js -->
+        <script src='https://www.kryogenix.org/code/browser/sorttable/sorttable.js'></script>
+
         <meta charset='utf-8'>
         <title>Upcoming Appointments</title>
     </head>
@@ -50,7 +53,6 @@ $appointmentController = new AppointmentController($mysqli);
 
                 if ($result) {
                 ?>
-                <script src="https://www.kryogenix.org/code/browser/sorttable/sorttable.js"></script>
                     <table class='table table-striped table-bordered sortable userTable'>
                         <thead>
                             <tr>
