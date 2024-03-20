@@ -50,7 +50,8 @@ $appointmentController = new AppointmentController($mysqli);
 
                 if ($result) {
                 ?>
-                    <table class='table table-striped table-bordered userTable'>
+                <script src="https://www.kryogenix.org/code/browser/sorttable/sorttable.js"></script>
+                    <table class='table table-striped table-bordered sortable userTable'>
                         <thead>
                             <tr>
                                 <th>Patient ID</th>
@@ -71,7 +72,8 @@ $appointmentController = new AppointmentController($mysqli);
                             for ($i = 0; $i < $numCols; $i++) { 
                                 if ($i == 3 || $i == 4) {
                             ?>
-                                    <td><?php echo date('M j Y,  g:i A', strtotime($row[$i])) ?></td>
+                                    <!-- Date columns need a custom key to be sorted properly -->
+                                    <td sorttable_customkey='<?php echo date('YmdHi', strtotime($row[$i])) ?>'><?php echo date('M j Y,  g:i A', strtotime($row[$i])) ?></td>
                                 <?php } else { ?>
                                     <td><?php echo $row[$i] ?></td>
                             <?php
