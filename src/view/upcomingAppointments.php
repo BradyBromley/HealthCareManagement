@@ -67,9 +67,17 @@ $appointmentController = new AppointmentController($mysqli);
                         while ($row = $result->fetch_row()) {
                         ?>
                             <tr>
-                            <?php for ($i = 0; $i < $numCols; $i++) { ?>
-                                <td><?php echo $row[$i]?></td>
-                            <?php } ?>
+                            <?php
+                            for ($i = 0; $i < $numCols; $i++) { 
+                                if ($i == 3 || $i == 4) {
+                            ?>
+                                    <td><?php echo date('M j Y,  g:i A', strtotime($row[$i])) ?></td>
+                                <?php } else { ?>
+                                    <td><?php echo $row[$i] ?></td>
+                            <?php
+                                }
+                            }
+                            ?>
                             </tr>
                         <?php } ?>
                         </tbody>
