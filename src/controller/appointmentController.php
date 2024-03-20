@@ -173,6 +173,7 @@ class AppointmentController extends ValidationController {
         if ($physicianID != 'all') {
             $sql .= ' AND physicianID = "' . $physicianID . '"';
         }
+        $sql .= ' ORDER BY startTime';
 
         $stmt = $this->mysqli->prepare($sql);
         if ($stmt->execute()) {
