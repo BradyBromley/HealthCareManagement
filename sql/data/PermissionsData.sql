@@ -3,4 +3,4 @@ INSERT INTO Permissions (permissionName) VALUES
     ('patients'),
     ('profile'),
     ('bookAppointment'),
-    ('upcomingAppointments');
+    ('appointmentListing');

@@ -32,14 +32,14 @@ $appointmentController = new AppointmentController($mysqli);
         <script src='https://www.kryogenix.org/code/browser/sorttable/sorttable.js'></script>
 
         <meta charset='utf-8'>
-        <title>Upcoming Appointments</title>
+        <title>Appointments</title>
     </head>
     <body>
         <?php include_once($_SERVER['DOCUMENT_ROOT'] . '/src/view/header.php') ?>
 
-        <!-- Upcoming Appointments-->
+        <!-- Appointments -->
         <div class='content'>
-            <h2>Upcoming Appointments</h2>
+            <h2>Appointments</h2>
             <?php
             // List appointments for all physicians if user is admin
             $role = $roleController->getRole($_SESSION['id']);
