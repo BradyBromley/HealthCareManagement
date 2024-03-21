@@ -41,10 +41,10 @@ $appointmentController = new AppointmentController($mysqli);
         <div class='content'>
             <h2>Appointments</h2>
             <?php
-            // List appointments for all physicians if user is admin
             $role = $roleController->getRole($_SESSION['id']);
             if ($role) {
                 $roleRow = $role->fetch_row();
+                // List appointments for all physicians if user is admin
                 if ($roleRow[1] == 'admin') {
                     $result = $appointmentController->listAppointments('all');
                 } else {
