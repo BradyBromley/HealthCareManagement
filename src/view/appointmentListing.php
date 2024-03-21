@@ -46,42 +46,31 @@ $appointmentController = new AppointmentController($mysqli);
                 $roleRow = $role->fetch_row();
                 // List appointments for all physicians if user is admin
                 if ($roleRow[1] == 'admin') {
-                    $result = $appointmentController->listAppointments('all');
+                    $appointments = $appointmentController->listAppointments('all');
                 } else {
-                    $result = $appointmentController->listAppointments($_SESSION['id']);
+                    $appointments = $appointmentController->listAppointments($_SESSION['id']);
                 }
 
-                if ($result) {
+                if ($appointments) {
                 ?>
                     <table class='table table-striped table-bordered sortable userTable'>
                         <thead>
                             <tr>
                                 <th>Patient ID</th>
-                                <th>First Name</th>
-                                <th>Last Name</th>
+                                <th>Name</th>
                                 <th>Start Time</th>
                                 <th>End Time</th>
                                 <th>Reason</th>
                             </tr>
                         </thead>
                         <tbody>
-                        <?php
-                        $numCols = 6;
-                        while ($row = $result->fetch_row()) {
-                        ?>
+                        <?php foreach ($appointments as $appointment) { ?>
                             <tr>
-                            <?php
-                            for ($i = 0; $i < $numCols; $i++) { 
-                                if ($i == 3 || $i == 4) {
-                            ?>
-                                    <!-- Date columns need a custom key to be sorted properly -->
-                                    <td sorttable_customkey='<?php echo date('YmdHi', strtotime($row[$i])) ?>'><?php echo date('M j Y,  g:i A', strtotime($row[$i])) ?></td>
-                                <?php } else { ?>
-                                    <td><?php echo $row[$i] ?></td>
-                            <?php
-                                }
-                            }
-                            ?>
+                                <td><?php echo $appointment['patientID'] ?></td>
+                                <td><?php echo $appointment['name'] ?></td>
+                                <td sorttable_customkey='<?php echo $appointment['startTimeTableKey'] ?>'><?php echo $appointment['startTime'] ?></td>
+                                <td sorttable_customkey='<?php echo $appointment['endTimeTableKey'] ?>'><?php echo $appointment['endTime'] ?></td>
+                                <td><?php echo $appointment['reason'] ?></td>
                             </tr>
                         <?php } ?>
                         </tbody>

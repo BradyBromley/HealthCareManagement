@@ -142,6 +142,40 @@ class AppointmentController extends ValidationController {
         return $output;
     }
 
+    public function listAppointments($physicianID) {
+        // Get the raw appointment data from the database
+        $sql = '
+        SELECT patientID, firstName, lastName, startTime, endTime, reason
+        FROM Appointments, Users
+        WHERE Appointments.patientID = Users.ID AND isActive = 1';
+        if ($physicianID != 'all') {
+            $sql .= ' AND physicianID = "' . $physicianID . '"';
+        }
+        $sql .= ' ORDER BY startTime';
+
+        $stmt = $this->mysqli->prepare($sql);
+        if (($stmt->execute()) && ($result = $stmt->get_result())) {
+            
+            // Format the data for the view
+            $appointments = [];
+            while ($row = $result->fetch_row()) {
+                $appointment = [
+                    'patientID' => $row[0],
+                    'name' => $row[1] . ' ' . $row[2],
+                    'startTime' => date('M j Y,  g:i A', strtotime($row[3])),
+                    'startTimeTableKey' => date('YmdHi', strtotime($row[3])),
+                    'endTime' => date('M j Y,  g:i A', strtotime($row[4])),
+                    'endTimeTableKey' => date('YmdHi', strtotime($row[4])),
+                    'reason' => $row[5]
+                ];
+                array_push($appointments, $appointment);
+            }
+            return $appointments;
+        }
+        $stmt->close();
+        return null;
+    }
+
     public function bookAppointment() {
         $physicianID = trim($_POST['physician']);
         $date = trim($_POST['appointmentDate']);
@@ -152,7 +186,7 @@ class AppointmentController extends ValidationController {
         $endTime = strtotime('+25 minutes', strtotime($startTime));
         $endTime = date('Y-m-d H:i', $endTime);
             
-        // Insert Appointment
+        // Insert Appointment into database
         $sql = 'INSERT INTO Appointments (patientID, physicianID, startTime, endTime, reason) VALUES (?, ?, ?, ?, ?)';
         $appointmentStmt = $this->mysqli->prepare($sql);
         $appointmentStmt->bind_param('iisss', $_SESSION['id'], $physicianID, $startTime, $endTime, $reason);
@@ -165,21 +199,4 @@ class AppointmentController extends ValidationController {
         return false;
     }
 
-    public function listAppointments($physicianID) {
-        $sql = '
-        SELECT patientID, firstName, lastName, startTime, endTime, reason
-        FROM Appointments, Users
-        WHERE Appointments.patientID = Users.ID AND isActive = 1';
-        if ($physicianID != 'all') {
-            $sql .= ' AND physicianID = "' . $physicianID . '"';
-        }
-        $sql .= ' ORDER BY startTime';
-
-        $stmt = $this->mysqli->prepare($sql);
-        if ($stmt->execute()) {
-            return $stmt->get_result();
-        }
-        $stmt->close();
-        return null;
-    }
 }
