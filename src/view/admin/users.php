@@ -36,10 +36,7 @@ if (!$userController->access('admin')) {
         <!-- Users -->
         <div class='content'>
             <h2>Users</h2>
-            <?php
-            $result = $userController->listUsers('all');
-            if ($result) {
-            ?>
+            <?php if ($users = $userController->listUsers('all')) { ?>
                 <table class='table table-striped table-bordered userTable'>
                     <thead>
                         <tr>
@@ -53,16 +50,15 @@ if (!$userController->access('admin')) {
                         </tr>
                     </thead>
                     <tbody>
-                    <?php
-                    $numCols = 5;
-                    while ($row = $result->fetch_row()) {
-                    ?>
+                    <?php foreach ($users as $user) { ?>
                         <tr>
-                        <?php for ($i = 0; $i < $numCols; $i++) { ?>
-                            <td><?php echo $row[$i]?></td>
-                        <?php } ?>
-                            <td><a type='button' class='btn btn-secondary' href='/src/view/profile.php?id=<?php echo $row[0]; ?>'><i class='fa-solid fa-newspaper'></i></a></td>
-                            <td><a type='button' class='btn btn-danger' data-bs-toggle='modal' href='#deactivateUserModal' data-bs-id='<?php echo $row[0]; ?>'><i class='fa-solid fa-ban'></i></a></td>
+                            <td><?php echo $user['ID']?></td>
+                            <td><?php echo $user['firstName']?></td>
+                            <td><?php echo $user['lastName']?></td>
+                            <td><?php echo $user['email']?></td>
+                            <td><?php echo $user['roleName']?></td>
+                            <td><a type='button' class='btn btn-secondary' href='/src/view/profile.php?id=<?php echo $user['ID']; ?>'><i class='fa-solid fa-newspaper'></i></a></td>
+                            <td><a type='button' class='btn btn-danger' data-bs-toggle='modal' href='#deactivateUserModal' data-bs-id='<?php echo $user['ID']; ?>'><i class='fa-solid fa-ban'></i></a></td>
                         </tr>
                     <?php } ?>
                     </tbody>

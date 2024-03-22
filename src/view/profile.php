@@ -19,13 +19,9 @@ if (($_REQUEST['id']) && ($_SESSION['id'] != $_REQUEST['id'])) {
     }
 
     // Redirect non-admins who try to look at non patient profiles
-    $user = $userController->getUser($_REQUEST['id']);
-    if ($user) {
-        $userRow = $user->fetch_row();
-        $role = $roleController->getRole($userRow[7]);
-        if ($role) {
-            $roleRow = $role->fetch_row();
-            if (($roleRow[1] != 'patient') && (!$userController->access('admin'))) {
+    if ($user = $userController->getUser($_REQUEST['id'])) {
+        if ($role = $roleController->getRole($user['roleID'])) {
+            if (($role['roleName'] != 'patient') && (!$userController->access('admin'))) {
                 header('location: http://' . $_SERVER['HTTP_HOST'] . '/index.php');
             }
         }
@@ -76,34 +72,31 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $user = $userController->getUser($_SESSION['id']);
         }
         if ($user) {
-            $userRow = $user->fetch_row();
-            $role = $roleController->getRole($userRow[7]);
-            if ($role) {
-                $roleRow = $role->fetch_row();
+            if ($role = $roleController->getRole($user['roleID'])) {
         ?>
                     <div class='accountField'>
                         <span class='accountFieldLabel'>First Name</span>
-                        <span class='accountFieldValue'><?php echo $userRow[3]; ?></span>
+                        <span class='accountFieldValue'><?php echo $user['firstName']; ?></span>
                     </div>
                     
                     <div class='accountField'>
                         <span class='accountFieldLabel'>Last Name</span>
-                        <span class='accountFieldValue'><?php echo $userRow[4]; ?></span>
+                        <span class='accountFieldValue'><?php echo $user['lastName']; ?></span>
                     </div>
 
                     <div class='accountField'>
                         <span class='accountFieldLabel'>Address</span>
-                        <span class='accountFieldValue'><?php echo $userRow[5]; ?></span>
+                        <span class='accountFieldValue'><?php echo $user['address']; ?></span>
                     </div>
 
                     <div class='accountField'>
                         <span class='accountFieldLabel'>City</span>
-                        <span class='accountFieldValue'><?php echo $userRow[6]; ?></span>
+                        <span class='accountFieldValue'><?php echo $user['city']; ?></span>
                     </div>
 
                     <div class='accountField'>
                         <span class='accountFieldLabel'>Role</span>
-                        <span id='role' class='accountFieldValue'><?php echo $roleRow[1]; ?></span>
+                        <span id='role' class='accountFieldValue'><?php echo $role['roleName']; ?></span>
                     </div>
 
                     <div id='availabilityHTML'></div>

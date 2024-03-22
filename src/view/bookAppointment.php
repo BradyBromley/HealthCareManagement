@@ -43,18 +43,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <h2>Book Appointment</h2>
         <form id='bookAppointmentForm' class='needs-validation' action='<?php echo htmlspecialchars($_SERVER['REQUEST_URI']); ?>' method='post'>
 
-        <?php
-            // Physician List
-            $physicians = $userController->listUsers('physician');
-            if ($physicians) {
-                $defaultPhysician = $physicians->fetch_row();
-        ?>
+            <?php if ($physicians = $userController->listUsers('physician')) { ?>
+                <!-- Physician List -->
                 <div class='form-group formInput'>
                     <label for='physician'>Physician</label>
                     <select class='form-select' id='physician' name='physician'>
-                        <option value='<?php echo $defaultPhysician[0]; ?>'><?php echo $defaultPhysician[1] . ' ' . $defaultPhysician[2]; ?></option>
-                    <?php while ($physicianRow = $physicians->fetch_row()) { ?>
-                        <option value='<?php echo $physicianRow[0]; ?>'><?php echo $physicianRow[1] . ' ' . $physicianRow[2]; ?></option>
+                    <?php foreach ($physicians as $physician) { ?>
+                        <option value='<?php echo $physician['ID']; ?>'><?php echo $physician['firstName'] . ' ' . $physician['lastName']; ?></option>
                     <?php } ?>
                     </select>
                 </div>
@@ -70,7 +65,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <div class='form-group formInput'>
                         <label for='appointmentTime'>Appointment time</label>
                         <select class='form-select' id='appointmentTime' name='appointmentTime'>
-                            <?php echo $appointmentController->getAvailableTimes(date('Y-m-d', strtotime('tomorrow')), $defaultPhysician[0]); ?>
+                            <?php echo $appointmentController->getAvailableTimes(date('Y-m-d', strtotime('tomorrow')), $physicians[0]['ID']); ?>
                         </select>
                     </div>
                 </div>

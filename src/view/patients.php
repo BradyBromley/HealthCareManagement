@@ -33,10 +33,7 @@ if (!$userController->access('patients')) {
         <!-- Patients -->
         <div class='content'>
             <h2>Patients</h2>
-            <?php
-            $result = $userController->listUsers('patient');
-            if ($result) {
-            ?>
+            <?php if ($users = $userController->listUsers('patient')) { ?>
                 <table class='table table-striped table-bordered userTable'>
                     <thead>
                         <tr>
@@ -48,15 +45,13 @@ if (!$userController->access('patients')) {
                         </tr>
                     </thead>
                     <tbody>
-                    <?php
-                    $numCols = 4;
-                    while ($row = $result->fetch_row()) {
-                    ?>
+                    <?php foreach ($users as $user) { ?>
                         <tr>
-                        <?php for ($i = 0; $i < $numCols; $i++) { ?>
-                            <td><?php echo $row[$i]?></td>
-                        <?php } ?>
-                            <td><a type='button' class='btn btn-secondary' href='/src/view/profile.php?id=<?php echo $row[0]; ?>'><i class='fa-solid fa-newspaper'></i></a></td>
+                            <td><?php echo $user['ID']?></td>
+                            <td><?php echo $user['firstName']?></td>
+                            <td><?php echo $user['lastName']?></td>
+                            <td><?php echo $user['email']?></td>
+                            <td><a type='button' class='btn btn-secondary' href='/src/view/profile.php?id=<?php echo $user['ID']; ?>'><i class='fa-solid fa-newspaper'></i></a></td>
                         </tr>
                     <?php } ?>
                     </tbody>

@@ -65,21 +65,28 @@ class AuthController extends ValidationController {
             
             if ($row) {
                 // Reactivate User
-                $sql = 'UPDATE Users SET passwordHash = ?, firstName = ?, lastName = ?, address = "", city = "", roleID = ?, isActive = 1 WHERE id = ?';
-                $usersStmt = $this->mysqli->prepare($sql);
-                $usersStmt->bind_param('sssii', $passwordHash, $firstName, $lastName, $this->getRoleID('guest'), $row[0]);
+                $sql = '
+                UPDATE Users
+                SET passwordHash = ?, firstName = ?, lastName = ?, address = "", city = "", roleID = ?, isActive = 1
+                WHERE id = ?';
+
+                $stmt = $this->mysqli->prepare($sql);
+                $stmt->bind_param('sssii', $passwordHash, $firstName, $lastName, $this->getRoleID('guest'), $row[0]);
             } else {
                 // Insert User
-                $sql = 'INSERT INTO Users (email, passwordHash, firstName, lastName, roleID) VALUES (?, ?, ?, ?, ?)';
-                $usersStmt = $this->mysqli->prepare($sql);
-                $usersStmt->bind_param('ssssi', $email, $passwordHash, $firstName, $lastName, $this->getRoleID('guest'));
+                $sql = '
+                INSERT INTO Users (email, passwordHash, firstName, lastName, roleID)
+                VALUES (?, ?, ?, ?, ?)';
+                
+                $stmt = $this->mysqli->prepare($sql);
+                $stmt->bind_param('ssssi', $email, $passwordHash, $firstName, $lastName, $this->getRoleID('guest'));
             }
             
-            if ($usersStmt->execute()) {
-                $usersStmt->close();
+            if ($stmt->execute()) {
+                $stmt->close();
                 return true;
             }
-            $usersStmt->close();
+            $stmt->close();
             return false;
         }
     }

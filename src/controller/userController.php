@@ -17,7 +17,7 @@ class UserController extends ValidationController {
     // Public Methods
     public function listUsers($role) {
         $sql = '
-        SELECT Users.ID, firstName, lastName, email, roleName
+        SELECT Users.ID, email, firstName, lastName, address, city, roleID, roleName
         FROM Users, Roles
         WHERE Users.roleID = Roles.ID AND isActive = 1';
         if ($role != 'all') {
@@ -25,19 +25,48 @@ class UserController extends ValidationController {
         }
 
         $stmt = $this->mysqli->prepare($sql);
-        if ($stmt->execute()) {
-            return $stmt->get_result();
+        if (($stmt->execute()) && ($result = $stmt->get_result()) && ($result->num_rows)) {
+            // Format the data for the view
+            $users = [];
+            while ($row = $result->fetch_row()) {
+                $user = [
+                    'ID' => $row[0],
+                    'email' => $row[1],
+                    'firstName' => $row[2],
+                    'lastName' => $row[3],
+                    'address' => $row[4],
+                    'city' => $row[5],
+                    'roleID' => $row[6],
+                    'roleName' => $row[7]
+                ];
+                array_push($users, $user);
+            }
+            return $users;
         }
         $stmt->close();
         return null;
     }
 
     public function getUser($id) {
-        $sql = 'SELECT * FROM Users WHERE ID = ?';
+        $sql = '
+        SELECT Users.ID, email, firstName, lastName, address, city, roleID
+        FROM Users
+        WHERE ID = ?';
+
         $stmt = $this->mysqli->prepare($sql);
         $stmt->bind_param('i', $id);
-        if ($stmt->execute()) {
-            return $stmt->get_result();
+        if (($stmt->execute()) && ($result = $stmt->get_result()) && ($result->num_rows)) {
+            $row = $result->fetch_row();
+            $user = [
+                'ID' => $row[0],
+                'email' => $row[1],
+                'firstName' => $row[2],
+                'lastName' => $row[3],
+                'address' => $row[4],
+                'city' => $row[5],
+                'roleID' => $row[6]
+            ];
+            return $user;
         }
         $stmt->close();
         return null;

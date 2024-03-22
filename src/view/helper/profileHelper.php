@@ -4,9 +4,13 @@ require_once '../../controller/appointmentController.php';
 
 // If the physician already has a set availability, then use that as the default
 $appointmentController = new AppointmentController($mysqli);
-$physicianHours = $appointmentController->getAvailability($_POST['physicianID']);
-$startTime = $physicianHours ? $physicianHours[0] : '00:00:00';
-$endTime = $physicianHours ? $physicianHours[1] : '00:30:00';
+if ($availability = $appointmentController->getAvailability($_POST['physicianID'])) {
+    $startTime = $availability['startTime'];
+    $endTime = $availability['endTime'];
+} else {
+    $startTime = '00:00:00';
+    $endTime = '00:30:00';
+}
 
 $result = [];
 

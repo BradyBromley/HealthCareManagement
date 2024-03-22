@@ -41,11 +41,9 @@ $appointmentController = new AppointmentController($mysqli);
         <div class='content'>
             <h2>Appointments</h2>
             <?php
-            $role = $roleController->getRole($_SESSION['id']);
-            if ($role) {
-                $roleRow = $role->fetch_row();
+            if ($role = $roleController->getRole($_SESSION['id'])) {
                 // List appointments for all physicians if user is admin
-                if ($roleRow[1] == 'admin') {
+                if ($role['roleName'] == 'admin') {
                     $appointments = $appointmentController->listAppointments('all');
                 } else {
                     $appointments = $appointmentController->listAppointments($_SESSION['id']);
@@ -67,7 +65,7 @@ $appointmentController = new AppointmentController($mysqli);
                         <?php foreach ($appointments as $appointment) { ?>
                             <tr>
                                 <td><?php echo $appointment['patientID'] ?></td>
-                                <td><?php echo $appointment['name'] ?></td>
+                                <td><?php echo $appointment['firstName'] . ' ' . $appointment['lastName'] ?></td>
                                 <td sorttable_customkey='<?php echo $appointment['startTimeTableKey'] ?>'><?php echo $appointment['startTime'] ?></td>
                                 <td sorttable_customkey='<?php echo $appointment['endTimeTableKey'] ?>'><?php echo $appointment['endTime'] ?></td>
                                 <td><?php echo $appointment['reason'] ?></td>
