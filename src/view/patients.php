@@ -8,7 +8,7 @@ if (!isset($_SESSION['loggedIn']) || !$_SESSION['loggedIn']) {
     header('location: http://' . $_SERVER['HTTP_HOST'] . '/src/view/auth/login.php');
 }
 
-// Redirect if user is not an admin
+// Redirect if user does not have access
 $userController = new UserController($mysqli);
 if (!$userController->access('patients')) {
     header('location: http://' . $_SERVER['HTTP_HOST'] . '/index.php');

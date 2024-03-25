@@ -12,4 +12,5 @@ INSERT INTO RolesToPermissions (roleID, permissionID) VALUES
     (2,5),
 
 /* Patient Permissions */
-    (3,4);
+    (3,4),
+    (3,5);

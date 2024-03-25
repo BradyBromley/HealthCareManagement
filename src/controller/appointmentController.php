@@ -137,14 +137,19 @@ class AppointmentController extends ValidationController {
         return $output;
     }
 
-    public function listAppointments($physicianID) {
+    public function listAppointments($ID, $roleName) {
         // Get the raw appointment data from the database
         $sql = '
-        SELECT patientID, firstName, lastName, startTime, endTime, reason
-        FROM Appointments, Users
-        WHERE Appointments.patientID = Users.ID AND isActive = 1';
-        if ($physicianID != 'all') {
-            $sql .= ' AND physicianID = "' . $physicianID . '"';
+        SELECT patientID, physicianID, Patient.firstName, Patient.lastName,
+        Physician.firstName, Physician.lastName, startTime, endTime, reason
+        FROM Appointments, Users Patient, Users Physician
+        WHERE Appointments.patientID = Patient.ID AND Appointments.physicianID = Physician.ID
+        AND Patient.isActive = 1 AND Physician.isActive = 1';
+        
+        if ($roleName == 'patient') {
+            $sql .= ' AND patientID = "' . $ID . '"';
+        } else if ($roleName == 'physician') {
+            $sql .= ' AND physicianID = "' . $ID . '"'; 
         }
         $sql .= ' ORDER BY startTime';
 
@@ -156,13 +161,16 @@ class AppointmentController extends ValidationController {
             while ($row = $result->fetch_row()) {
                 $appointment = [
                     'patientID' => $row[0],
-                    'firstName' => $row[1],
-                    'lastName' => $row[2],
-                    'startTime' => date('M j Y,  g:i A', strtotime($row[3])),
-                    'startTimeTableKey' => date('YmdHi', strtotime($row[3])),
-                    'endTime' => date('M j Y,  g:i A', strtotime($row[4])),
-                    'endTimeTableKey' => date('YmdHi', strtotime($row[4])),
-                    'reason' => $row[5]
+                    'physicianID' => $row[1],
+                    'patientFirstName' => $row[2],
+                    'patientLastName' => $row[3],
+                    'physicianFirstName' => $row[4],
+                    'physicianLastName' => $row[5],
+                    'startTime' => date('M j Y,  g:i A', strtotime($row[6])),
+                    'startTimeTableKey' => date('YmdHi', strtotime($row[6])),
+                    'endTime' => date('M j Y,  g:i A', strtotime($row[7])),
+                    'endTimeTableKey' => date('YmdHi', strtotime($row[7])),
+                    'reason' => $row[8]
                 ];
                 array_push($appointments, $appointment);
             }

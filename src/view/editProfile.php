@@ -111,12 +111,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             ?>
                             </select>
                         </div>
-                <?php
-                    } else {
-                ?>
+                    <?php } else { ?>
                         <div class='banner alert alert-danger'>Oops! Something went wrong. Please try again later.</div>
+                    <?php } ?>
                 <?php
-                    }
                 } else {
                     // Don't let the role be editable if the logged in user isn't an admin
                     if ($role = $roleController->getRole($user['roleID'])) {
@@ -129,10 +127,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     </div>
                     <?php } else { ?>
                         <div class='banner alert alert-danger'>Oops! Something went wrong. Please try again later.</div>
-                <?php
-                    }
-                }
-                ?>
+                    <?php } ?>
+                <?php } ?>
 
                 <div id='startTimeHTML' class='form-group formInput'></div>
                 <div id='endTimeHTML' class='form-group formInput'></div>
@@ -141,10 +137,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
             <?php if ($result) { ?>
                 <div class='banner alert alert-success'>Updated Successfully!</div>
-        <?php
-            }
-        } else {
-        ?>
+            <?php } ?>
+        <?php } else { ?>
             <div class='banner alert alert-danger'>Oops! Something went wrong. Please try again later.</div>
         <?php } ?>
 

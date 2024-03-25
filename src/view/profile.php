@@ -71,48 +71,42 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         } else {
             $user = $userController->getUser($_SESSION['id']);
         }
-        if ($user) {
-            if ($role = $roleController->getRole($user['roleID'])) {
+        if (($user) && ($role = $roleController->getRole($user['roleID']))) {
         ?>
-                    <div class='accountField'>
-                        <span class='accountFieldLabel'>First Name</span>
-                        <span class='accountFieldValue'><?php echo $user['firstName']; ?></span>
-                    </div>
-                    
-                    <div class='accountField'>
-                        <span class='accountFieldLabel'>Last Name</span>
-                        <span class='accountFieldValue'><?php echo $user['lastName']; ?></span>
-                    </div>
+            <div class='accountField'>
+                <span class='accountFieldLabel'>First Name</span>
+                <span class='accountFieldValue'><?php echo $user['firstName']; ?></span>
+            </div>
+            
+            <div class='accountField'>
+                <span class='accountFieldLabel'>Last Name</span>
+                <span class='accountFieldValue'><?php echo $user['lastName']; ?></span>
+            </div>
 
-                    <div class='accountField'>
-                        <span class='accountFieldLabel'>Address</span>
-                        <span class='accountFieldValue'><?php echo $user['address']; ?></span>
-                    </div>
+            <div class='accountField'>
+                <span class='accountFieldLabel'>Address</span>
+                <span class='accountFieldValue'><?php echo $user['address']; ?></span>
+            </div>
 
-                    <div class='accountField'>
-                        <span class='accountFieldLabel'>City</span>
-                        <span class='accountFieldValue'><?php echo $user['city']; ?></span>
-                    </div>
+            <div class='accountField'>
+                <span class='accountFieldLabel'>City</span>
+                <span class='accountFieldValue'><?php echo $user['city']; ?></span>
+            </div>
 
-                    <div class='accountField'>
-                        <span class='accountFieldLabel'>Role</span>
-                        <span id='role' class='accountFieldValue'><?php echo $role['roleName']; ?></span>
-                    </div>
+            <div class='accountField'>
+                <span class='accountFieldLabel'>Role</span>
+                <span id='role' class='accountFieldValue'><?php echo $role['roleName']; ?></span>
+            </div>
 
-                    <div id='availabilityHTML'></div>
+            <div id='availabilityHTML'></div>
 
-                    <?php if ($_REQUEST['id']) { ?>
-                        <a class='btn btn-secondary' href='/src/view/editProfile.php?id=<?php echo $_REQUEST['id'] ?>'>Edit</a>
-                    <?php } else { ?>
-                        <a class='btn btn-secondary' href='/src/view/editProfile.php?id=<?php echo $_SESSION['id'] ?>'>Edit</a>
-                    <?php }?>
-
+            <?php if ($_REQUEST['id']) { ?>
+                <a class='btn btn-secondary' href='/src/view/editProfile.php?id=<?php echo $_REQUEST['id'] ?>'>Edit</a>
             <?php } else { ?>
-                <div class='banner alert alert-danger'>Oops! Something went wrong. Please try again later.</div>
-        <?php
-            }
-        } else {
-        ?>
+                <a class='btn btn-secondary' href='/src/view/editProfile.php?id=<?php echo $_SESSION['id'] ?>'>Edit</a>
+            <?php }?>
+
+        <?php } else { ?>
             <div class='banner alert alert-danger'>Oops! Something went wrong. Please try again later.</div>
         <?php } ?>
 

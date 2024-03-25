@@ -37,7 +37,6 @@ class RoleController extends ValidationController {
 
     public function getRole($id) {
         $sql = 'SELECT * FROM Roles WHERE ID = ?';
-        
         $stmt = $this->mysqli->prepare($sql);
         $stmt->bind_param('i', $id);
         if (($stmt->execute()) && ($result = $stmt->get_result()) && ($result->num_rows)) {

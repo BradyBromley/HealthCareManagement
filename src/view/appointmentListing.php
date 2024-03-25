@@ -10,9 +10,9 @@ if (!isset($_SESSION['loggedIn']) || !$_SESSION['loggedIn']) {
     header('location: http://' . $_SERVER['HTTP_HOST'] . '/src/view/auth/login.php');
 }
 
-// Redirect if user is not an admin
+// Redirect if user does not have access
 $userController = new UserController($mysqli);
-if (!$userController->access('patients')) {
+if (!$userController->access('appointmentListing')) {
     header('location: http://' . $_SERVER['HTTP_HOST'] . '/index.php');
 }
 
@@ -41,44 +41,66 @@ $appointmentController = new AppointmentController($mysqli);
         <div class='content'>
             <h2>Appointments</h2>
             <?php
-            if ($role = $roleController->getRole($_SESSION['id'])) {
-                // List appointments for all physicians if user is admin
-                if ($role['roleName'] == 'admin') {
-                    $appointments = $appointmentController->listAppointments('all');
-                } else {
-                    $appointments = $appointmentController->listAppointments($_SESSION['id']);
-                }
-
-                if ($appointments) {
-                ?>
-                    <table class='table table-striped table-bordered sortable userTable'>
-                        <thead>
-                            <tr>
-                                <th>Patient ID</th>
-                                <th>Name</th>
-                                <th>Start Time</th>
-                                <th>End Time</th>
-                                <th>Reason</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        <?php foreach ($appointments as $appointment) { ?>
-                            <tr>
-                                <td><?php echo $appointment['patientID'] ?></td>
-                                <td><?php echo $appointment['firstName'] . ' ' . $appointment['lastName'] ?></td>
-                                <td sorttable_customkey='<?php echo $appointment['startTimeTableKey'] ?>'><?php echo $appointment['startTime'] ?></td>
-                                <td sorttable_customkey='<?php echo $appointment['endTimeTableKey'] ?>'><?php echo $appointment['endTime'] ?></td>
-                                <td><?php echo $appointment['reason'] ?></td>
-                            </tr>
+            // List appointments for all physicians if user is admin
+            if (($user = $userController->getUser($_SESSION['id'])) && 
+                ($role = $roleController->getRole($user['roleID'])) && 
+                ($appointments = $appointmentController->listAppointments($_SESSION['id'], $role['roleName']))) {
+            ?>
+                <table class='table table-striped table-bordered sortable userTable'>
+                    <thead>
+                        <tr>
+                        <!-- Patient ID and name show up for admins and physicians -->
+                        <?php if (($role['roleName'] == 'admin') || ($role['roleName'] == 'physician')) { ?>
+                            <th>Patient ID</th>
+                            <th>Patient Name</th>
                         <?php } ?>
-                        </tbody>
-                    </table>
-                <?php } else { ?>
-                    <div class='banner alert alert-danger'>Oops! Something went wrong. Please try again later.</div>
-                <?php } ?>
+
+                        <!-- Physician ID shows up for admins -->
+                        <?php if ($role['roleName'] == 'admin') { ?>
+                            <th>Physician ID</th>
+                        <?php } ?>
+
+                        <!-- Physician name shows up for admins and patients -->
+                        <?php if (($role['roleName'] == 'admin') || ($role['roleName'] == 'patient')) { ?>
+                            <th>Physician Name</th>
+                        <?php } ?>
+
+                        <!-- The remaining values always show -->
+                            <th>Start Time</th>
+                            <th>End Time</th>
+                            <th>Reason</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    <?php foreach ($appointments as $appointment) { ?>
+                        <tr>
+                        <!-- Patient ID and name show up for admins and physicians -->
+                        <?php if (($role['roleName'] == 'admin') || ($role['roleName'] == 'physician')) { ?>
+                            <td><?php echo $appointment['patientID'] ?></td>
+                            <td><?php echo $appointment['patientFirstName'] . ' ' . $appointment['patientLastName'] ?></td>
+                        <?php } ?>
+
+                        <!-- Physician ID shows up for admins -->
+                        <?php if ($role['roleName'] == 'admin') { ?>
+                            <td><?php echo $appointment['physicianID'] ?></td>
+                        <?php } ?>
+
+                        <!-- Physician name shows up for admins and patients -->
+                        <?php if (($role['roleName'] == 'admin') || ($role['roleName'] == 'patient')) { ?>
+                            <td><?php echo $appointment['physicianFirstName'] . ' ' . $appointment['physicianLastName'] ?></td>
+                        <?php } ?>
+
+                        <!-- The remaining values always show -->
+                            <td sorttable_customkey='<?php echo $appointment['startTimeTableKey'] ?>'><?php echo $appointment['startTime'] ?></td>
+                            <td sorttable_customkey='<?php echo $appointment['endTimeTableKey'] ?>'><?php echo $appointment['endTime'] ?></td>
+                            <td><?php echo $appointment['reason'] ?></td>
+                        </tr>
+                    <?php } ?>
+                    </tbody>
+                </table>
             <?php } else { ?>
                 <div class='banner alert alert-danger'>Oops! Something went wrong. Please try again later.</div>
-            <?php } ?>            
+            <?php } ?>
         </div>
     </body>
 </html>
