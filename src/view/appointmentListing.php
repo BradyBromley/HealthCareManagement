@@ -28,6 +28,9 @@ $appointmentController = new AppointmentController($mysqli);
         <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css'>
         <link rel='stylesheet' href='/css/style.css'>
 
+        <!-- Import for modals -->
+        <script src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js' integrity='sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL' crossorigin='anonymous'></script>
+
         <!-- Import js -->
         <script src='https://www.kryogenix.org/code/browser/sorttable/sorttable.js'></script>
 
@@ -69,6 +72,7 @@ $appointmentController = new AppointmentController($mysqli);
                             <th>Start Time</th>
                             <th>End Time</th>
                             <th>Reason</th>
+                            <th>Cancel Appointment</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -94,6 +98,7 @@ $appointmentController = new AppointmentController($mysqli);
                             <td sorttable_customkey='<?php echo $appointment['startTimeTableKey'] ?>'><?php echo $appointment['startTime'] ?></td>
                             <td sorttable_customkey='<?php echo $appointment['endTimeTableKey'] ?>'><?php echo $appointment['endTime'] ?></td>
                             <td><?php echo $appointment['reason'] ?></td>
+                            <td><a type='button' class='btn btn-danger' data-bs-toggle='modal' href='#cancelAppointmentModal' data-bs-id='<?php echo $appointment['ID']; ?>'><i class='fa-solid fa-ban'></i></a></td>
                         </tr>
                     <?php } ?>
                     </tbody>
@@ -101,6 +106,27 @@ $appointmentController = new AppointmentController($mysqli);
             <?php } else { ?>
                 <div class='banner alert alert-danger'>Oops! Something went wrong. Please try again later.</div>
             <?php } ?>
+
+            <!-- Cancel Appointment Modal -->
+            <div class='modal fade' id='cancelAppointmentModal' tabindex='-1' aria-labelledby='cancelAppointmentModalLabel' aria-hidden='true'>
+                <div class='modal-dialog'>
+                    <div class='modal-content'>
+                        <div class='modal-header'>
+                            <h1 class='modal-title fs-5' id='cancelAppointmentModalLabel'>Cancel Appointment</h1>
+                            <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
+                        </div>
+                        <div class='modal-body'>
+                            Are you sure you want to cancel this appointment?
+                        </div>
+                        <div class='modal-footer'>
+                            <a type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Close</a>
+                            <a type='button' class='cancelAppointmentButton btn btn-danger'>Cancel Appointment</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <script src='/js/appointmentListing.js'></script>
+
         </div>
     </body>
 </html>

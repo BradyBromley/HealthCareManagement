@@ -140,7 +140,7 @@ class AppointmentController extends ValidationController {
     public function listAppointments($ID, $roleName) {
         // Get the raw appointment data from the database
         $sql = '
-        SELECT patientID, physicianID, Patient.firstName, Patient.lastName,
+        SELECT Appointments.ID, patientID, physicianID, Patient.firstName, Patient.lastName,
         Physician.firstName, Physician.lastName, startTime, endTime, reason
         FROM Appointments, Users Patient, Users Physician
         WHERE Appointments.patientID = Patient.ID AND Appointments.physicianID = Physician.ID
@@ -160,17 +160,18 @@ class AppointmentController extends ValidationController {
             $appointments = [];
             while ($row = $result->fetch_row()) {
                 $appointment = [
-                    'patientID' => $row[0],
-                    'physicianID' => $row[1],
-                    'patientFirstName' => $row[2],
-                    'patientLastName' => $row[3],
-                    'physicianFirstName' => $row[4],
-                    'physicianLastName' => $row[5],
-                    'startTime' => date('M j Y,  g:i A', strtotime($row[6])),
-                    'startTimeTableKey' => date('YmdHi', strtotime($row[6])),
-                    'endTime' => date('M j Y,  g:i A', strtotime($row[7])),
-                    'endTimeTableKey' => date('YmdHi', strtotime($row[7])),
-                    'reason' => $row[8]
+                    'ID' => $row[0],
+                    'patientID' => $row[1],
+                    'physicianID' => $row[2],
+                    'patientFirstName' => $row[3],
+                    'patientLastName' => $row[4],
+                    'physicianFirstName' => $row[5],
+                    'physicianLastName' => $row[6],
+                    'startTime' => date('M j Y,  g:i A', strtotime($row[7])),
+                    'startTimeTableKey' => date('YmdHi', strtotime($row[7])),
+                    'endTime' => date('M j Y,  g:i A', strtotime($row[8])),
+                    'endTimeTableKey' => date('YmdHi', strtotime($row[8])),
+                    'reason' => $row[9]
                 ];
                 array_push($appointments, $appointment);
             }
@@ -203,4 +204,15 @@ class AppointmentController extends ValidationController {
         return false;
     }
 
+    public function cancelAppointment($id) {
+        $sql = 'DELETE FROM Appointments WHERE ID = ?';
+        $stmt = $this->mysqli->prepare($sql);
+        $stmt->bind_param('i', $id);
+        if ($stmt->execute()) {
+            $stmt->close();
+            return true;
+        }
+        $stmt->close();
+        return false;
+    }
 }

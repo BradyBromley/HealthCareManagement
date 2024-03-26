@@ -95,10 +95,10 @@ class UserController extends ValidationController {
     }
 
     public function deactivateUser($id) {
-        $sql = 'UPDATE Users SET passwordHash = "", isActive = 0 WHERE id = ?';
+        $sql = 'UPDATE Users SET passwordHash = "", isActive = 0 WHERE ID = ?';
         $stmt = $this->mysqli->prepare($sql);
         $stmt->bind_param('i', $id);
-            if ($stmt->execute()) {
+        if ($stmt->execute()) {
             $stmt->close();
             return true;
         }
