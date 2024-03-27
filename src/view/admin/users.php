@@ -27,6 +27,9 @@ if (!$userController->access('admin')) {
         <!-- Import for modals -->
         <script src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js' integrity='sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL' crossorigin='anonymous'></script>
 
+        <!-- Import js -->
+        <script src='https://www.kryogenix.org/code/browser/sorttable/sorttable.js'></script>
+
         <meta charset='utf-8'>
         <title>Users</title>
     </head>
@@ -37,7 +40,7 @@ if (!$userController->access('admin')) {
         <div class='content'>
             <h2>Users</h2>
             <?php if ($users = $userController->listUsers('all')) { ?>
-                <table class='table table-striped table-bordered userTable'>
+                <table class='table table-striped table-bordered sortable userTable'>
                     <thead>
                         <tr>
                             <th>ID</th>
