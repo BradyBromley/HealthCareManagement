@@ -16,7 +16,7 @@ $userController = new UserController($mysqli);
 $roleController = new RoleController($mysqli);
 if (($_REQUEST['id']) && ($_SESSION['id'] != $_REQUEST['id'])) {
     // Redirect if the user only has access to their own profile and they are trying to edit someone elses
-    if (!$userController->access('profile')) {
+    if (!$userController->access('patientProfiles')) {
         header('location: http://' . $_SERVER['HTTP_HOST'] . '/index.php');
     }
 

@@ -10,7 +10,7 @@ $userController->deactivateUser($_REQUEST['id']);
 if ($_REQUEST['id'] == $_SESSION['id']) {
     header('location: http://' . $_SERVER['HTTP_HOST'] . '/src/view/auth/logout.php');
 } else {
-    header('location: http://' . $_SERVER['HTTP_HOST'] . '/src/view/admin/users.php');
+    header('location: http://' . $_SERVER['HTTP_HOST'] . '/src/view/userListing.php');
 }
 
 ?>

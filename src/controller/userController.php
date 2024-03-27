@@ -15,13 +15,13 @@ class UserController extends ValidationController {
     // Private Methods
 
     // Public Methods
-    public function listUsers($role) {
+    public function listUsers($roleName) {
         $sql = '
         SELECT Users.ID, email, firstName, lastName, address, city, roleID, roleName
         FROM Users, Roles
         WHERE Users.roleID = Roles.ID AND isActive = 1';
-        if ($role != 'all') {
-            $sql .= ' AND Roles.roleName = "' . $role . '"';
+        if ($roleName != 'admin') {
+            $sql .= ' AND Roles.roleName = "' . $roleName . '"';
         }
 
         $stmt = $this->mysqli->prepare($sql);

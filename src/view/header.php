@@ -8,10 +8,11 @@
                 <li class='navbarLink'><a href='/src/view/bookAppointment.php'>Book Appointment</a></li>
             <?php } if ($userController->access('appointmentListing')) { ?>
                 <li class='navbarLink'><a href='/src/view/appointmentListing.php'>Appointments</a></li>
-            <?php } if ($userController->access('patients')) { ?>
-                <li class='navbarLink'><a href='/src/view/patients.php'>Patients</a></li>
+            <?php } if ($userController->access('patientListing')) { ?>
+                <li class='navbarLink'><a href='/src/view/userListing.php'>Patients</a></li>
+            <?php } if ($userController->access('userListing')) {?>
+                <li class='navbarLink'><a href='/src/view/userListing.php'>Users</a></li>
             <?php } if ($userController->access('admin')) {?>
-                <li class='navbarLink'><a href='/src/view/admin/users.php'>Users</a></li>
                 <li class='navbarLink'><a href='/src/view/admin/admin.php'>Admin</a></li>
             <?php } ?>
                 <li class='navbarLink'><a href='/src/view/profile.php'>Profile</a></li>
