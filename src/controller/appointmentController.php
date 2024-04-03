@@ -141,7 +141,7 @@ class AppointmentController extends ValidationController {
         // Get the raw appointment data from the database
         $sql = '
         SELECT Appointments.ID, patientID, physicianID, Patient.firstName, Patient.lastName,
-        Physician.firstName, Physician.lastName, startTime, endTime, reason
+        Physician.firstName, Physician.lastName, startTime, endTime, reason, status
         FROM Appointments, Users Patient, Users Physician
         WHERE Appointments.patientID = Patient.ID AND Appointments.physicianID = Physician.ID
         AND Patient.isActive = 1 AND Physician.isActive = 1';
@@ -171,7 +171,8 @@ class AppointmentController extends ValidationController {
                     'startTimeTableKey' => date('YmdHi', strtotime($row[7])),
                     'endTime' => date('M j Y,  g:i A', strtotime($row[8])),
                     'endTimeTableKey' => date('YmdHi', strtotime($row[8])),
-                    'reason' => $row[9]
+                    'reason' => $row[9],
+                    'status' => $row[10]
                 ];
                 array_push($appointments, $appointment);
             }
@@ -196,6 +197,18 @@ class AppointmentController extends ValidationController {
         $stmt = $this->mysqli->prepare($sql);
         $stmt->bind_param('iisss', $_SESSION['id'], $physicianID, $startTime, $endTime, $reason);
 
+        if ($stmt->execute()) {
+            $stmt->close();
+            return true;
+        }
+        $stmt->close();
+        return false;
+    }
+
+    public function changeStatus($id, $status) {
+        $sql = 'UPDATE Appointments SET status = ? WHERE ID = ?';
+        $stmt = $this->mysqli->prepare($sql);
+        $stmt->bind_param('si', $status, $id);
         if ($stmt->execute()) {
             $stmt->close();
             return true;

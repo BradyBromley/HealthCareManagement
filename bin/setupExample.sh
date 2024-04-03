@@ -1,12 +1,12 @@
 #!/bin/bash
 echo 'Executing SQL commands'
 
-mysql -u USER -p PASSWORD HealthCareManagement < sql/scripts/Roles.sql
-mysql -u USER -p PASSWORD HealthCareManagement < sql/scripts/Users.sql
-mysql -u USER -p PASSWORD HealthCareManagement < sql/scripts/Permissions.sql
-mysql -u USER -p PASSWORD HealthCareManagement < sql/scripts/RolesToPermissions.sql
-mysql -u USER -p PASSWORD HealthCareManagement < sql/scripts/Availability.sql
-mysql -u USER -p PASSWORD HealthCareManagement < sql/scripts/Appointments.sql
+mysql -u USER -p PASSWORD HealthCareManagement < sql/setupScripts/Roles.sql
+mysql -u USER -p PASSWORD HealthCareManagement < sql/setupScripts/Users.sql
+mysql -u USER -p PASSWORD HealthCareManagement < sql/setupScripts/Permissions.sql
+mysql -u USER -p PASSWORD HealthCareManagement < sql/setupScripts/RolesToPermissions.sql
+mysql -u USER -p PASSWORD HealthCareManagement < sql/setupScripts/Availability.sql
+mysql -u USER -p PASSWORD HealthCareManagement < sql/setupScripts/Appointments.sql
 
 mysql -u USER -p PASSWORD HealthCareManagement < sql/data/RolesData.sql
 mysql -u USER -p PASSWORD HealthCareManagement < sql/data/PermissionsData.sql

@@ -1,0 +1,1 @@
+ALTER TABLE Appointments ADD status varchar(255) DEFAULT 'Scheduled';

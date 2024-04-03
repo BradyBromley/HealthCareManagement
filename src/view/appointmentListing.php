@@ -34,6 +34,9 @@ $appointmentController = new AppointmentController($mysqli);
         <!-- Import js -->
         <script src='https://www.kryogenix.org/code/browser/sorttable/sorttable.js'></script>
 
+        <!-- Import jquery -->
+        <script src='https://code.jquery.com/jquery-3.7.1.min.js' integrity='sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=' crossorigin='anonymous'></script>
+
         <meta charset='utf-8'>
         <title>Appointments</title>
     </head>
@@ -68,10 +71,15 @@ $appointmentController = new AppointmentController($mysqli);
                             <th>Physician Name</th>
                         <?php } ?>
 
-                        <!-- The remaining values always show -->
                             <th>Start Time</th>
                             <th>End Time</th>
                             <th>Reason</th>
+                            <th>Status</th>
+
+                        <?php if (($role['roleName'] == 'admin') || ($role['roleName'] == 'physician')) { ?>
+                            <th>Change Status</th>
+                        <?php } ?>
+
                             <th>Cancel Appointment</th>
                         </tr>
                     </thead>
@@ -94,10 +102,16 @@ $appointmentController = new AppointmentController($mysqli);
                             <td><?php echo $appointment['physicianFirstName'] . ' ' . $appointment['physicianLastName'] ?></td>
                         <?php } ?>
 
-                        <!-- The remaining values always show -->
                             <td sorttable_customkey='<?php echo $appointment['startTimeTableKey'] ?>'><?php echo $appointment['startTime'] ?></td>
                             <td sorttable_customkey='<?php echo $appointment['endTimeTableKey'] ?>'><?php echo $appointment['endTime'] ?></td>
                             <td><?php echo $appointment['reason'] ?></td>
+                            <td><?php echo $appointment['status'] ?></td>
+
+                        <!-- Admins and physicians can change appointment status -->
+                        <?php if (($role['roleName'] == 'admin') || ($role['roleName'] == 'physician')) { ?>
+                            <td><a type='button' class='btn btn-secondary' data-bs-toggle='modal' href='#changeStatusModal' data-bs-id='<?php echo $appointment['ID']; ?>'><i class='fa-solid fa-pen-to-square'></i></a></td>
+                        <?php } ?>
+
                             <td><a type='button' class='btn btn-danger' data-bs-toggle='modal' href='#cancelAppointmentModal' data-bs-id='<?php echo $appointment['ID']; ?>'><i class='fa-solid fa-ban'></i></a></td>
                         </tr>
                     <?php } ?>
@@ -106,6 +120,30 @@ $appointmentController = new AppointmentController($mysqli);
             <?php } else { ?>
                 <div class='banner alert alert-danger'>Oops! Something went wrong. Please try again later.</div>
             <?php } ?>
+
+            <!-- Complete Appointment Modal -->
+            <div class='modal fade' id='changeStatusModal' tabindex='-1' aria-labelledby='changeStatusModalLabel' aria-hidden='true'>
+                <div class='modal-dialog'>
+                    <div class='modal-content'>
+                        <div class='modal-header'>
+                            <h1 class='modal-title fs-5' id='changeStatusModalLabel'>Change Status</h1>
+                            <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
+                        </div>
+                        <div class='modal-body'>
+                            Are you sure you want to change the status of this appointment?
+                            <select name="status" id="status">
+                                <option value="Scheduled">Scheduled</option>
+                                <option value="No-Show">No-Show</option>
+                                <option value="Finished">Finished</option>
+                            </select>
+                        </div>
+                        <div class='modal-footer'>
+                            <a type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Close</a>
+                            <a type='button' id='changeStatusButton' class='btn btn-success'>Change Status</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             <!-- Cancel Appointment Modal -->
             <div class='modal fade' id='cancelAppointmentModal' tabindex='-1' aria-labelledby='cancelAppointmentModalLabel' aria-hidden='true'>
@@ -120,7 +158,7 @@ $appointmentController = new AppointmentController($mysqli);
                         </div>
                         <div class='modal-footer'>
                             <a type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Close</a>
-                            <a type='button' class='cancelAppointmentButton btn btn-danger'>Cancel Appointment</a>
+                            <a type='button' id='cancelAppointmentButton' class='btn btn-danger'>Cancel Appointment</a>
                         </div>
                     </div>
                 </div>
