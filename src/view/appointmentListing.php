@@ -130,11 +130,10 @@ $appointmentController = new AppointmentController($mysqli);
                             <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
                         </div>
                         <div class='modal-body'>
-                            Are you sure you want to change the status of this appointment?
-                            <select name="status" id="status">
-                                <option value="Scheduled">Scheduled</option>
-                                <option value="No-Show">No-Show</option>
-                                <option value="Finished">Finished</option>
+                            <select class='form-select'  id='status' name='status'>
+                                <option value='Scheduled'>Scheduled</option>
+                                <option value='No-Show'>No-Show</option>
+                                <option value='Finished'>Finished</option>
                             </select>
                         </div>
                         <div class='modal-footer'>
