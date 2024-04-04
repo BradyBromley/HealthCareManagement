@@ -1,6 +1,6 @@
 <?php
-require_once '../config.php';
-require_once '../controller/appointmentController.php';
+require_once '../../config.php';
+require_once '../../controller/appointmentController.php';
 
 session_start();
 $appointmentController = new AppointmentController($mysqli);

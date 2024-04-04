@@ -4,5 +4,5 @@ deactivateUserModal.addEventListener('show.bs.modal', function (event) {
     var id = event.relatedTarget.getAttribute('data-bs-id');
     // Set the deactivate button to deactivate that particular user
     var modalBodyInput = deactivateUserModal.querySelector('.deactivateUserButton');
-    modalBodyInput.href = '/src/view/deactivateUser.php?id=' + id;
+    modalBodyInput.href = '/src/view/helper/deactivateUserHelper.php?id=' + id;
 });

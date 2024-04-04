@@ -1,6 +1,6 @@
 <?php
-require_once '../config.php';
-require_once '../controller/userController.php';
+require_once '../../config.php';
+require_once '../../controller/userController.php';
 
 session_start();
 $userController = new UserController($mysqli);

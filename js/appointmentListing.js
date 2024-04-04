@@ -8,7 +8,7 @@ changeStatusModal.addEventListener('show.bs.modal', function (event) {
 
     // Set the button to change the appointment status
     var changeStatusButton = changeStatusModal.querySelector('#changeStatusButton');
-    changeStatusButton.href = '/src/view/changeAppointmentStatus.php?id=' + id + '&status=' + status;
+    changeStatusButton.href = '/src/view/helper/changeAppointmentStatusHelper.php?id=' + id + '&status=' + status;
 });
 
 var cancelAppointmentModal = document.getElementById('cancelAppointmentModal');
@@ -17,7 +17,7 @@ cancelAppointmentModal.addEventListener('show.bs.modal', function (event) {
     var id = event.relatedTarget.getAttribute('data-bs-id');
     // Set the button to cancel the appointment
     var cancelAppointmentButton = cancelAppointmentModal.querySelector('#cancelAppointmentButton');
-    cancelAppointmentButton.href = '/src/view/cancelAppointment.php?id=' + id;
+    cancelAppointmentButton.href = '/src/view/helper/cancelAppointmentHelper.php?id=' + id;
 });
 
 
