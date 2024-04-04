@@ -36,9 +36,8 @@
     background-color: darkslategrey;
 }
 
+
 /* Page Formatting */
-
-
 .content {
     margin: auto;
     width: 90%;
@@ -47,6 +46,14 @@
 .banner {
     margin-top: 10px;
 }
+
+
+/* Listings */
+table.sortable th:not(.sorttable_sorted):not(.sorttable_sorted_reverse):not(.sorttable_nosort):after { 
+    content: " \25B4\25BE";
+    color: gray;
+}
+
 
 /* Form */
 .formInput {
@@ -57,6 +64,7 @@
     height: 138px;
 }
 
+
 /* Users */
 .userTable thead tr th {
     text-align: center;
@@ -65,6 +73,7 @@
 .userTable tbody tr td {
     text-align: center;
 }
+
 
 /* Account */
 .accountField {
