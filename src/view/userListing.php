@@ -69,9 +69,9 @@ $roleController = new RoleController($mysqli);
                             <?php if ($userController->access('userListing')) { ?>
                                 <th>Role</th>
                             <?php } ?>
-                                <th>View</th>
+                                <th class='sorttable_nosort'>View</th>
                             <?php if ($userController->access('userListing')) { ?>
-                                <th>Deactivate</th>
+                                <th class='sorttable_nosort'>Deactivate</th>
                             <?php } ?>
                             </tr>
                         </thead>

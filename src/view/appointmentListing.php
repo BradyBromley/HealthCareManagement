@@ -77,10 +77,10 @@ $appointmentController = new AppointmentController($mysqli);
                             <th>Status</th>
 
                         <?php if (($role['roleName'] == 'admin') || ($role['roleName'] == 'physician')) { ?>
-                            <th>Change Status</th>
+                            <th class='sorttable_nosort'>Change Status</th>
                         <?php } ?>
 
-                            <th>Cancel Appointment</th>
+                            <th class='sorttable_nosort'>Cancel Appointment</th>
                         </tr>
                     </thead>
                     <tbody>
