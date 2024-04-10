@@ -14,8 +14,6 @@
                 <li class='navbarLink'><a href='/src/view/userListing.php'>Patients</a></li>
             <?php } if ($userController->access('userListing')) {?>
                 <li class='navbarLink'><a href='/src/view/userListing.php'>Users</a></li>
-            <?php } if ($userController->access('admin')) {?>
-                <li class='navbarLink'><a href='/src/view/admin/admin.php'>Admin</a></li>
             <?php } ?>
             </ul>
 
