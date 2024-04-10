@@ -59,7 +59,7 @@ $roleController = new RoleController($mysqli);
 
                 if ($users) {
             ?>
-                    <table class='table table-striped table-bordered sortable userTable'>
+                    <table class='table table-striped table-bordered sortable userListing'>
                         <thead>
                             <tr>
                                 <th>ID</th>

@@ -52,7 +52,7 @@ $appointmentController = new AppointmentController($mysqli);
                 ($role = $roleController->getRole($user['roleID'])) && 
                 ($appointments = $appointmentController->listAppointments($_SESSION['id'], $role['roleName']))) {
             ?>
-                <table class='table table-striped table-bordered sortable userTable'>
+                <table class='table table-striped table-bordered sortable appointmentListing'>
                     <thead>
                         <tr>
                         <!-- Patient ID and name show up for admins and physicians -->
@@ -85,7 +85,7 @@ $appointmentController = new AppointmentController($mysqli);
                     </thead>
                     <tbody>
                     <?php foreach ($appointments as $appointment) { ?>
-                        <tr>
+                        <tr class='status<?php echo $appointment['status'] ?>'>
                         <!-- Patient ID and name show up for admins and physicians -->
                         <?php if (($role['roleName'] == 'admin') || ($role['roleName'] == 'physician')) { ?>
                             <td><?php echo $appointment['patientID'] ?></td>
