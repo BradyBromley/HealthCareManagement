@@ -54,6 +54,7 @@ $appointmentController = new AppointmentController($mysqli);
             ?>
                 <table class='table table-striped table-bordered sortable appointmentListing'>
                     <thead>
+
                         <tr>
                         <!-- Patient ID and name show up for admins and physicians -->
                         <?php if (($role['roleName'] == 'admin') || ($role['roleName'] == 'physician')) { ?>
@@ -79,12 +80,13 @@ $appointmentController = new AppointmentController($mysqli);
                         <?php if (($role['roleName'] == 'admin') || ($role['roleName'] == 'physician')) { ?>
                             <th class='sorttable_nosort'>Change Status</th>
                         <?php } ?>
-
                             <th class='sorttable_nosort'>Cancel Appointment</th>
                         </tr>
+
                     </thead>
                     <tbody>
                     <?php foreach ($appointments as $appointment) { ?>
+                        
                         <tr class='status<?php echo $appointment['status'] ?>'>
                         <!-- Patient ID and name show up for admins and physicians -->
                         <?php if (($role['roleName'] == 'admin') || ($role['roleName'] == 'physician')) { ?>
@@ -112,8 +114,13 @@ $appointmentController = new AppointmentController($mysqli);
                             <td><a type='button' class='btn btn-secondary' data-bs-toggle='modal' href='#changeStatusModal' data-bs-id='<?php echo $appointment['ID']; ?>'><i class='fa-solid fa-pen-to-square'></i></a></td>
                         <?php } ?>
 
+                        <?php if (strtotime($appointment['startTime']) > time()) { ?>
                             <td><a type='button' class='btn btn-danger' data-bs-toggle='modal' href='#cancelAppointmentModal' data-bs-id='<?php echo $appointment['ID']; ?>'><i class='fa-solid fa-ban'></i></a></td>
+                        <?php } else {?>
+                            <td></td>
+                        <?php } ?>
                         </tr>
+
                     <?php } ?>
                     </tbody>
                 </table>

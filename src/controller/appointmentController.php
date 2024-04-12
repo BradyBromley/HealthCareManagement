@@ -206,6 +206,7 @@ class AppointmentController extends ValidationController {
     }
 
     public function changeStatus($id, $status) {
+        // Change the status of an appointment
         $sql = 'UPDATE Appointments SET status = ? WHERE ID = ?';
         $stmt = $this->mysqli->prepare($sql);
         $stmt->bind_param('si', $status, $id);
@@ -218,6 +219,7 @@ class AppointmentController extends ValidationController {
     }
 
     public function cancelAppointment($id) {
+        // Cancel an appointment
         $sql = 'DELETE FROM Appointments WHERE ID = ?';
         $stmt = $this->mysqli->prepare($sql);
         $stmt->bind_param('i', $id);
