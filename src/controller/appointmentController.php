@@ -12,23 +12,36 @@ class AppointmentController extends ValidationController {
     }
 
     // Private Methods
+    private function getTimes($startTime = '00:00:00', $endTime = '24:00:00') {
+        // Return an array of times in 30 minute increments
+        $times = [];
+        $current = strtotime($startTime);
+        $end = strtotime($endTime);
+
+        while ($current < $end) {
+            array_push($times, date('H:i:s', $current));
+            $current = strtotime('+30 minutes', $current);
+        }
+        return $times;
+    }
+
 
     // Public Methods
     public function getAvailability($physicianID) {
         // Physicians are only available at certain times of the day
         $sql = '
-        SELECT startTime, endTime
+        SELECT availableTime
         FROM Availability
         WHERE physicianID = ?';
 
         $stmt = $this->mysqli->prepare($sql);
         $stmt->bind_param('i', $physicianID);
         if (($stmt->execute()) && ($result = $stmt->get_result()) && ($result->num_rows)) {
-            $row = $result->fetch_row();
-            $availability = [
-                'startTime' => $row[0],
-                'endTime' => $row[1]
-            ];
+            // Format the data for the view
+            $availability = [];
+            while ($row = $result->fetch_row()) {
+                array_push($availability, $row[0]);
+            }
             return $availability;
         }
         $stmt->close();
@@ -39,26 +52,27 @@ class AppointmentController extends ValidationController {
         // Set the availability for a particular physician
         $startTime = trim($_POST['startTime']);
         $endTime = trim($_POST['endTime']);
-        $availability = $this->getAvailability($physicianID);
 
-        if ($availability) {
-            // Update Availability
-            $sql = 'UPDATE Availability SET startTime = ?, endTime = ? WHERE physicianID = ?';
-            $stmt = $this->mysqli->prepare($sql);
-            $stmt->bind_param('ssi', $startTime, $endTime, $physicianID);
-        } else {
-            // Insert Availability
-            $sql = 'INSERT INTO Availability (physicianID, startTime, endTime) VALUES (?, ?, ?)';
-            $stmt = $this->mysqli->prepare($sql);
-            $stmt->bind_param('iss', $physicianID, $startTime, $endTime);
+        if ($this->getAvailability($physicianID)) {
+            // On update, delete the old entries and insert new ones
+            $this->deleteAvailability($physicianID);
         }
 
-        if ($stmt->execute()) {
-            $stmt->close();
-            return true;
+        // Insert Availability
+        $sql = 'INSERT INTO Availability (physicianID, availableTime) VALUES (?, ?)';
+        $stmt = $this->mysqli->prepare($sql);
+        $stmt->bind_param('is', $physicianID, $time);
+
+        $times = $this->getTimes($startTime, $endTime);
+        foreach ($times as $time) {
+            if (!$stmt->execute()) {
+                $stmt->close();
+                return false;
+            }
         }
+
         $stmt->close();
-        return false;
+        return true;
     }
 
     public function deleteAvailability($physicianID) {
@@ -79,11 +93,10 @@ class AppointmentController extends ValidationController {
 
         // Get the default start and end time for a particular physician
         $availability = $this->getAvailability($physicianID);
-        $startTime = $date . ' ' . $availability['startTime'];
-        $endTime = $date . ' ' . $availability['endTime'];
-
-        $current = strtotime($startTime);
-        $end = strtotime($endTime);
+        $startTime = $date . ' ' . $availability[0];
+        // End time is 30 minutes after the last available time
+        $latestTime = strtotime($availability[array_key_last($availability)]);
+        $endTime = $date . ' ' . date('H:i:s', strtotime('+30 minutes', $latestTime));
 
         // Find all appointments booked for the selected day and physician
         $sql = '
@@ -102,11 +115,14 @@ class AppointmentController extends ValidationController {
         }
         $stmt->close();
 
+        $current = strtotime($startTime);
+        $end = strtotime($endTime);
+        
         // A time is available if no appointments have been booked for that time
         while ($current < $end) {
             if (!in_array($current, $unavailableTimes)) {
                 $time = date('H:i', $current);
-                $selected = ($time == $availability['startTime']) ? ' selected' : '';
+                $selected = ($time == $availability[0]) ? ' selected' : '';
         
                 $output .= '<option value='. $time . $selected . '>' . date('h:i A', $current) .'</option>';
             }
@@ -114,7 +130,6 @@ class AppointmentController extends ValidationController {
             $current = strtotime('+30 minutes', $current);
             
         }
-    
         return $output;
     }
 
@@ -122,18 +137,13 @@ class AppointmentController extends ValidationController {
         // Return a select list of times in 30 minute increments
         $output = '';
 
-        $current = strtotime($earliestTime);
-        $end = strtotime($latestTime);
+        $times = $this->getTimes($earliestTime, $latestTime);
 
-        while ($current < $end) {
-            $time = date('H:i:s', $current);
-            // Set the default time displayed based on the provided value
+        foreach ($times as $time) {
             $selected = ($time == $selectedTime) ? ' selected' : '';
-    
-            $output .= '<option value="'. $time . '" ' . $selected . '>' . date('h:i A', $current) .'</option>';
-            $current = strtotime('+30 minutes', $current);
+            $output .= '<option value="'. $time . '" ' . $selected . '>' . date('h:i A', strtotime($time)) .'</option>';
+
         }
-    
         return $output;
     }
 
