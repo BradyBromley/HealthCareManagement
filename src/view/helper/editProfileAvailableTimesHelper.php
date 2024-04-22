@@ -4,9 +4,9 @@ require_once '../../controller/appointmentController.php';
 
 // The end time dropdown should only show times after the start time
 $appointmentController = new AppointmentController($mysqli);
-$earliestTime = strtotime($_POST['startTime']);
-$earliestTime = strtotime('+30 minutes', $earliestTime);
-$output = $appointmentController->getTimeList(date('H:i:s', $earliestTime), '24:00:00', $_POST['endTime']);
+$startTime = strtotime('+30 minutes', strtotime($_POST['startTime']));
+$endTime = $_POST['endTime'];
+$output = $appointmentController->getTimeList(date('H:i:s', $startTime), '24:00:00', $endTime);
 
 $result = [];
 

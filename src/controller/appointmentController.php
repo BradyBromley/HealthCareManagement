@@ -106,7 +106,7 @@ class AppointmentController extends ValidationController {
 
         $stmt = $this->mysqli->prepare($sql);
         $stmt->bind_param('iss', $physicianID, $startTime, $endTime);
-        
+
         $unavailableTimes = [];
         if (($stmt->execute()) && ($result = $stmt->get_result()) && ($result->num_rows)) {
             while ($row = $result->fetch_row()) {
@@ -115,34 +115,26 @@ class AppointmentController extends ValidationController {
         }
         $stmt->close();
 
-        $current = strtotime($startTime);
-        $end = strtotime($endTime);
-        
         // A time is available if no appointments have been booked for that time
-        while ($current < $end) {
-            if (!in_array($current, $unavailableTimes)) {
-                $time = date('H:i', $current);
+        foreach ($availability as $time) {
+            $timestamp = strtotime($date . ' ' . $time);
+            if (!in_array($timestamp, $unavailableTimes)) {
                 $selected = ($time == $availability[0]) ? ' selected' : '';
-        
-                $output .= '<option value='. $time . $selected . '>' . date('h:i A', $current) .'</option>';
+                $output .= '<option value='. $time . $selected . '>' . date('h:i A', $timestamp) .'</option>';
             }
-            // Appointments can be booked in 30 minute increments
-            $current = strtotime('+30 minutes', $current);
-            
         }
         return $output;
     }
 
-    public function getTimeList($earliestTime = '00:00:00', $latestTime = '24:00:00', $selectedTime = '00:00:00') {
+    public function getTimeList($startTime = '00:00:00', $latestTime = '24:00:00', $selectedTime = '00:00:00') {
         // Return a select list of times in 30 minute increments
         $output = '';
 
-        $times = $this->getTimes($earliestTime, $latestTime);
+        $times = $this->getTimes($startTime, $latestTime);
 
         foreach ($times as $time) {
             $selected = ($time == $selectedTime) ? ' selected' : '';
-            $output .= '<option value="'. $time . '" ' . $selected . '>' . date('h:i A', strtotime($time)) .'</option>';
-
+            $output .= '<option value='. $time . ' ' . $selected . '>' . date('h:i A', strtotime($time)) .'</option>';
         }
         return $output;
     }
