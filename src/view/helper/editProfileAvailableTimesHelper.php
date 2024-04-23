@@ -6,14 +6,13 @@ require_once '../../controller/appointmentController.php';
 $appointmentController = new AppointmentController($mysqli);
 $startTime = strtotime('+30 minutes', strtotime($_POST['startTime']));
 $endTime = $_POST['endTime'];
-$output = $appointmentController->getTimeList(date('H:i:s', $startTime), '24:00:00', $endTime);
 
 $result = [];
 
 $endTimeHTML = "
 <label for='endTime'>End Time</label>
 <select class='form-select' id='endTime' name='endTime'>
-    " . $output . "
+    " . $appointmentController->getTimeList(date('H:i:s', $startTime), $endTime) . "
 </select>
 ";
 

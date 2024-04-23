@@ -12,16 +12,23 @@ class AppointmentController extends ValidationController {
     }
 
     // Private Methods
-    private function getTimes($startTime = '00:00:00', $endTime = '24:00:00') {
+    private function getTimes($startTime = '00:00:00', $endTime = '00:00:00') {
         // Return an array of times in 30 minute increments
         $times = [];
         $current = strtotime($startTime);
         $end = strtotime($endTime);
 
-        while ($current < $end) {
+        // This accounts for the availability starting on one day and ending on another
+        if ($current >= $end) {
+            $end = strtotime('+24 hours', $end);
+        }
+        
+        // Execute once before checking the condition to account for starting and ending 24hours apart
+        do {
             array_push($times, date('H:i:s', $current));
             $current = strtotime('+30 minutes', $current);
-        }
+        } while ($current != $end);
+
         return $times;
     }
 
@@ -126,11 +133,20 @@ class AppointmentController extends ValidationController {
         return $output;
     }
 
-    public function getTimeList($startTime = '00:00:00', $latestTime = '24:00:00', $selectedTime = '00:00:00') {
+    public function getTimeList($startTime = '00:00:00', $selectedTime = '00:00:00') {
         // Return a select list of times in 30 minute increments
         $output = '';
+        
+        /////////////////////////////////////////////
+        // Create a new variable $endTime that is $latestTime +30min
+        // Give this new variable to getTimes
+        // 24:00:00 should be possible for $latestTime
+        // MAYBE IT SHOULD JUST BE endTime INSTEAD OF $latestTime?
+        // Essentially, the dropdown for a physicians endTime should have 12:00am as an option
+        // - OR MAYBE NOW WORK ON SETTING ENDTIME TO BE UP TO 24hours AFTER STARTTIME
+        /////////////////////////////////////////////
 
-        $times = $this->getTimes($startTime, $latestTime);
+        $times = $this->getTimes($startTime, $startTime);
 
         foreach ($times as $time) {
             $selected = ($time == $selectedTime) ? ' selected' : '';
