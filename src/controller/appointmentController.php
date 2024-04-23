@@ -98,7 +98,6 @@ class AppointmentController extends ValidationController {
     public function getAvailableTimes($date, $physicianID) {
         $output = '';
 
-        
         $availability = $this->getAvailability($physicianID);
         // Sort the availability so that it shows up chronologically
         sort($availability);
