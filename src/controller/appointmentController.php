@@ -98,26 +98,27 @@ class AppointmentController extends ValidationController {
     public function getAvailableTimes($date, $physicianID) {
         $output = '';
 
-        // Get the default start and end time for a particular physician
+        
         $availability = $this->getAvailability($physicianID);
+        // Sort the availability so that it shows up chronologically
+        sort($availability);
+        // Get the default start and end time for a particular physician
         $startTime = $date . ' ' . $availability[0];
-        // End time is 30 minutes after the last available time
-        $latestTime = strtotime($availability[array_key_last($availability)]);
-        $endTime = $date . ' ' . date('H:i:s', strtotime('+30 minutes', $latestTime));
+        $latestTime = $date . ' ' . $availability[array_key_last($availability)];
 
         // Find all appointments booked for the selected day and physician
         $sql = '
-        SELECT * FROM Appointments
+        SELECT startTime FROM Appointments
         WHERE physicianID = ? AND
         startTime BETWEEN ? AND ?';
 
         $stmt = $this->mysqli->prepare($sql);
-        $stmt->bind_param('iss', $physicianID, $startTime, $endTime);
+        $stmt->bind_param('iss', $physicianID, $startTime, $latestTime);
 
         $unavailableTimes = [];
         if (($stmt->execute()) && ($result = $stmt->get_result()) && ($result->num_rows)) {
             while ($row = $result->fetch_row()) {
-                array_push($unavailableTimes, strtotime($row[3]));
+                array_push($unavailableTimes, strtotime($row[0]));
             }
         }
         $stmt->close();
