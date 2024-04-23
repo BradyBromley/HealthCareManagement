@@ -136,18 +136,8 @@ class AppointmentController extends ValidationController {
     public function getTimeList($startTime = '00:00:00', $selectedTime = '00:00:00') {
         // Return a select list of times in 30 minute increments
         $output = '';
-        
-        /////////////////////////////////////////////
-        // Create a new variable $endTime that is $latestTime +30min
-        // Give this new variable to getTimes
-        // 24:00:00 should be possible for $latestTime
-        // MAYBE IT SHOULD JUST BE endTime INSTEAD OF $latestTime?
-        // Essentially, the dropdown for a physicians endTime should have 12:00am as an option
-        // - OR MAYBE NOW WORK ON SETTING ENDTIME TO BE UP TO 24hours AFTER STARTTIME
-        /////////////////////////////////////////////
 
         $times = $this->getTimes($startTime, $startTime);
-
         foreach ($times as $time) {
             $selected = ($time == $selectedTime) ? ' selected' : '';
             $output .= '<option value='. $time . ' ' . $selected . '>' . date('h:i A', strtotime($time)) .'</option>';
