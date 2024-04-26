@@ -12,7 +12,7 @@ $result = [];
 $endTimeHTML = "
 <label for='endTime'>End Time</label>
 <select class='form-select' id='endTime' name='endTime'>
-    " . $appointmentController->getTimeList(date('H:i:s', $startTime), $endTime) . "
+    " . $appointmentController->getTimeSelectList(date('H:i:s', $startTime), $endTime) . "
 </select>
 ";
 

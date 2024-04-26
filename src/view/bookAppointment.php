@@ -66,7 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <div class='form-group formInput'>
                         <label for='appointmentTime'>Appointment time</label>
                         <select class='form-select' id='appointmentTime' name='appointmentTime'>
-                            <?php echo $appointmentController->getAvailableTimes(date('Y-m-d', strtotime('tomorrow')), $physicians[0]['ID']); ?>
+                            <?php echo $appointmentController->getAvailableAppointmentSelectList(date('Y-m-d', strtotime('tomorrow')), $physicians[0]['ID']); ?>
                         </select>
                     </div>
                 </div>

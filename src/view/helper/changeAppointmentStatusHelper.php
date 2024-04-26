@@ -4,7 +4,7 @@ require_once '../../controller/appointmentController.php';
 
 session_start();
 $appointmentController = new AppointmentController($mysqli);
-$appointmentController->changeStatus($_REQUEST['id'], $_REQUEST['status']);
+$appointmentController->changeAppointmentStatus($_REQUEST['id'], $_REQUEST['status']);
 
 header('location: http://' . $_SERVER['HTTP_HOST'] . '/src/view/appointmentListing.php');
 

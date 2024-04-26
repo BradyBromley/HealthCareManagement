@@ -20,7 +20,7 @@ $result = [];
 $startTimeHTML = "
 <label for='startTime'>Start Time</label>
 <select class='form-select' id='startTime' name='startTime'>
-    " . $appointmentController->getTimeList('00:00:00', $firstStartTime) . "
+    " . $appointmentController->getTimeSelectList('00:00:00', $firstStartTime) . "
 </select>
 ";
 $result['startTimeHTML'] = $startTimeHTML;
@@ -31,7 +31,7 @@ $secondStartTime = strtotime('+30 minutes', strtotime($firstStartTime));
 $endTimeHTML = "
 <label for='endTime'>End Time</label>
 <select class='form-select' id='endTime' name='endTime'>
-    " . $appointmentController->getTimeList(date('H:i:s', $secondStartTime), $endTime) . "
+    " . $appointmentController->getTimeSelectList(date('H:i:s', $secondStartTime), $endTime) . "
 </select>
 ";
 $result['endTimeHTML'] = $endTimeHTML;
