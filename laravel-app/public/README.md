@@ -1,5 +1,6 @@
 # HealthCareManagement
 
+### Code Setup
 To setup the app through Apache, clone the repository to /var/www. Then create a file named HealthCareManagement.conf in /etc/apache2/sites-available/. Set up the file so that it looks like this. The ServerAdmin 
 ```
 <VirtualHost *:80>
@@ -25,11 +26,7 @@ You may also need to do this command in the command line in order for www-data t
 sudo chown -R www-data:www-data /var/www/HealthCareManagement/laravel-app/storage
 ```
 
-To setup mysql, first login and run the command:
-    'CREATE DATABASE HealthCareManagement;'
-Then exit out of mysql, create a new file called setup.sh based on setupExample.sh, and run the bash command:
-    'bash setup.sh'
-
+### Database Setup
 in /laravel-app edit .env to have these database settings (Use your DB username and password):
 ```
 DB_CONNECTION=mysql
@@ -38,6 +35,16 @@ DB_PORT=3306
 DB_DATABASE=HealthCareManagement
 DB_USERNAME=root
 DB_PASSWORD=
+```
+
+To setup mysql, first login and run the command:
+```
+CREATE DATABASE HealthCareManagement;
+```
+Then exit out of mysql, and in the command line run the commands:
+```
+php artisan migrate
+php artisan db:seed
 ```
 
 Create a new file called config.php based on configExample.php.
