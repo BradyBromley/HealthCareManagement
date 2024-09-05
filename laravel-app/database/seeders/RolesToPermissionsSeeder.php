@@ -14,51 +14,51 @@ class RolesToPermissionsSeeder extends Seeder
      */
     public function run(): void
     {
-        \DB::table('RolesToPermissions')->insert(
+        \DB::table('roles_to_permissions')->insert(
             // Admin Permissions
             [[
-                'roleID' => 1,
-                'permissionID' => 1
+                'role_id' => 1,
+                'permission_id' => 1
             ],
             [
-                'roleID' => 1,
-                'permissionID' => 2
+                'role_id' => 1,
+                'permission_id' => 2
             ],
             [
-                'roleID' => 1,
-                'permissionID' => 4
+                'role_id' => 1,
+                'permission_id' => 4
             ],
             [
-                'roleID' => 1,
-                'permissionID' => 5
+                'role_id' => 1,
+                'permission_id' => 5
             ],
             [
-                'roleID' => 1,
-                'permissionID' => 6
+                'role_id' => 1,
+                'permission_id' => 6
             ],
 
             // Physician Permissions
             [
-                'roleID' => 2,
-                'permissionID' => 3
+                'role_id' => 2,
+                'permission_id' => 3
             ],
             [
-                'roleID' => 2,
-                'permissionID' => 4
+                'role_id' => 2,
+                'permission_id' => 4
             ],
             [
-                'roleID' => 2,
-                'permissionID' => 6
+                'role_id' => 2,
+                'permission_id' => 6
             ],
 
             // Patient Permissions
             [
-                'roleID' => 3,
-                'permissionID' => 5
+                'role_id' => 3,
+                'permission_id' => 5
             ],
             [
-                'roleID' => 3,
-                'permissionID' => 6
+                'role_id' => 3,
+                'permission_id' => 6
             ]]
         );
     }

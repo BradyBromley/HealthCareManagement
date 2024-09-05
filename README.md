@@ -18,9 +18,9 @@ To setup the app through Apache, clone the repository to /var/www. Then create a
 
 </VirtualHost>
 ```
-Then activate the file (sudo a2ensite HealthCareManagement.conf) and restart Apache (systemctl restart apache2). Finally, Add the line 'LOCAL_IP HealthCareManagement' to /etc/hosts (where LOCAL_IP is your local ipv4 address). You can now get to the app with the url 'http://HealthCareManagement'.
+Then activate the file (sudo a2ensite HealthCareManagement.conf), enable mod_rewrite for apache (sudo a2enmod rewrite) and restart Apache (systemctl restart apache2). Finally, Add the line 'LOCAL_IP HealthCareManagement' to /etc/hosts (where LOCAL_IP is your local ipv4 address). You can now get to the app with the url 'http://HealthCareManagement'.
 
-You may also need to do this command in the command line in order for www-data to write logs:
+You may also need to do this command in order for www-data to write logs:
 ```
 sudo chown -R www-data:www-data /var/www/HealthCareManagement/laravel-app/storage
 ```

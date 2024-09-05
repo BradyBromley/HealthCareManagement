@@ -39,9 +39,9 @@ class AppointmentController extends ValidationController {
 
         // Find all appointments booked for the selected day and physician
         $sql = '
-        SELECT startTime FROM Appointments
-        WHERE physicianID = ? AND
-        startTime BETWEEN ? AND ?';
+        SELECT start_time FROM appointments
+        WHERE physician_id = ? AND
+        start_time BETWEEN ? AND ?';
 
         $stmt = $this->mysqli->prepare($sql);
         $stmt->bind_param('iss', $physicianID, $startTime, $latestTime);
@@ -62,9 +62,9 @@ class AppointmentController extends ValidationController {
     public function getAvailability($physicianID) {
         // Physicians are only available at certain times of the day
         $sql = '
-        SELECT availableTime
-        FROM Availability
-        WHERE physicianID = ?';
+        SELECT available_time
+        FROM availability
+        WHERE physician_id = ?';
 
         $stmt = $this->mysqli->prepare($sql);
         $stmt->bind_param('i', $physicianID);
@@ -92,7 +92,7 @@ class AppointmentController extends ValidationController {
         }
 
         // Insert Availability
-        $sql = 'INSERT INTO Availability (physicianID, availableTime) VALUES (?, ?)';
+        $sql = 'INSERT INTO availability (physician_id, available_time) VALUES (?, ?)';
         $stmt = $this->mysqli->prepare($sql);
         $stmt->bind_param('is', $physicianID, $time);
 
@@ -110,7 +110,7 @@ class AppointmentController extends ValidationController {
     }
 
     public function deleteAvailability($physicianID) {
-        $sql = 'DELETE FROM Availability WHERE physicianID = ?';
+        $sql = 'DELETE FROM availability WHERE physician_id = ?';
 
         $stmt = $this->mysqli->prepare($sql);
         $stmt->bind_param('i', $physicianID);
@@ -161,18 +161,18 @@ class AppointmentController extends ValidationController {
     public function listAppointments($ID, $roleName) {
         // Get the raw appointment data from the database
         $sql = '
-        SELECT Appointments.ID, patientID, physicianID, Patient.firstName, Patient.lastName,
-        Physician.firstName, Physician.lastName, startTime, endTime, reason, status
-        FROM Appointments, Users Patient, Users Physician
-        WHERE Appointments.patientID = Patient.ID AND Appointments.physicianID = Physician.ID
-        AND Patient.isActive = 1 AND Physician.isActive = 1';
+        SELECT appointments.id, patient_id, physician_id, patient.first_name, patient.last_name,
+        physician.first_name, physician.last_name, start_time, end_time, reason, status
+        FROM appointments, users patient, users physician
+        WHERE appointments.patient_id = patient.id AND appointments.physician_id = physician.id
+        AND patient.is_active = 1 AND physician.is_active = 1';
         
         if ($roleName == 'patient') {
-            $sql .= ' AND patientID = "' . $ID . '"';
+            $sql .= ' AND patient_id = "' . $ID . '"';
         } else if ($roleName == 'physician') {
-            $sql .= ' AND physicianID = "' . $ID . '"'; 
+            $sql .= ' AND physician_id = "' . $ID . '"'; 
         }
-        $sql .= ' ORDER BY startTime';
+        $sql .= ' ORDER BY start_time';
 
         $stmt = $this->mysqli->prepare($sql);
         if (($stmt->execute()) && ($result = $stmt->get_result()) && ($result->num_rows)) {
@@ -214,7 +214,7 @@ class AppointmentController extends ValidationController {
         $endTime = gmdate('Y-m-d H:i:s', $endTime);
             
         // Insert Appointment into database
-        $sql = 'INSERT INTO Appointments (patientID, physicianID, startTime, endTime, reason) VALUES (?, ?, ?, ?, ?)';
+        $sql = 'INSERT INTO appointments (patient_id, physician_id, start_time, end_time, reason) VALUES (?, ?, ?, ?, ?)';
         $stmt = $this->mysqli->prepare($sql);
         $stmt->bind_param('iisss', $_SESSION['id'], $physicianID, $startTime, $endTime, $reason);
 
@@ -228,7 +228,7 @@ class AppointmentController extends ValidationController {
 
     public function changeAppointmentStatus($id, $status) {
         // Change the status of an appointment
-        $sql = 'UPDATE Appointments SET status = ? WHERE ID = ?';
+        $sql = 'UPDATE appointments SET status = ? WHERE id = ?';
         $stmt = $this->mysqli->prepare($sql);
         $stmt->bind_param('si', $status, $id);
         if ($stmt->execute()) {
@@ -241,7 +241,7 @@ class AppointmentController extends ValidationController {
 
     public function cancelAppointment($id) {
         // Cancel an appointment
-        $sql = 'DELETE FROM Appointments WHERE ID = ?';
+        $sql = 'DELETE FROM appointments WHERE id = ?';
         $stmt = $this->mysqli->prepare($sql);
         $stmt->bind_param('i', $id);
         if ($stmt->execute()) {

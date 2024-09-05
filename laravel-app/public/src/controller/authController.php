@@ -15,7 +15,7 @@ class AuthController extends ValidationController {
     // Private Methods
     private function getUserFromEmail($email) {
         // Return ID and password if the email exists
-        $sql = 'SELECT ID, passwordHash, isActive FROM Users WHERE email = ?';
+        $sql = 'SELECT id, password, is_active FROM users WHERE email = ?';
         $stmt = $this->mysqli->prepare($sql);
         $stmt->bind_param('s', $email);
         if ($stmt->execute()) {
@@ -30,7 +30,7 @@ class AuthController extends ValidationController {
 
     private function getRoleID($role) {
         // Return ID if the role exists
-        $sql = 'SELECT ID FROM Roles WHERE roleName = ?';
+        $sql = 'SELECT id FROM roles WHERE role_name = ?';
         $stmt = $this->mysqli->prepare($sql);
         $stmt->bind_param('s', $role);
         if ($stmt->execute()) {
@@ -66,8 +66,8 @@ class AuthController extends ValidationController {
             if ($row) {
                 // Reactivate User
                 $sql = '
-                UPDATE Users
-                SET passwordHash = ?, firstName = ?, lastName = ?, address = "", city = "", roleID = ?, isActive = 1
+                UPDATE users
+                SET password = ?, first_name = ?, last_name = ?, address = "", city = "", role_id = ?, is_active = 1
                 WHERE id = ?';
 
                 $stmt = $this->mysqli->prepare($sql);
@@ -75,7 +75,7 @@ class AuthController extends ValidationController {
             } else {
                 // Insert User
                 $sql = '
-                INSERT INTO Users (email, passwordHash, firstName, lastName, roleID)
+                INSERT INTO users (email, password, first_name, last_name, role_id)
                 VALUES (?, ?, ?, ?, ?)';
                 
                 $stmt = $this->mysqli->prepare($sql);
@@ -93,6 +93,7 @@ class AuthController extends ValidationController {
     
     public function login() {
         // Validate all inputs in the form
+        
         $email = $this->validateEmail($_POST['email']);
         $this->validatePassword($_POST['password']);
         if (($row = $this->getUserFromEmail($email)) && ($row[2] == 1)) {

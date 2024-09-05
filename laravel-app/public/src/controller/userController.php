@@ -17,11 +17,11 @@ class UserController extends ValidationController {
     // Public Methods
     public function listUsers($roleName) {
         $sql = '
-        SELECT Users.ID, email, firstName, lastName, address, city, roleID, roleName
-        FROM Users, Roles
-        WHERE Users.roleID = Roles.ID AND isActive = 1';
+        SELECT users.id, email, first_name, last_name, address, city, role_id, role_name
+        FROM users, roles
+        WHERE users.role_id = roles.id AND is_active = 1';
         if ($roleName != 'admin') {
-            $sql .= ' AND Roles.roleName = "' . $roleName . '"';
+            $sql .= ' AND roles.role_name = "' . $roleName . '"';
         }
 
         $stmt = $this->mysqli->prepare($sql);
@@ -49,9 +49,9 @@ class UserController extends ValidationController {
 
     public function getUser($id) {
         $sql = '
-        SELECT Users.ID, email, firstName, lastName, address, city, roleID
-        FROM Users
-        WHERE ID = ?';
+        SELECT users.id, email, first_name, last_name, address, city, role_id
+        FROM users
+        WHERE id = ?';
 
         $stmt = $this->mysqli->prepare($sql);
         $stmt->bind_param('i', $id);
@@ -82,7 +82,7 @@ class UserController extends ValidationController {
 
         if (empty($this->firstNameError) && empty($this->lastNameError)) {
             // Update User
-            $sql = 'UPDATE Users SET firstName = ?, lastName = ?, address = ?, city = ?, roleID = ? WHERE id = ?';
+            $sql = 'UPDATE users SET first_name = ?, last_name = ?, address = ?, city = ?, role_id = ? WHERE id = ?';
             $stmt = $this->mysqli->prepare($sql);
             $stmt->bind_param('ssssii', $firstName, $lastName, $address, $city, $role, $id);
             if ($stmt->execute()) {
@@ -95,7 +95,7 @@ class UserController extends ValidationController {
     }
 
     public function deactivateUser($id) {
-        $sql = 'UPDATE Users SET passwordHash = "", isActive = 0 WHERE ID = ?';
+        $sql = 'UPDATE users SET password = "", is_active = 0 WHERE id = ?';
         $stmt = $this->mysqli->prepare($sql);
         $stmt->bind_param('i', $id);
         if ($stmt->execute()) {
@@ -108,12 +108,12 @@ class UserController extends ValidationController {
 
     public function access($permission) {
         // Check if the current user has the required permission
-        $sql = 'SELECT Users.ID
-            FROM Users, RolesToPermissions, Permissions
+        $sql = 'SELECT users.id
+            FROM users, roles_to_permissions, permissions
             WHERE
-                Users.ID = ? AND Users.RoleID = RolesToPermissions.roleID AND
-                RolesToPermissions.permissionID = Permissions.ID AND 
-                Permissions.permissionName = ?';
+                users.id = ? AND users.role_id = roles_to_permissions.role_id AND
+                roles_to_permissions.permission_id = permissions.id AND 
+                permissions.permission_name = ?';
         $stmt = $this->mysqli->prepare($sql);
         $stmt->bind_param('is', $_SESSION['id'], $permission);
 

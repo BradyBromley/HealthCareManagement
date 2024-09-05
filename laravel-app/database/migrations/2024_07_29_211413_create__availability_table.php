@@ -13,13 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('Availability', function (Blueprint $table)
+        Schema::create('availability', function (Blueprint $table)
         {
-            $table->increments('ID');
-            $table->unsignedInteger('physicianID');
-            $table->time('availableTime')->default('00:00:00');
+            $table->increments('id');
+            $table->unsignedInteger('physician_id');
+            $table->time('available_time')->default('00:00:00');
 
-            $table->foreign('physicianID')->references('ID')->on('Users');
+            $table->foreign('physician_id')->references('id')->on('users');
         });
     }
 
@@ -30,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('Availability');
+        Schema::dropIfExists('availability');
     }
 };

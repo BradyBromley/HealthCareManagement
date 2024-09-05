@@ -14,24 +14,24 @@ class PermissionsSeeder extends Seeder
      */
     public function run(): void
     {
-        \DB::table('Permissions')->insert(
+        \DB::table('permissions')->insert(
             [[
-                'permissionName' => 'admin'
+                'permission_name' => 'admin'
             ],
             [
-                'permissionName' => 'userListing'
+                'permission_name' => 'userListing'
             ],
             [
-                'permissionName' => 'patientListing'
+                'permission_name' => 'patientListing'
             ],
             [
-                'permissionName' => 'patientProfiles'
+                'permission_name' => 'patientProfiles'
             ],
             [
-                'permissionName' => 'bookAppointment'
+                'permission_name' => 'bookAppointment'
             ],
             [
-                'permissionName' => 'appointmentListing'
+                'permission_name' => 'appointmentListing'
             ]]
         );
     }

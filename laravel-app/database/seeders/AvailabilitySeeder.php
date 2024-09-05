@@ -14,26 +14,26 @@ class AvailabilitySeeder extends Seeder
      */
     public function run(): void
     {
-        \DB::table('Availability')->insert(
+        \DB::table('availability')->insert(
             [[
-                'physicianID' => 2,
-                'availableTime' => '02:00:00',
+                'physician_id' => 2,
+                'available_time' => '02:00:00',
             ],
             [
-                'physicianID' => 2,
-                'availableTime' => '02:30:00',
+                'physician_id' => 2,
+                'available_time' => '02:30:00',
             ],
             [
-                'physicianID' => 2,
-                'availableTime' => '03:00:00',
+                'physician_id' => 2,
+                'availabletime' => '03:00:00',
             ],
             [
-                'physicianID' => 2,
-                'availableTime' => '03:30:00',
+                'physician_id' => 2,
+                'availabletime' => '03:30:00',
             ],
             [
-                'physicianID' => 2,
-                'availableTime' => '04:00:00',
+                'physician_id' => 2,
+                'availabletime' => '04:00:00',
             ]]
         );
     }

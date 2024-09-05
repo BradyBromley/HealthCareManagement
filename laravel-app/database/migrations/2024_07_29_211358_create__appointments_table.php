@@ -13,18 +13,18 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('Appointments', function (Blueprint $table)
+        Schema::create('appointments', function (Blueprint $table)
         {
-            $table->increments('ID');
-            $table->unsignedInteger('patientID');
-            $table->unsignedInteger('physicianID');
-            $table->dateTime('startTime');
-            $table->dateTime('endTime');
+            $table->increments('id');
+            $table->unsignedInteger('patient_id');
+            $table->unsignedInteger('physician_id');
+            $table->dateTime('start_time');
+            $table->dateTime('end_time');
             $table->string('reason', 512);
             $table->string('status', 255)->default('Scheduled');
 
-            $table->foreign('patientID')->references('ID')->on('Users');
-            $table->foreign('physicianID')->references('ID')->on('Users');
+            $table->foreign('patient_id')->references('id')->on('users');
+            $table->foreign('physician_id')->references('id')->on('users');
         });
     }
 
@@ -35,6 +35,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('Appointments');
+        Schema::dropIfExists('appointments');
     }
 };

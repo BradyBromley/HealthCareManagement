@@ -13,17 +13,26 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('Users', function (Blueprint $table)
+        Schema::create('users', function (Blueprint $table)
         {
-            $table->increments('ID');
+            $table->increments('id');
             $table->string('email', 255)->unique();
-            $table->string('passwordHash', 255);
-            $table->string('firstName', 255);
-            $table->string('lastName', 255);
+            $table->string('password', 255);
+            $table->string('first_name', 255);
+            $table->string('last_name', 255);
             $table->string('address', 255)->nullable();
             $table->string('city', 255)->nullable();
-            $table->integer('roleID');
-            $table->boolean('isActive');
+            $table->integer('role_id');
+            $table->boolean('is_active');
+        });
+
+        Schema::create('sessions', function (Blueprint $table) {
+            $table->string('id')->primary();
+            $table->foreignId('user_id')->nullable()->index();
+            $table->string('ip_address', 45)->nullable();
+            $table->text('user_agent')->nullable();
+            $table->longText('payload');
+            $table->integer('last_activity')->index();
         });
     }
 
@@ -34,6 +43,7 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('Users');
+        Schema::dropIfExists('users');
+        Schema::dropIfExists('sessions');
     }
 };
