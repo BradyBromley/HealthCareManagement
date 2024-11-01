@@ -1,61 +1,65 @@
 $(document).ready(function(){
     // Invoke a change on page load so the start/end times get correctly shown/hidden
-    $('#role').change();
+    $('#role_id').change();
 });
 
 // The start and end time dropdowns should only show if the physician role is selected
-$(document).on('change', '#role', function(){
-    var role = $('#role').find('option:selected').text();
-    var physicianID = $('#userID').attr('value');
-    
+$(document).on('change', '#role_id', function(){
+    var role = $('#role_id').find('option:selected').text();
+    var user_id = $('#user_id').attr('value');
+
     $.ajax({
-        type: 'POST',
+        type: 'GET',
         datatype: 'json',
-        url: 'helper/editProfilePhysicianHelper.php',
-        data: {
-            physicianID: physicianID
-        },
+        url: '/users/' + user_id + '/updateAvailability',
         cache: false,
         success: function(data) {
             var json = $.parseJSON(data);
-            var startTimeHTML = json.startTimeHTML;
-            var endTimeHTML = json.endTimeHTML;
+            var start_time_select_list = json.start_time_select_list;
+            var end_time_select_list = json.end_time_select_list;
 
             if (role == 'physician') {
-                $('#startTimeHTML').html(startTimeHTML);
-                $('#endTimeHTML').html(endTimeHTML);
+                $('#start_time_select_list').html(start_time_select_list);
+                $('#end_time_select_list').html(end_time_select_list);
 
-                $('#startTimeHTML').show();
-                $('#endTimeHTML').show();
+                $('#start_time_select_list').show();
+                $('#end_time_select_list').show();
             } else {
-                $('#startTimeHTML').html('');
-                $('#endTimeHTML').html('');
+                $('#start_time_select_list').html('');
+                $('#end_time_select_list').html('');
 
-                $('#startTimeHTML').hide();
-                $('#endTimeHTML').hide();
+                $('#start_time_select_list').hide();
+                $('#end_time_select_list').hide();
             }
         }
     });
 });
 
 // The end time dropdown should only show times after the start time
-$(document).on('change', '#startTime', function(){
-    var startTime = $('#startTime').val();
-    var endTime =  $('#endTime').val();
+$(document).on('change', '#start_time_select_list', function(){
+    var user_id = $('#user_id').attr('value');
+    var start_time = $('#start_time').val();
+    var end_time =  $('#end_time').val();
+
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-Token': $('input[name="_token"]').attr('value')
+        }
+    });
 
     $.ajax({
         type: 'POST',
         datatype: 'json',
-        url: 'helper/editProfileAvailableTimesHelper.php',
+        url: '/users/' + user_id + '/updateEndTime',
         data: {
-            startTime,
-            endTime
+            start_time,
+            end_time,
         },
         cache: false,
         success: function(data) {
             var json = $.parseJSON(data);
-            var endTimeHTML = json.endTimeHTML;
-            $('#endTimeHTML').html(endTimeHTML);
+            var end_time_select_list = json.end_time_select_list;
+            $('#end_time_select_list').html(end_time_select_list);
         }
     });
 });

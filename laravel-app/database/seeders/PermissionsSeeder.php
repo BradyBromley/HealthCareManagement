@@ -22,16 +22,16 @@ class PermissionsSeeder extends Seeder
                 'permission_name' => 'userListing'
             ],
             [
-                'permission_name' => 'patientListing'
+                'permission_name' => 'appointmentListing'
             ],
             [
-                'permission_name' => 'patientProfiles'
+                'permission_name' => 'physicianAppointmentListing'
+            ],
+            [
+                'permission_name' => 'patientAppointmentListing'
             ],
             [
                 'permission_name' => 'bookAppointment'
-            ],
-            [
-                'permission_name' => 'appointmentListing'
             ]]
         );
     }

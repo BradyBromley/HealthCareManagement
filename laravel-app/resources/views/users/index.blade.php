@@ -3,61 +3,79 @@
 @section('title', 'Users')
 
 @section('content')
-    <div class='container'>
-
-        <nav class='navbar2 navbar-inverse'>
-            <div class='navbar-header'>
-                <a class='navbar-brand' href='{{ URL::to('users') }}'>user Alert</a>
-            </div>
-            <ul class='nav navbar-nav'>
-                <li><a href='{{ URL::to('users') }}'>View All users</a></li>
-                <li><a href='{{ URL::to('users/create') }}'>Create a user</a>
-            </ul>
-        </nav>
-
-        <h1>Users</h1>
-
-        <!-- will be used to show any messages -->
-        @if (Session::has('message'))
-            <div class='alert alert-info'>{{ Session::get('message') }}</div>
-        @endif
-
-        <table class='table table-striped table-bordered'>
+    <!-- Users -->
+    <div class='content'>
+        <h2>Users</h2>
+        <table class='table table-striped table-bordered sortable userListing'>
             <thead>
                 <tr>
-                    <td>ID</td>
-                    <td>First Name</td>
-                    <td>Last Name</td>
-                    <td>Email</td>
-                    <td>Role</td>
-                    <td>View</td>
-                    <td>Deactivate</td>
+                    <th>@sortablelink('id', 'ID')</th>
+                    <th>@sortablelink('first_name', 'First Name')</th>
+                    <th>@sortablelink('last_name', 'Last Name')</th>
+                    <th>@sortablelink('email', 'Email')</th>
+                    @if (Auth::user()->hasPermissionTo('admin'))
+                        <th>@sortablelink('role.role_name', 'Role')</th>
+                    @endif
+                    <th>View</th>
+                    @if (Auth::user()->hasPermissionTo('admin'))
+                        <th>Deactivate</th>
+                    @endif
                 </tr>
             </thead>
             <tbody>
-            @foreach($users as $key => $value)
-                <tr>
-                    <td>{{ $value->id }}</td>
-                    <td>{{ $value->first_name }}</td>
-                    <td>{{ $value->last_name }}</td>
-                    <td>{{ $value->email }}</td>
-                    <td>{{ $value->role->role_name }}</td>
-
-                    <!-- we will also add show, edit, and delete buttons -->
-                    <td>
-                        <!-- show the user (uses the show method found at GET /users/{id} -->
-                        <a class='btn btn-small btn-success' href='{{ URL::to('users/' . $value->id) }}'>Show this user</a>
-                    </td>
-                    <td>
-                        <!-- delete the user (uses the destroy method DESTROY /users/{id} -->
-                        <!-- we will add this later since its a little more complicated than the other two buttons -->
-                        <!-- edit this user (uses the edit method found at GET /users/{id}/edit -->
-                        <a class='btn btn-small btn-info' href='{{ URL::to('users/' . $value->id . '/edit') }}'>Edit this user</a>
-                    </td>
-                </tr>
-            @endforeach
+                @if ($users->count() == 0)
+                    <tr>
+                        @if (Auth::user()->hasPermissionTo('admin'))
+                            <td colspan="7">No users to display.</td>
+                        @else
+                            <td colspan="5">No users to display.</td>
+                        @endif
+                    </tr>
+                @endif
+                @foreach($users as $key => $value)
+                    @if(Auth::user()->hasPermissionTo('admin') || ($value->role->role_name == 'patient'))
+                        <tr>
+                            <td>{{ $value->id }}</td>
+                            <td>{{ $value->first_name }}</td>
+                            <td>{{ $value->last_name }}</td>
+                            <td>{{ $value->email }}</td>
+                            @if (Auth::user()->hasPermissionTo('admin'))
+                                <td>{{ $value->role->role_name }}</td>
+                            @endif
+                            <td><a type='button' class='btn btn-secondary' href='{{ URL::to('users/' . $value->id) }}'><i class='fa-solid fa-newspaper'></i></a></td>
+                            @if (Auth::user()->hasPermissionTo('admin'))
+                                <td><a type='button' class='btn btn-danger' data-bs-toggle='modal' href='#deactivateUserModal' data-bs-id='{{ $value->id }}'><i class='fa-solid fa-ban'></i></a></td>
+                            @endif
+                        </tr>
+                    @endif
+                @endforeach
             </tbody>
         </table>
 
+        {{ $users->links('pagination::bootstrap-5') }}        
+
+        <!-- Deactivate User Modal -->
+        <div class='modal fade' id='deactivateUserModal' tabindex='-1' aria-labelledby='deactivateUserModalLabel' aria-hidden='true'>
+            <div class='modal-dialog'>
+                <div class='modal-content'>
+                    <div class='modal-header'>
+                        <h1 class='modal-title fs-5' id='deactivateUserModalLabel'>Deactivate User</h1>
+                        <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
+                    </div>
+                    <div class='modal-body'>
+                        Are you sure you want to deactivate this user?
+                    </div>
+                    <div class='modal-footer'>
+                        <a type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Close</a>
+                        <form method='POST' id='deactivateUserForm'>
+                            @csrf
+                            @method('DELETE')
+                            <button id='submit' type='submit' class='btn btn-danger'>Deactivate User</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src='/js/users.js'></script>
     </div>
 @endsection

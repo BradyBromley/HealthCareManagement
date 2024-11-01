@@ -85,14 +85,6 @@
     margin-top: 10px;
 }
 
-
-/* Listings */
-table.sortable th:not(.sorttable_sorted):not(.sorttable_sorted_reverse):not(.sorttable_nosort):after { 
-    content: " \25B4\25BE";
-    color: gray;
-}
-
-
 /* Form */
 .formInput {
     height: 90px;
@@ -114,26 +106,26 @@ table.sortable th:not(.sorttable_sorted):not(.sorttable_sorted_reverse):not(.sor
 
 
 /* Appointment Listing */
-.appointmentListing thead tr th {
+.appointment_listing thead tr th {
     text-align: center;
 }
 
-.appointmentListing tbody tr td {
+.appointment_listing tbody tr td {
     text-align: center;
 }
 
-.statusScheduled {
+.Scheduled {
     --bs-table-color: goldenrod !important;
     --bs-table-striped-color: goldenrod !important;
 
 }
 
-.statusNo-Show {
+.No-Show {
     --bs-table-color: red !important;
     --bs-table-striped-color: red !important;
 }
 
-.statusFinished {
+.Finished {
     --bs-table-color: green !important;
     --bs-table-striped-color: green !important;
 

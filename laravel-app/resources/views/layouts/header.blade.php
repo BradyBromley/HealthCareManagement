@@ -6,6 +6,11 @@
         <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css'>
         <link rel='stylesheet' href={{ asset('css/style.css') }}>
         
+        <!-- Import for modals -->
+        <script src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js' integrity='sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL' crossorigin='anonymous'></script>
+
+        <!-- Import jquery -->
+        <script src='https://code.jquery.com/jquery-3.7.1.min.js' integrity='sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=' crossorigin='anonymous'></script>
 
         <meta charset='utf-8'>
 
@@ -19,11 +24,16 @@
                 <div class='navbar'>
                     <!-- Navbar links -->
                     <ul class='navbarLeft'>
-                        <li class='navbarLink'><a href='/index.php'>Home</a></li>
-                        <li class='navbarLink'><a href='/src/view/bookAppointment.php'>Book Appointment</a></li>
-                        <li class='navbarLink'><a href='/src/view/appointmentListing.php'>Appointments</a></li>
-                        <li class='navbarLink'><a href='/src/view/userListing.php'>Patients</a></li>
-                        <li class='navbarLink'><a href='/src/view/userListing.php'>Users</a></li>
+                        <li class='navbarLink'><a href='{{ URL::to('/') }}'>Home</a></li>
+                        @if (Auth::user()->hasPermissionTo('bookAppointment'))
+                            <li class='navbarLink'><a href='/src/view/bookAppointment.php'>Book Appointment</a></li>
+                        @endif
+                        @if (Auth::user()->hasPermissionTo('appointmentListing'))
+                            <li class='navbarLink'><a href='{{ URL::to('appointments') }}'>Appointments</a></li>
+                        @endif
+                        @if (Auth::user()->hasPermissionTo('userListing'))
+                            <li class='navbarLink'><a href='{{ URL::to('users') }}'>Users</a></li>
+                        @endif
                     </ul>
         
                     <!-- User dropdown -->
@@ -34,11 +44,11 @@
                                 <i class='fa fa-caret-down'></i>
                             </button>
                             <div class='dropdownContent'>
-                                <a href='/src/view/profile.php'>Profile</a>
-                                <a href='{{ route('logout') }}' onclick='event.preventDefault(); document.getElementById("logout-form").submit();'>Logout</a>
+                                <a href='{{ URL::to('users/' . Auth::user()->id) }}'>Profile</a>
+                                <a href='{{ URL::to('auth/logout') }}' onclick='event.preventDefault(); document.getElementById("logout-form").submit();'>Logout</a>
                             </div>
 
-                            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                            <form id="logout-form" action="{{ URL::to('auth/logout') }}" method="POST" style="display: none;">
                                 {{ csrf_field() }}
                             </form>
                         </li>
