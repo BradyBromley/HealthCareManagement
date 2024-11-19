@@ -21,8 +21,13 @@ class Appointment extends Model
                         'reason',
                         'status'];
 
-    public function user()
+    public function patient()
     {
-        return $this->belongsTo('App\Models\User');
+        return $this->belongsTo('App\Models\User', 'patient_id');
+    }
+
+    public function physician()
+    {
+        return $this->belongsTo('App\Models\User', 'physician_id');
     }
 }

@@ -12,7 +12,7 @@
                     <!-- Patient ID and name show up for admins and physicians -->
                     @if (Auth::user()->hasPermissionTo('physicianAppointmentListing'))
                         <th>@sortablelink('patient_id', 'Patient ID')</th>
-                        <th>@sortablelink('patient_id', 'Patient Name')</th>
+                        <th>@sortablelink('patient.full_name', 'Patient Name')</th>
                     @endif
 
                     <!-- Physician ID shows up for admins -->
@@ -22,7 +22,7 @@
 
                     <!-- Physician name shows up for admins and patients -->
                     @if (Auth::user()->hasPermissionTo('patientAppointmentListing'))
-                        <th>@sortablelink('physician_id', 'Physician Name')</th>
+                        <th>@sortablelink('physician.full_name', 'Physician Name')</th>
                     @endif
                     <th>@sortablelink('start_time', 'Start Time')</th>
                     <th>@sortablelink('end_time', 'End Time')</th>
@@ -55,7 +55,7 @@
                             <!-- Patient ID and name show up for admins and physicians -->
                             @if (Auth::user()->hasPermissionTo('physicianAppointmentListing'))
                                 <td>{{ $value->patient_id }}</td>
-                                <td>{{ $value->patient_id }}</td>
+                                <td>{{ $value->patient->full_name }}</td>
                             @endif
 
                             <!-- Physician ID shows up for admins -->
@@ -65,11 +65,11 @@
 
                             <!-- Physician name shows up for admins and patients -->
                             @if (Auth::user()->hasPermissionTo('patientAppointmentListing'))
-                                <td>{{ $value->physician_id }}</td>
+                                <td>{{ $value->physician->full_name }}</td>
                             @endif
 
-                            <td>{{ $value->start_time }}</td>
-                            <td>{{ $value->end_time }}</td>
+                            <td>{{ date('M j Y,  g:i A', strtotime($value->start_time . ' GMT')) }}</td>
+                            <td>{{ date('M j Y,  g:i A', strtotime($value->end_time . ' GMT')) }}</td>
                             <td>{{ $value->reason }}</td>
                             <td>{{ $value->status }}</td>
 

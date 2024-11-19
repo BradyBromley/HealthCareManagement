@@ -18,7 +18,8 @@ class User extends Authenticatable
     public $sortable = ['id',
                         'email',
                         'first_name',
-                        'last_name'];
+                        'last_name',
+                        'role_id'];
     
 
     public function role()
