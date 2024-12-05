@@ -51,7 +51,7 @@ class User extends Authenticatable
         return $start_time;
     }
 
-    // Get the last
+    // Get the end time
     public function endTime()
     {
         $availabilities = $this->availabilities;
@@ -60,7 +60,10 @@ class User extends Authenticatable
             $end_time = '00:30:00';
         } else
         {
-            $end_time = $availabilities->last()->time;
+            $last_available_time = $availabilities->last()->time;
+
+            // The end time is 30 minutes after the last available time
+            $end_time = date('H:i:s', strtotime('+30 minutes', strtotime($last_available_time)));
         }
         return $end_time;
     }

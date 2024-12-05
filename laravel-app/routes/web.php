@@ -45,6 +45,11 @@ Route::middleware('auth')->group(function () {
         Route::get('/appointments/{appointment}/changeStatus/{status}', [AppointmentController::class, 'changeStatus'])->name('appointment.changeStatus');
     });
 
+    Route::middleware('permission:bookAppointment')->group(function () {
+        Route::get('/appointments/create', [AppointmentController::class, 'create'])->name('appointment.create');
+        Route::post('/appointments/updateAppointmentAvailability', [AppointmentController::class, 'updateAppointmentAvailability'])->name('appointment.updateAppointmentAvailability');
+    });
+
     Route::middleware('permission:admin')->group(function ()  {
         Route::delete('/appointments/{appointment}', [AppointmentController::class, 'destroy'])->name('appointment.destroy');
     });

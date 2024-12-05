@@ -1,6 +1,6 @@
 $(document).ready(function(){
     // Invoke a change on page load so the availability gets correctly shown
-    $('#appointmentDate').change();
+    $('#appointment_date').change();
 });
 
 function htmlDate(date) {
@@ -15,38 +15,45 @@ function htmlDate(date) {
 }
 
 // Appointments can be booked anytime from the following day, to a year from now
-var appointment_date = document.getElementById('appointmentDate');
+var appointment_date = document.getElementById('appointment_date');
 var today = new Date();
 var tomorrow = new Date(today.setDate(today.getDate() + 1));
-var tomorrowYMD = htmlDate(tomorrow);
-var nextYear = htmlDate(new Date(new Date().setFullYear(new Date().getFullYear() + 1)));
+var tomorrow_ymd = htmlDate(tomorrow);
+var next_year = htmlDate(new Date(new Date().setFullYear(new Date().getFullYear() + 1)));
 
 appointment_date.valueAsDate = tomorrow;
-appointment_date.setAttribute('min', tomorrowYMD);
-appointment_date.setAttribute('max', nextYear);
+appointment_date.setAttribute('min', tomorrow_ymd);
+appointment_date.setAttribute('max', next_year);
 
 // The available appointment times depend on the physician and date chosen
-$('#appointmentDate, #physician').on('change', function(){
-    var date = $('#appointmentDate').val();
-    var physician_id = $('#physician').val();
+$('#appointment_date, #physician_id').on('change', function(){
+    var physician_id = $('#physician_id').val();
+    var date = $('#appointment_date').val();
 
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-Token': $('input[name="_token"]').attr('value')
+        }
+    });
     $.ajax({
         type: 'POST',
         datatype: 'json',
-        url: 'helper/bookAppointmentHelper.php',
+        url: '/appointments/updateAppointmentAvailability',
         data: {
-            date: date,
-            physicianID: physician_id
+            physician_id,
+            date,
         },
         cache: false,
         success: function(data) {
             var json = $.parseJSON(data);
-            var appointmentTimeHTML = json.appointmentTimeHTML;
-            $('#appointmentTimeHTML').html(appointmentTimeHTML);
-            if (appointmentTimeHTML) {
-                $('#submitHTML').html('<button id="submit" type="submit" class="btn btn-success">Submit</button>');
+            var appointment_time_select_list = json.appointment_time_select_list;
+            $('#appointment_time_select_list').html(appointment_time_select_list);
+
+            // Only allow an appointment to be booked if there is an available time
+            if (appointment_time_select_list) {
+                $('#submit_button').html('<button id="submit" type="submit" class="btn btn-success">Submit</button>');
             } else {
-                $('#submitHTML').html('<div class="banner alert alert-warning">There are no appointments available for this day.</div>');
+                $('#submit_button').html('<div class="banner alert alert-warning">There are no appointments available for this day.</div>');
                 
             }
         }

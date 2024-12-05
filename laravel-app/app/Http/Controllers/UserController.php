@@ -160,13 +160,13 @@ class UserController extends Controller
                     array_push($times, $i);
                     
                 }
-                for ($i = 1; $i <= $end_time; $i++)
+                for ($i = 1; $i < $end_time; $i++)
                 {
                     array_push($times, $i);
                 }
             } else
             {
-                for ($i = $start_time; $i <= $end_time; $i++)
+                for ($i = $start_time; $i < $end_time; $i++)
                 {
                     array_push($times, $i);
                 }

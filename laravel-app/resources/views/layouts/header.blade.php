@@ -26,7 +26,7 @@
                     <ul class='navbarLeft'>
                         <li class='navbarLink'><a href='{{ URL::to('/') }}'>Home</a></li>
                         @if (Auth::user()->hasPermissionTo('bookAppointment'))
-                            <li class='navbarLink'><a href='/src/view/bookAppointment.php'>Book Appointment</a></li>
+                            <li class='navbarLink'><a href='{{ URL::to('appointments/create') }}'>Book Appointment</a></li>
                         @endif
                         @if (Auth::user()->hasPermissionTo('appointmentListing'))
                             <li class='navbarLink'><a href='{{ URL::to('appointments') }}'>Appointments</a></li>

@@ -47,6 +47,7 @@ $(document).on('change', '#start_time_select_list', function(){
         }
     });
 
+    // Post start and end times so that they don't get reset when dropdowns change
     $.ajax({
         type: 'POST',
         datatype: 'json',
