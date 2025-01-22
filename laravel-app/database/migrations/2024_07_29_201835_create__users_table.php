@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('last_name', 255);
             $table->string('address', 255)->nullable();
             $table->string('city', 255)->nullable();
+            $table->string('timezone', 255)->default(config('app.timezone'));
             $table->integer('role_id');
             $table->boolean('is_active');
         });

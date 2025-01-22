@@ -47,6 +47,7 @@ Route::middleware('auth')->group(function () {
 
     Route::middleware('permission:bookAppointment')->group(function () {
         Route::get('/appointments/create', [AppointmentController::class, 'create'])->name('appointment.create');
+        Route::post('/appointments', [AppointmentController::class, 'store'])->name('appointment.store');
         Route::post('/appointments/updateAppointmentAvailability', [AppointmentController::class, 'updateAppointmentAvailability'])->name('appointment.updateAppointmentAvailability');
     });
 

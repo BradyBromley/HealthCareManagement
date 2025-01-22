@@ -130,6 +130,7 @@ class UserController extends Controller
         $request->validate([
             'first_name' => 'required',
             'last_name' => 'required',
+            'timezone' => 'required',
         ]);
 
         
@@ -137,6 +138,7 @@ class UserController extends Controller
         $user->last_name = $request->input('last_name');
         $user->address = $request->input('address');
         $user->city = $request->input('city');
+        $user->timezone = $request->input('timezone');
 
         if (Auth::user()->hasPermissionTo('admin'))
         {

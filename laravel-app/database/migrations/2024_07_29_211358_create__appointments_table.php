@@ -20,7 +20,7 @@ return new class extends Migration
             $table->unsignedInteger('physician_id');
             $table->dateTime('start_time');
             $table->dateTime('end_time');
-            $table->string('reason', 512);
+            $table->string('reason', 512)->nullable();;
             $table->string('status', 255)->default('Scheduled');
 
             $table->foreign('patient_id')->references('id')->on('users');

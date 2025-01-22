@@ -68,8 +68,8 @@
                                 <td>{{ $value->physician->full_name }}</td>
                             @endif
 
-                            <td>{{ date('M j Y,  g:i A', strtotime($value->start_time . ' GMT')) }}</td>
-                            <td>{{ date('M j Y,  g:i A', strtotime($value->end_time . ' GMT')) }}</td>
+                            <td>{{ $value->localStartTime() }}</td>
+                            <td>{{ $value->localEndTime() }}</td>
                             <td>{{ $value->reason }}</td>
                             <td>{{ $value->status }}</td>
 

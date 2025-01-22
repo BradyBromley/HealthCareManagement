@@ -36,6 +36,18 @@
             <input id='city' name='city' type='text' class='form-control' value='{{ $user->city }}' placeholder='City'>
         </div>
 
+        <div class='form-group formInput'>
+            <label for='timezone'>Timezone</label>
+            <select id='timezone' name='timezone' class='form-control'>
+                @foreach (timezone_identifiers_list() as $timezone)
+                    <option value='{{ $timezone }}' {{ $timezone == $user->timezone ? ' selected' : '' }}>{{ $timezone }}</option>
+                @endforeach
+            </select>
+            @error ('timezone')
+                <div class='invalid-feedback'>{{ $message }}</div>
+            @enderror
+        </div>
+
         @if (Auth::user()->hasPermissionTo('admin'))
             <div class='form-group formInput'>
                 <label for='role_id'>Role</label>

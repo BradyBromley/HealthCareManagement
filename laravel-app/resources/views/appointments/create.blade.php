@@ -7,7 +7,7 @@
     <div class='content'>
         <h2>Book Appointment</h2>
 
-        <form method='POST' id='bookAppointmentForm' class='needs-validation' action='<?php echo htmlspecialchars($_SERVER['REQUEST_URI']); ?>' method='post'>
+        <form method='POST' id='bookAppointmentForm' class='needs-validation' action='{{ URL::to('appointments/') }}'>
             @csrf
 
             <!-- Physician List -->

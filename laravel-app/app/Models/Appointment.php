@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Kyslik\ColumnSortable\Sortable;
+use Auth;
+use Carbon\Carbon;
 
 class Appointment extends Model
 {
@@ -29,5 +31,22 @@ class Appointment extends Model
     public function physician()
     {
         return $this->belongsTo('App\Models\User', 'physician_id');
+    }
+
+    // Get the first available time
+    public function localStartTime()
+    {
+        $date = Carbon::createFromFormat('Y-m-d H:i:s', $this->start_time, 'UTC');
+        $date->setTimezone(Auth::user()->timezone);
+
+        return $date->format('M j Y, g:i A');
+    }
+
+    public function localEndTime()
+    {
+        $date = Carbon::createFromFormat('Y-m-d H:i:s', $this->end_time, 'UTC');
+        $date->setTimezone(Auth::user()->timezone);
+
+        return $date->format('M j Y, g:i A');
     }
 }
