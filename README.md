@@ -46,6 +46,11 @@ php artisan migrate
 php artisan db:seed
 ```
 
+Run this command to populate the timezone table:
+```
+mysql_tzinfo_to_sql /usr/share/zoneinfo | mysql -u root mysql
+```
+
 Create a new file called config.php based on configExample.php.
 
 This is an ER Diagram for the database.
