@@ -36,11 +36,11 @@
             <div id='availabilityHTML'>
                 <div class='accountField'>
                     <span class='accountFieldLabel'>Start Time</span>
-                    <span class='accountFieldValue'>{{ date('h:i A', strtotime($user->startTime())) }}</span>
+                    <span class='accountFieldValue'>{{ App\Common\Helpers::localTime($user->startTime())->format('h:i A') }}</span>
                 </div>
                 <div class='accountField'>
                     <span class='accountFieldLabel'>End Time</span>
-                    <span class='accountFieldValue'>{{ date('h:i A', strtotime($user->endTime())) }}</span>
+                    <span class='accountFieldValue'>{{ App\Common\Helpers::localTime($user->endTime())->format('h:i A') }}</span>
                 </div>
             </div>
         @endif

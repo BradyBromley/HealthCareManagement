@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Availability;
 use Illuminate\Http\Request;
+use App\Common\Helpers;
 
 class AvailabilityController extends Controller
 {
@@ -24,10 +25,10 @@ class AvailabilityController extends Controller
         {
             if ($availability->time == $start_time)
             {
-                $start_options .= "<option value='" . $availability->id . "' selected>" . date('h:i A', strtotime($availability->time)) . "</option>";
+                $start_options .= "<option value='" . $availability->id . "' selected>" . Helpers::localTime($availability->time)->format('h:i A') . "</option>";
             } else
             {
-                $start_options .= "<option value='" . $availability->id . "'>" . date('h:i A', strtotime($availability->time)) . "</option>";
+                $start_options .= "<option value='" . $availability->id . "'>" . Helpers::localTime($availability->time)->format('h:i A') . "</option>";
             } 
         }
         
@@ -61,10 +62,10 @@ class AvailabilityController extends Controller
             {
                 if ($availability->time == $end_time)
                 {
-                    $end_options .= "<option value='" . $availability->id . "' selected>" . date('h:i A', strtotime($availability->time)) . "</option>";
+                    $end_options .= "<option value='" . $availability->id . "' selected>" . Helpers::localTime($availability->time)->format('h:i A') . "</option>";
                 } else
                 {
-                    $end_options .= "<option value='" . $availability->id . "'>" . date('h:i A', strtotime($availability->time)) . "</option>";
+                    $end_options .= "<option value='" . $availability->id . "'>" . Helpers::localTime($availability->time)->format('h:i A') . "</option>";
                 }
             } else if ($availability->time < $start_time)
             {
@@ -77,10 +78,10 @@ class AvailabilityController extends Controller
         {
             if ($availability->time == $end_time)
             {
-                $end_options .= "<option value='" . $availability->id . "' selected>" . date('h:i A', strtotime($availability->time)) . "</option>";
+                $end_options .= "<option value='" . $availability->id . "' selected>" . Helpers::localTime($availability->time)->format('h:i A') . "</option>";
             } else
             {
-                $end_options .= "<option value='" . $availability->id . "'>" . date('h:i A', strtotime($availability->time)) . "</option>";
+                $end_options .= "<option value='" . $availability->id . "'>" . Helpers::localTime($availability->time)->format('h:i A') . "</option>";
             }
         }
 

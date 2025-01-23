@@ -38,7 +38,7 @@
 
         <div class='form-group formInput'>
             <label for='timezone'>Timezone</label>
-            <select id='timezone' name='timezone' class='form-control'>
+            <select class='form-select' id='timezone' name='timezone'>
                 @foreach (timezone_identifiers_list() as $timezone)
                     <option value='{{ $timezone }}' {{ $timezone == $user->timezone ? ' selected' : '' }}>{{ $timezone }}</option>
                 @endforeach
