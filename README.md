@@ -79,7 +79,7 @@ This is the user listing where Admins can deactivate users:
 This is the book appointment page. Patients can select a physician to have an appointment with, and they can select a time that the physician is available. This availability depends on both the physician's availability in their profile, and the other appointments that have been booked with the physician:
 ![alt text](laravel-app/public/images/bookAppointment.png)
 
-test2 example2 has their availability from 12:30 - 3:30 AM UTC, so when test example is booking an appointment in America/Vancouver time, that shows up as 4:30 - 7:30 PM PST.
+test2 example2 has their availability from 12:30 - 3:30 AM UTC, so when test example is booking an appointment in America/Vancouver time, that shows up as 4:30 - 7:30 PM PST for the previous day.
 
 ### Appointment Listing Page
 
