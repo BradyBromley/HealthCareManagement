@@ -54,7 +54,7 @@ mysql_tzinfo_to_sql /usr/share/zoneinfo | mysql -u root mysql
 Create a new file called config.php based on configExample.php.
 
 This is an ER Diagram for the database.
-![alt text](images/healthCareManagementERDiagram.png)
+![alt text](laravel-app/public/images/healthCareManagementERDiagram.png)
 
 # Website Overview
 
@@ -67,25 +67,25 @@ This website has a role and permissions system, giving different access levels t
 ### Edit Profile Page
 
 This is the edit profile page for physicians:
-![alt text](images/editProfile.png)
+![alt text](laravel-app/public/images/editProfile.png)
 
 ### User Listing Page
 
 This is the user listing where Admins can deactivate users:
-![alt text](images/deactivateUser.png)
+![alt text](laravel-app/public/images/deactivateUser.png)
 
 ### Book Appointment Page
 
 This is the book appointment page. Patients can select a physician to have an appointment with, and they can select a time that the physician is available. This availability depends on both the physician's availability in their profile, and the other appointments that have been booked with the physician:
-![alt text](images/bookAppointment.png)
-![alt text](images/bookAppointmentAvailability.png)
+![alt text](laravel-app/public/images/bookAppointment.png)
+![alt text](laravel-app/public/images/bookAppointmentAvailability.png)
 
 ### Appointment Listing Page
 
 The appointment listing shows all appointments relevant to a user. Patients can view appointments they have booked, physicians can view appointments that patients have booked with them, and admins see all appointments. Physicians and admins can also change the status of the appointment.
 
 This is what the appointment listing looks like for a patient.
-![alt text](images/patientAppointmentListing.png)
+![alt text](laravel-app/public/images/patientAppointmentListing.png)
 
 This is what the appointment listing looks like for an admin.
-![alt text](images/adminAppointmentListing.png)
+![alt text](laravel-app/public/images/adminAppointmentListing.png)
