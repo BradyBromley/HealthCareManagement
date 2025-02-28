@@ -112,6 +112,8 @@
 
 .appointment_listing tbody tr td {
     text-align: center;
+    -ms-word-break: break-all;
+    word-break: break-all;
 }
 
 .Scheduled {

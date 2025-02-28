@@ -36,7 +36,7 @@
 
                 <div class='form-group formTextArea'>
                     <label for='reason'>Reason for appointment</label>
-                    <textarea id='reason' name='reason' rows='3' class='form-control' placeholder='Enter reason'></textarea>
+                    <textarea id='reason' name='reason' rows='3' maxlength="512" class='form-control' placeholder='Enter reason'></textarea>
                 </div>
             </div>
 
