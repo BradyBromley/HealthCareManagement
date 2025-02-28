@@ -102,6 +102,8 @@
 
 .userListing tbody tr td {
     text-align: center;
+    -ms-word-break: break-word;
+    word-break: break-word;
 }
 
 
@@ -112,8 +114,8 @@
 
 .appointment_listing tbody tr td {
     text-align: center;
-    -ms-word-break: break-all;
-    word-break: break-all;
+    -ms-word-break: break-word;
+    word-break: break-word;
 }
 
 .Scheduled {
