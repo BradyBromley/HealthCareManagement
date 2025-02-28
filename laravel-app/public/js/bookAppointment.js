@@ -46,16 +46,20 @@ $('#appointment_date, #physician_id').on('change', function(){
         cache: false,
         success: function(data) {
             var json = $.parseJSON(data);
-            var appointment_time_select_list = json.appointment_time_select_list;
-            $('#appointment_time_select_list').html(appointment_time_select_list);
+            var appointment_options = json.appointment_options;
+            
 
             // Only allow an appointment to be booked if there is an available time
-            if (appointment_time_select_list) {
+            console.log(appointment_options);
+            if (appointment_options) {
                 $('#submit_button').html('<button id="submit" type="submit" class="btn btn-success">Submit</button>');
+                $('#appointment_availability_details').show();
             } else {
                 $('#submit_button').html('<div class="banner alert alert-warning">There are no appointments available for this day.</div>');
-                
+                $('#appointment_availability_details').hide();
             }
+
+            $('#appointment_options').html(appointment_options);
         }
     });
 });

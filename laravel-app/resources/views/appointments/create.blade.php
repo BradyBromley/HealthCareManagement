@@ -27,11 +27,17 @@
             </div>
 
             <!-- Dropdown input for selecting appointment time -->
-            <div id='appointment_time_select_list' class='form-group formInput'></div>
+            <div id='appointment_availability_details'>
+                <div class='form-group formInput'>
+                    <label for='appointment_options'>Appointment Time</label>
+                    <select class='form-select' id='appointment_options' name='appointment_time'>
+                    </select>
+                </div>
 
-            <div class='form-group formTextArea'>
-                <label for='reason'>Reason for appointment</label>
-                <textarea id='reason' name='reason' rows='3' class='form-control' placeholder='Enter reason'></textarea>
+                <div class='form-group formTextArea'>
+                    <label for='reason'>Reason for appointment</label>
+                    <textarea id='reason' name='reason' rows='3' class='form-control' placeholder='Enter reason'></textarea>
+                </div>
             </div>
 
             <div id='submit_button'>

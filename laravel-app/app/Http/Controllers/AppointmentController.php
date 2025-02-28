@@ -153,15 +153,8 @@ class AppointmentController extends Controller
             $appointment_options .= "<option value='" . $local_time->format('H:i:s') . "'>" . $local_time->format('h:i A') . "</option>";
         }
 
-        $appointment_time_select_list = "
-        <label for='appointment_time'>Appointment Time</label>
-        <select class='form-select' id='appointment_time' name='appointment_time'>
-            " . $appointment_options . "
-        </select>
-        ";
-
         $result = [];
-        $result['appointment_time_select_list'] = $appointment_time_select_list;
+        $result['appointment_options'] = $appointment_options;
 
         echo json_encode($result);
     }
